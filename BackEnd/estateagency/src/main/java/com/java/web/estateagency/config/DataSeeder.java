@@ -36,10 +36,10 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
 			roleService.save(new Role(ERole.ROLE_AGENT));
 		}
 
-		// Admin account
-		// if (userService.findByUsername("Admin") == null) {
-		// 	userService.saveAD();
-		// }
+		//Admin account
+		if (!userService.getUserByUsername("Admin").isPresent()) {
+			userService.saveAD();
+		}
 
 		// // Member account
 		// if (userRepository.findByEmail("member@gmail.com") == null) {

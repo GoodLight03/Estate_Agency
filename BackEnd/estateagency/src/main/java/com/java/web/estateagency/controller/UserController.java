@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/")
     @Operation(summary="Lấy ra user bằng username")
     public ResponseEntity<User> getuser(@RequestParam("username") String username){
-        User user = userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username).get();
         return ResponseEntity.ok(user);
     }
 

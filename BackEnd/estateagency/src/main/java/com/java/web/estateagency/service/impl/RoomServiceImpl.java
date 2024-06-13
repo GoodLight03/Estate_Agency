@@ -1,0 +1,71 @@
+package com.java.web.estateagency.service.impl;
+
+import java.util.Base64;
+import java.util.List;
+import java.util.Locale.Category;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.java.web.estateagency.entity.Room;
+import com.java.web.estateagency.entity.User;
+import com.java.web.estateagency.exception.NotFoundException;
+import com.java.web.estateagency.model.request.CreateRoomRequest;
+import com.java.web.estateagency.repository.RoomRepository;
+import com.java.web.estateagency.repository.UserRepository;
+import com.java.web.estateagency.service.RoomService;
+import com.java.web.estateagency.utils.ImageUpload;
+
+@Service
+public class RoomServiceImpl implements RoomService {
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private ImageUpload imageUpload;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public Room createRoom(CreateRoomRequest createRoomRequest) {
+        Room room = new Room();
+        room.setName(createRoomRequest.getName());
+        room.setPrice(createRoomRequest.getPrice());
+        room.setAddress(createRoomRequest.getAddress());
+        room.setDescription(createRoomRequest.getDescribe());
+        room.setState(createRoomRequest.getState());
+        User user = userRepository.findById(createRoomRequest.getIdAgent()).orElseThrow(()-> new NotFoundException("Not Found Category With Id: " + createRoomRequest.getIdAgent()));
+        room.setUser(user);
+        try {
+            if (createRoomRequest.getImg() == null) {
+                room.setImg(null);
+            } else {
+                imageUpload.uploadFile(createRoomRequest.getImg());
+                room.setImg(Base64.getEncoder().encodeToString(createRoomRequest.getImg().getBytes()));
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return roomRepository.save(room);
+    }
+
+    @Override
+    public List<Room> getAll() {
+       List<Room> rooms=roomRepository.findAll();
+       return rooms;
+    }
+
+    @Override
+    public List<Room> getbyAgent(Long idAgent) {
+      return roomRepository.getByAgent(idAgent);
+      
+    }
+
+    @Override
+    public Room detailRoom(Long id) {
+       return roomRepository.findById(id).get();
+    }
+
+}

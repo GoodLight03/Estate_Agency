@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -96,9 +97,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getUserByUsername(String username) {
+  public Optional<User> getUserByUsername(String username) {
     // TODO Auto-generated method stub
-    User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Not Found User"));
+    Optional<User> user = userRepository.findByUsername(username);
     return user;
   }
 
@@ -151,6 +152,24 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getUsserId(Long id) {
     return userRepository.findById(id).get();
+  }
+
+  @Override
+  public void saveAD() {
+    User user = new User();
+    user.setUsername("Admin");
+    user.setFullname("Admin");
+    user.setPassword(encoder.encode("123456"));
+    user.setEmail("Admin");
+    user.setState("Admin");
+    user.setAddress("Admin@gmail.com");
+    user.setPhone("Admin");
+    Set<Role> roles=new HashSet<>();
+    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+    roles.add(adminRole);
+    user.setRoles(roles);
+    userRepository.save(user);
   }
 
 }
