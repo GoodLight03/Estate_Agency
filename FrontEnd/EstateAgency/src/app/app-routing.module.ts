@@ -20,6 +20,7 @@ import { RequestComponent } from './components/client/request/request.component'
 import { HistoryComponent } from './components/client/history/history.component';
 import { FavouriteComponent } from './components/client/favourite/favourite.component';
 import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
+import { RoleGuardService } from './service/role-guard.service';
 
 const routes: Routes = [
   {
@@ -63,7 +64,7 @@ const routes: Routes = [
     ]
   },
   {
-    path:'admin',component:DashboardComponent,
+    path:'admin',component:DashboardComponent,canActivate: [RoleGuardService],data: {expectedRole: "ROLE_ADMIN"},
     children:[
       {
         path:'report',component:ReportadminComponent,
@@ -73,7 +74,7 @@ const routes: Routes = [
       }]
   },
   {
-    path:'agent',component:DashboardComponent,
+    path:'agent',component:DashboardComponent,canActivate: [RoleGuardService],data: {expectedRole: "ROLE_AGENT"},
     children:[
       {
         path:'report',component:ReportagentComponent,

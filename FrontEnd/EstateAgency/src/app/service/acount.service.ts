@@ -18,6 +18,10 @@ export class AcountService {
     return this.http.get(USER_API+"agent",httpOptions);
   }
 
+  getListUserAll():Observable<any>{
+    return this.http.get(USER_API+"all",httpOptions);
+  }
+
   getUserName(username: string):Observable<any>{
     let params = new HttpParams();
     params = params.append('username',username);

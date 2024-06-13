@@ -23,14 +23,20 @@
         <ng-template pTemplate="header">
             <tr>
                 <th>Name</th>
-                <th>Enable</th>
-                <th>Action</th>
+                <th>Email</th>
+                <!-- <th>Adress</th> -->
+                <th>Role</th>
+                <!-- <th>Enable</th>
+                <th>Action</th> -->
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-category>
             <tr> 
-                <td>{{category.name}}</td>
-                <td>
+                <td>{{category.username}}</td>
+                <td>{{category.email}}</td>
+                <!-- <td>{{category.adress}}</td> -->
+                <td>{{category.roles[0].name}}</td>
+                <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>
                 </td>
@@ -47,7 +53,7 @@
                             <p-button label="No" icon="pi pi-times" (click)="deleteForm=false"></p-button>
                         </div>
                     </p-dialog>
-                </td>
+                </td> -->
             </tr>
         </ng-template>
     </p-table>

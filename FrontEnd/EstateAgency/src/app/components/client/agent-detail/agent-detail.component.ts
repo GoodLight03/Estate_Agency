@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AcountService } from '../../../service/acount.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RoomService } from '../../../service/room.service';
 
 @Component({
   selector: 'app-agent-detail',
@@ -14,8 +15,9 @@ export class AgentDetailComponent implements OnInit{
   id: number = 0;
   agent : any;
   listRelatedProduct: any[] =[];
+  listCategory : any;
 
-  constructor(private acountService: AcountService,private router: Router,private route: ActivatedRoute,private messageService: MessageService){
+  constructor(private acountService: AcountService,private router: Router,private route: ActivatedRoute,private messageService: MessageService,private roomService: RoomService){
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
   }
@@ -23,6 +25,7 @@ export class AgentDetailComponent implements OnInit{
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.getProduct();
+    this.getListCategory();
   }
 
   getProduct(){
@@ -31,6 +34,17 @@ export class AgentDetailComponent implements OnInit{
         this.agent = res;
        // this.getListRelatedProduct();
       },error: err=>{
+        console.log(err);
+      }
+    })
+  }
+
+  getListCategory(){
+    this.roomService.getRoomByAgent(this.id).subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
         console.log(err);
       }
     })

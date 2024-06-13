@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { AcountService } from '../../../../service/acount.service';
+import { RoomService } from '../../../../service/room.service';
 
 @Component({
   selector: 'app-reportadmin',
@@ -19,7 +22,7 @@ export class ReportadminComponent implements OnInit{
     name : null
   }
 
-  //constructor(private messageService : MessageService,private categoryService: CategoryService){}
+  constructor(private messageService : MessageService,private roomService: RoomService){}
 
   ngOnInit(): void {
     this.getListCategory();
@@ -27,14 +30,14 @@ export class ReportadminComponent implements OnInit{
 
 
   getListCategory(){
-    // this.categoryService.getListCategory().subscribe({
-    //   next: res =>{
-    //     this.listCategory = res;
-    //     console.log(res);
-    //   },error: err =>{
-    //     console.log(err);
-    //   }
-    // })
+    this.roomService.getAll().subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
   }
 
   showForm(){

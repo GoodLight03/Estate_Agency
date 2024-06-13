@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { AcountService } from '../../../../service/acount.service';
 
 @Component({
   selector: 'app-acountadmin',
   templateUrl: './acountadmin.component.html',
-  styleUrl: './acountadmin.component.css'
+  styleUrl: './acountadmin.component.css',
+  providers: [MessageService]
 })
 export class AcountadminComponent implements OnInit{
   listCategory : any;
@@ -19,7 +22,7 @@ export class AcountadminComponent implements OnInit{
     name : null
   }
 
-  //constructor(private messageService : MessageService,private categoryService: CategoryService){}
+  constructor(private messageService : MessageService,private acountService: AcountService){}
 
   ngOnInit(): void {
     this.getListCategory();
@@ -27,14 +30,14 @@ export class AcountadminComponent implements OnInit{
 
 
   getListCategory(){
-    // this.categoryService.getListCategory().subscribe({
-    //   next: res =>{
-    //     this.listCategory = res;
-    //     console.log(res);
-    //   },error: err =>{
-    //     console.log(err);
-    //   }
-    // })
+    this.acountService.getListUserAll().subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
   }
 
   showForm(){
