@@ -1,0 +1,45 @@
+<div class="container" id="container" style="margin-top: 150px; height: 700px;">
+	<div class="form-container sign-up-container">
+		<form action="#">
+			<h1>Create Account</h1>
+			<input type="text" placeholder="Username" [(ngModel)]="registerForm.username" name="username" />
+			<input type="email" placeholder="Email" [(ngModel)]="registerForm.email" name="email" />
+			<input type="password" placeholder="Password" [(ngModel)]="registerForm.password" name="password" />
+			<input type="text" placeholder="Full Name"  name="fullname" />
+			<input type="phone" placeholder="Phone"  name="phone" />
+			<input type="text" placeholder="Adress" name="adress" />
+			<input type="file" name="img" [(ngModel)]="registerForm.img" (change)="onFileSelected($event)">
+			<div style="margin-bottom: 10px; width: 100%; padding: 10px; text-align: left; background-color: #eee; border: none;">	
+				<select style="width: 100%;text-align: left; background-color: #eee; border: none;" [(ngModel)]="selectedRole" name="role" (change)="addRole()">
+					<option value="customer">Cusomer</option>
+					<option value="agent">Agent</option>
+				</select>
+			</div>
+			
+			<button (click)="register()">Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="#">
+			<h1>Sign in</h1>
+			<input type="text" placeholder="Username" [(ngModel)]="loginForm.username" name="username" />
+			<input type="password" placeholder="Password" [(ngModel)]="loginForm.password" name="password" />
+			<a href="javascript:void(0)">Forgot your password?</a>
+			<button (click)="login()">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn" (click)="loginFormChange()">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp" (click)="registerFormChange()">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>

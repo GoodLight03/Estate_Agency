@@ -1,0 +1,102 @@
+import { HomeComponent } from './components/client/home/home.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { IndexComponent } from './components/client/index/index.component';
+import { RoomComponent } from './components/client/room/room.component';
+import { RoomRoomdetailComponent } from './components/client/room-roomdetail/room-roomdetail.component';
+import { AgentComponent } from './components/client/agent/agent.component';
+import { AgentDetailComponent } from './components/client/agent-detail/agent-detail.component';
+import { ContactComponent } from './components/client/contact/contact.component';
+import { LoginComponent } from './components/client/login/login.component';
+import { DashboardComponent } from './components/manager/dashboard/dashboard.component';
+import { ReportadminComponent } from './components/manager/admin/reportadmin/reportadmin.component';
+import { ReportagentComponent } from './components/manager/agent/reportagent/reportagent.component';
+import { AcountadminComponent } from './components/manager/admin/acountadmin/acountadmin.component';
+import { RoomagentComponent } from './components/manager/agent/roomagent/roomagent.component';
+import { InformationComponent } from './components/client/information/information.component';
+import { MaintenaceComponent } from './components/manager/agent/maintenace/maintenace.component';
+import { ContractComponent } from './components/manager/agent/contract/contract.component';
+import { RequestComponent } from './components/client/request/request.component';
+import { HistoryComponent } from './components/client/history/history.component';
+import { FavouriteComponent } from './components/client/favourite/favourite.component';
+import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
+
+const routes: Routes = [
+  {
+    path:'',component:IndexComponent,
+    children:[
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path:'home',component:HomeComponent,
+      },
+      {
+        path:'room', component:RoomComponent,
+      },
+      {
+        path:'roomdetail',component:RoomRoomdetailComponent,
+      },
+      {
+        path:'agent', component:AgentComponent,
+      },
+      {
+        path:'agentdetail/:id', component:AgentDetailComponent,
+      },
+      {
+        path:'contact', component:ContactComponent,
+      },
+      {
+        path:'information', component:InformationComponent,
+      },
+      {
+        path:'history', component:HistoryComponent,
+      },
+      {
+        path:'request', component:RequestComponent,
+      },
+      {
+        path:'favourite', component:FavouriteComponent,
+      }
+    ]
+  },
+  {
+    path:'admin',component:DashboardComponent,
+    children:[
+      {
+        path:'report',component:ReportadminComponent,
+      },
+      {
+        path:'acount', component:AcountadminComponent,
+      }]
+  },
+  {
+    path:'agent',component:DashboardComponent,
+    children:[
+      {
+        path:'report',component:ReportagentComponent,
+      },
+      {
+        path:'room', component:RoomagentComponent,
+      },
+      {
+        path:'maintenace',component:MaintenaceComponent,
+      },
+      {
+        path:'contract', component:ContractComponent,
+      },
+      {
+        path:'request',component:RequestagentComponent,
+      }
+    ]
+  },
+  {path:'login',component:LoginComponent}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
