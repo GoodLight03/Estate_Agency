@@ -20,7 +20,7 @@
                   <a href="property-grid.html">Properties</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  304 Blaster Up
+                  {{room.name}}
                 </li>
               </ol>
             </nav>
@@ -37,10 +37,10 @@
             <div id="property-single-carousel" class="swiper">
               <div class="swiper-wrapper">
                 <div class="carousel-item-b swiper-slide">
-                  <img src="assets/img/slide-1.jpg" alt="">
+                  <img src="{{'data:image/jpg;base64,' + room.img}}" alt="">
                 </div>
                 <div class="carousel-item-b swiper-slide">
-                  <img src="assets/img/slide-2.jpg" alt="">
+                  <img src="{{'data:image/jpg;base64,' + room.img}}" alt="">
                 </div>
               </div>
             </div>
@@ -59,7 +59,7 @@
                       <span class="bi bi-cash">$</span>
                     </div>
                     <div class="card-title-c align-self-center">
-                      <h5 class="title-c">15000</h5>
+                      <h5 class="title-c">{{room.price}}</h5>
                     </div>
                   </div>
                 </div>
@@ -121,8 +121,7 @@
                 </div>
                 <div class="property-description">
                   <p class="description color-text-a">
-                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit
-                    neque, auctor sit amet
+                    {{room.description}}
                     aliquam vel, ullamcorper sit amet ligula. Cras ultricies ligula sed magna dictum porta.
                     Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt
                     nibh pulvinar quam id dui posuere blandit.

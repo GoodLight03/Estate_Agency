@@ -17,7 +17,31 @@ export class RoomService {
     return this.http.get(ROOM_API,httpOptions);
   }
 
-  createRoom(name:string,description: string,price: string,quantity:number,categoryId: number,imageIds: Array<string>):Observable<any>{
-    return this.http.post(ROOM_API +'create',{name,description,price,quantity,categoryId,imageIds},httpOptions);
+  createRoom(name:string,price: string,address:string,description: string,state:string,img: File,idAgent:string):Observable<any>{
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price',price);
+    formData.append('address',address);
+    formData.append('describe',description);
+    formData.append('state', state);
+    formData.append('img',img);
+    formData.append('idAgent', idAgent);
+    console.log(formData.get('name') +""+ formData.get('idAgent') +'');
+    
+
+    // return this.http.post(ROOM_API +'create',{name,price,address,description,state,img,idAgent},httpOptions);
+    return this.http.post(ROOM_API +'create',formData);
+  }
+
+  getRoomByAgent(id: number):Observable<any>{
+    return this.http.get(ROOM_API +'all/'+ id,httpOptions);
+  }
+
+  getAll():Observable<any>{
+    return this.http.get(ROOM_API,httpOptions);
+  }
+
+  getRoomId(id: number):Observable<any>{
+    return this.http.get(ROOM_API+ 'detail/'+ id,httpOptions);
   }
 }

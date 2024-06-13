@@ -37,7 +37,7 @@ const routes: Routes = [
         path:'room', component:RoomComponent,
       },
       {
-        path:'roomdetail',component:RoomRoomdetailComponent,
+        path:'roomdetail/:id',component:RoomRoomdetailComponent,
       },
       {
         path:'agent', component:AgentComponent,
