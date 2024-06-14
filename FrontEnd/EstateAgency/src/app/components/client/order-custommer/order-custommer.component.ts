@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { HistoryService } from '../../../service/history.service';
 import { StorangeService } from '../../../service/storange.service';
+import { OrderService } from '../../../service/order.service';
 
 @Component({
-  selector: 'app-history',
-  templateUrl: './history.component.html',
-  styleUrl: './history.component.css',
+  selector: 'app-order-custommer',
+  templateUrl: './order-custommer.component.html',
+  styleUrl: './order-custommer.component.css',
   providers: [MessageService]
 })
-export class HistoryComponent {
+export class OrderCustommerComponent {
+
   listCategory : any;
 
-  constructor(private messageService : MessageService,private historyService: HistoryService,private storageService: StorangeService){}
+  constructor(private messageService : MessageService,private orderService: OrderService,private storageService: StorangeService){}
 
 
   ngOnInit(): void {
@@ -21,7 +22,7 @@ export class HistoryComponent {
   }
 
   getListCategory(){
-    this.historyService.getAgentOrder(this.storageService.getUser().id).subscribe({
+    this.orderService.getAgentOrder(this.storageService.getUser().id).subscribe({
       next: res =>{
         this.listCategory = res;
         console.log(res);

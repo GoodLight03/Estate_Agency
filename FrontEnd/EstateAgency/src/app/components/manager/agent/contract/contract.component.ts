@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { ContractService } from '../../../../service/contract.service';
+import { StorangeService } from '../../../../service/storange.service';
 
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
-  styleUrl: './contract.component.css'
+  styleUrl: './contract.component.css',
+  providers: [MessageService]
 })
 export class ContractComponent implements OnInit{
   listCategory : any;
@@ -19,7 +23,7 @@ export class ContractComponent implements OnInit{
     name : null
   }
 
-  //constructor(private messageService : MessageService,private categoryService: CategoryService){}
+  constructor(private messageService : MessageService,private contractService: ContractService,private storageService: StorangeService){}
 
   ngOnInit(): void {
     this.getListCategory();
@@ -27,14 +31,14 @@ export class ContractComponent implements OnInit{
 
 
   getListCategory(){
-    // this.categoryService.getListCategory().subscribe({
-    //   next: res =>{
-    //     this.listCategory = res;
-    //     console.log(res);
-    //   },error: err =>{
-    //     console.log(err);
-    //   }
-    // })
+    this.contractService.getAgentOrder(this.storageService.getUser().id).subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
   }
 
   showForm(){

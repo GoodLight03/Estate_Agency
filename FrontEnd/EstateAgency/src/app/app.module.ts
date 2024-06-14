@@ -34,6 +34,8 @@ import { FavouriteComponent } from './components/client/favourite/favourite.comp
 import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { OrderCustommerComponent } from './components/client/order-custommer/order-custommer.component';
+import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +59,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HistoryComponent,
     FavouriteComponent,
     RequestagentComponent,
+    OrderCustommerComponent,
+    OrderagentComponent,
   ],
   imports: [
     BrowserModule,

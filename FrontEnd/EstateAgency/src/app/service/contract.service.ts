@@ -20,4 +20,9 @@ export class ContractService {
   createCotract(name:string,description: string,price: string,quantity:number,categoryId: number,imageIds: Array<string>):Observable<any>{
     return this.http.post(CONTRACT_API +'create',{name,description,price,quantity,categoryId,imageIds},httpOptions);
   }
+
+  getAgentOrder(id: number):Observable<any>{
+    return this.http.get(CONTRACT_API+ 'agent/'+ id,httpOptions);
+  }
+
 }

@@ -1,3 +1,5 @@
+import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
+import { OrderCustommerComponent } from './components/client/order-custommer/order-custommer.component';
 import { HomeComponent } from './components/client/home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -60,6 +62,9 @@ const routes: Routes = [
       },
       {
         path:'favourite', component:FavouriteComponent,
+      },
+      {
+        path:'order', component:OrderCustommerComponent,
       }
     ]
   },
@@ -90,6 +95,9 @@ const routes: Routes = [
       },
       {
         path:'request',component:RequestagentComponent,
+      },
+      {
+        path:'order/:id',component:OrderagentComponent,
       }
     ]
   },
