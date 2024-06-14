@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.java.web.estateagency.entity.Order;
-import com.java.web.estateagency.model.request.CreateOrderRequest;
+import com.java.web.estateagency.model.request.CreateOrdersRequest;
 import com.java.web.estateagency.model.request.CreateRoomRequest;
 import com.java.web.estateagency.model.response.MessageResponse;
 import com.java.web.estateagency.service.OrderService;
@@ -35,8 +35,8 @@ public class OrderController {
 
     @PostMapping("/create")
     @Operation(summary = "Tạo Phòng")
-    public ResponseEntity<?> create(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
-        orderService.save(createOrderRequest);
+    public ResponseEntity<?> create(@Valid @RequestBody CreateOrdersRequest createOrderRequest) {
+        orderService.saveOrders(createOrderRequest);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

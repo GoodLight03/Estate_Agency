@@ -3,10 +3,10 @@ package com.java.web.estateagency.service;
 import java.util.List;
 
 import com.java.web.estateagency.entity.Order;
-import com.java.web.estateagency.model.request.CreateOrderRequest;
+import com.java.web.estateagency.model.request.CreateOrdersRequest;
 
 public interface OrderService {
-    Order save(CreateOrderRequest request);
+    Order saveOrders(CreateOrdersRequest request);
 
     List<Order> getorderCustomerss(Long id);
 

@@ -45,40 +45,40 @@ public class UserServiceImpl implements UserService {
   public void register(CreateUserRequest request) {
     try {
       // TODO Auto-generated method stub
-    User user = new User();
-    user.setUsername(request.getUsername());
-    user.setEmail(request.getEmail());
-    user.setPassword(encoder.encode(request.getPassword()));
-    Set<String> strRoles = request.getRole();
-    Set<Role> roles = new HashSet<>();
+      User user = new User();
+      user.setUsername(request.getUsername());
+      user.setEmail(request.getEmail());
+      user.setPassword(encoder.encode(request.getPassword()));
+      Set<String> strRoles = request.getRole();
+      Set<Role> roles = new HashSet<>();
 
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-          case "admin":
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
+      if (strRoles == null) {
+        Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
+      } else {
+        strRoles.forEach(role -> {
+          switch (role) {
+            case "admin":
+              Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+              roles.add(adminRole);
 
-            break;
-          case "agent":
-            Role modRole = roleRepository.findByName(ERole.ROLE_AGENT)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(modRole);
+              break;
+            case "agent":
+              Role modRole = roleRepository.findByName(ERole.ROLE_AGENT)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+              roles.add(modRole);
 
-            break;
-          default:
-            Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        }
-      });
-    }
-    user.setRoles(roles);
+              break;
+            default:
+              Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+              roles.add(userRole);
+          }
+        });
+      }
+      user.setRoles(roles);
 
       if (request.getImg() == null) {
         user.setImg(null);
@@ -90,10 +90,9 @@ public class UserServiceImpl implements UserService {
       userRepository.save(user);
     } catch (Exception e) {
       e.printStackTrace();
-      
+
     }
-   
-   
+
   }
 
   @Override
@@ -164,9 +163,9 @@ public class UserServiceImpl implements UserService {
     user.setState("Admin");
     user.setAddress("Admin@gmail.com");
     user.setPhone("Admin");
-    Set<Role> roles=new HashSet<>();
+    Set<Role> roles = new HashSet<>();
     Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
     roles.add(adminRole);
     user.setRoles(roles);
     userRepository.save(user);

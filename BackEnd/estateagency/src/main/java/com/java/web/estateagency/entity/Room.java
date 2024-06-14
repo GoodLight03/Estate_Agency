@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "room")
+@Table(name = "rooms")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,4 +52,8 @@ public class Room {
     @JsonBackReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Contract> contracts;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }

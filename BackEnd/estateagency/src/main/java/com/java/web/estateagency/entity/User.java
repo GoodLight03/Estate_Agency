@@ -70,4 +70,8 @@ public class User {
     @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Contract> contracts;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }

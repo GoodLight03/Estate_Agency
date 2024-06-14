@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.java.web.estateagency.entity.Contract;
 import com.java.web.estateagency.entity.History;
 import com.java.web.estateagency.entity.Order;
-import com.java.web.estateagency.model.request.CreateOrderRequest;
+import com.java.web.estateagency.model.request.CreateOrdersRequest;
 import com.java.web.estateagency.repository.ContractsRepository;
 import com.java.web.estateagency.repository.HistoryRepository;
 import com.java.web.estateagency.repository.OrderRepository;
@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService{
     private ContractsRepository contractRepositorys;
 
     @Override
-    public Order save(CreateOrderRequest request) {
+    public Order saveOrders(CreateOrdersRequest request) {
         Order order =new Order();
         order.setRoom(roomRepository.findById(request.getIdRoom()).get());
         order.setUser(userRepository.findById(request.getIdAgent()).get());
