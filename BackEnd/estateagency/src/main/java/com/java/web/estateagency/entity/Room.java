@@ -44,4 +44,12 @@ public class Room {
      @JsonBackReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<History> histories;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Contract> contracts;
 }
