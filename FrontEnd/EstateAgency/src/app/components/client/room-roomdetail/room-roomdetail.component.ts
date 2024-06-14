@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { AcountService } from '../../../service/acount.service';
 import { StorangeService } from '../../../service/storange.service';
 import { OrderService } from '../../../service/order.service';
+import { CommentService } from '../../../service/comment.service';
 
 @Component({
   selector: 'app-room-roomdetail',
@@ -19,16 +20,21 @@ export class RoomRoomdetailComponent {
   listRelatedProduct: any[] = [];
   agent: any;
   isLoggedIn = false;
+  content="";
 
-  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute, private messageService: MessageService, private storageService: StorangeService, private acountService: AcountService, private orderSercive: OrderService) {
+  lisrcommnet:any;
+
+  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute, private messageService: MessageService, private storageService: StorangeService, private acountService: AcountService, private orderSercive: OrderService,private commentService: CommentService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
+    console.log("OK"+this.id);
     this.getProduct();
     this.isLoggedIn = this.storageService.isLoggedIn();
+    this.getListComment()
   }
 
   getProduct() {
@@ -60,11 +66,35 @@ export class RoomRoomdetailComponent {
     this.orderSercive.createOrder(this.id, this.storageService.getUser().id).subscribe({
       next: res => {
         this.showSuccess("Đăng ký thành công")
+        this.getListComment()
       }, error: err => {
         this.showError(err.message);
       }
     })
   }
+
+  createComment(){
+    this.commentService.createComment(this.content,this.storageService.getUser().id,this.id).subscribe({
+      next: res=>{
+        this.showSuccess("Đăng ký thành công")
+      },
+      error: err => {
+        this.showError(err.message);
+      }
+    })
+  }
+
+  getListComment(){
+    this.commentService.getRoomIdComment(this.id).subscribe({
+      next: res =>{
+        this.lisrcommnet = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
+  }
+
 
   showSuccess(text: string) {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: text });

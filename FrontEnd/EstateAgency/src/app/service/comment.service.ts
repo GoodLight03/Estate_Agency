@@ -18,7 +18,11 @@ export class CommentService {
     return this.http.get(COMMENT_API,httpOptions);
   }
 
-  createComment(name:string,description: string,price: string,quantity:number,categoryId: number,imageIds: Array<string>):Observable<any>{
-    return this.http.post(COMMENT_API +'create',{name,description,price,quantity,categoryId,imageIds},httpOptions);
+  createComment(content:string,idCustomer:number,idRoom:number):Observable<any>{
+    return this.http.post(COMMENT_API +'create',{content,idCustomer,idRoom},httpOptions);
+  }
+
+  getRoomIdComment(id: number):Observable<any>{
+    return this.http.get(COMMENT_API+ 'room/'+ id,httpOptions);
   }
 }
