@@ -20,16 +20,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private long id;
 
-    @Column(name="username",unique = true)
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name="email",unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     private String fullname;
@@ -74,4 +74,12 @@ public class User {
     @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "firstUserName", cascade = CascadeType.ALL)
+    private List<Chat> firstUserChats;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "secondUserName", cascade = CascadeType.ALL)
+    private List<Chat> secondUserChats;
 }

@@ -13,4 +13,8 @@ public class CreateCommentCustomerRequest {
     private Long idCustomer;
 
     private Long idRoom;
+
+
+    private Long idfirstUserName;
+    private Long idsecondUserName;
 }
