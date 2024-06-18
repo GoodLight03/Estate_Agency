@@ -23,7 +23,7 @@ import { ReportadminComponent } from './components/manager/admin/reportadmin/rep
 import { AcountadminComponent } from './components/manager/admin/acountadmin/acountadmin.component';
 import { ReportagentComponent } from './components/manager/agent/reportagent/reportagent.component';
 import { RoomagentComponent } from './components/manager/agent/roomagent/roomagent.component';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InformationComponent } from './components/client/information/information.component';
 import { MaintenaceComponent } from './components/manager/agent/maintenace/maintenace.component';
@@ -36,6 +36,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OrderCustommerComponent } from './components/client/order-custommer/order-custommer.component';
 import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
+import { ChatComponent } from './components/chat/chat.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +62,7 @@ import { OrderagentComponent } from './components/manager/agent/orderagent/order
     RequestagentComponent,
     OrderCustommerComponent,
     OrderagentComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

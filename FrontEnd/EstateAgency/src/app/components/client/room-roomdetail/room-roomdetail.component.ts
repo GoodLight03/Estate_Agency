@@ -6,6 +6,8 @@ import { AcountService } from '../../../service/acount.service';
 import { StorangeService } from '../../../service/storange.service';
 import { OrderService } from '../../../service/order.service';
 import { CommentService } from '../../../service/comment.service';
+import { ChatService } from '../../../service/chat.service';
+import { Chat } from '../../../models/chat';
 
 @Component({
   selector: 'app-room-roomdetail',
@@ -20,18 +22,24 @@ export class RoomRoomdetailComponent {
   listRelatedProduct: any[] = [];
   agent: any;
   isLoggedIn = false;
-  content="";
+  content = "";
 
-  lisrcommnet:any;
+  chatId: any = 0;
 
-  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute, private messageService: MessageService, private storageService: StorangeService, private acountService: AcountService, private orderSercive: OrderService,private commentService: CommentService) {
+  public chatData: any = [];
+
+  lisrcommnet: any;
+
+  chatObj: Chat = new Chat();
+
+  constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute, private messageService: MessageService, private storageService: StorangeService, private acountService: AcountService, private orderSercive: OrderService, private commentService: CommentService, private chatService: ChatService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
-    console.log("OK"+this.id);
+    console.log("OK" + this.id);
     this.getProduct();
     this.isLoggedIn = this.storageService.isLoggedIn();
     this.getListComment()
@@ -43,6 +51,7 @@ export class RoomRoomdetailComponent {
         this.room = res;
         this.agent = res.user;
         console.log(this.room);
+        console.log(this.agent);
         // this.getListRelatedProduct();
       }, error: err => {
         console.log(err);
@@ -63,20 +72,50 @@ export class RoomRoomdetailComponent {
   }
 
   createOrder() {
+    //this.storageService.saveChat(2);
     this.orderSercive.createOrder(this.id, this.storageService.getUser().id).subscribe({
       next: res => {
         this.showSuccess("Đăng ký thành công")
-        this.getListComment()
+
       }, error: err => {
         this.showError(err.message);
       }
     })
+    console.log(this.agent.username + "Heloo" + this.storageService.getUser().username);
+    this.chatService.getChatByFirstUserNameAndSecondUserName(this.agent.username, this.storageService.getUser().username).subscribe(
+      (data: any) => {
+        this.chatData = data;
+        console.log(this.chatData[0].id);
+        this.chatId = this.chatData[0].id;
+        this.storageService.saveChat(this.chatId);
+        this.router.navigateByUrl('/chat');
+      },
+      (error: { status: number; }) => {
+        if (error.status == 404) {
+          this.chatObj.firstUserName = this.storageService.getUser().username;
+          this.chatObj.secondUserName = this.agent.username;
+          this.chatService.createChatRoomV(this.agent.id, this.storageService.getUser().id).subscribe(
+            (data: any) => {
+              console.log("Post"+this.chatData); 
+              this.chatData = data;
+              this.storageService.saveChat(this.chatData[0].id);
+              this.router.navigateByUrl('/chat');
+              console.log("2")
+            })
+        } else {
+          // this.router.navigateByUrl('/chat');
+          console.log("3")
+        }
+      });
+
   }
 
-  createComment(){
-    this.commentService.createComment(this.content,this.storageService.getUser().id,this.id).subscribe({
-      next: res=>{
+
+  createComment() {
+    this.commentService.createComment(this.content, this.storageService.getUser().id, this.id).subscribe({
+      next: res => {
         this.showSuccess("Đăng ký thành công")
+        this.getListComment();
       },
       error: err => {
         this.showError(err.message);
@@ -84,12 +123,12 @@ export class RoomRoomdetailComponent {
     })
   }
 
-  getListComment(){
+  getListComment() {
     this.commentService.getRoomIdComment(this.id).subscribe({
-      next: res =>{
+      next: res => {
         this.lisrcommnet = res;
         console.log(res);
-      },error: err =>{
+      }, error: err => {
         console.log(err);
       }
     })

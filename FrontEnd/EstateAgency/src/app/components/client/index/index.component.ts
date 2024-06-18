@@ -41,6 +41,9 @@ export class IndexComponent implements OnInit{
       this.router.navigate(['/admin/report']);
     }
 
+    setInterval(()=>{
+      this.isLoggedIn = this.storageService.isLoggedIn();
+    },1000);
   }
   
   logout():void{

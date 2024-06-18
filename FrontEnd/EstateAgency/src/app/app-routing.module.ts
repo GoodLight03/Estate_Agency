@@ -23,85 +23,93 @@ import { HistoryComponent } from './components/client/history/history.component'
 import { FavouriteComponent } from './components/client/favourite/favourite.component';
 import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
 import { RoleGuardService } from './service/role-guard.service';
+import { ChatComponent } from './components/chat/chat.component';
 
 const routes: Routes = [
   {
-    path:'',component:IndexComponent,
-    children:[
+    path: '', component: IndexComponent,
+    children: [
       {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'
       },
       {
-        path:'home',component:HomeComponent,
+        path: 'home', component: HomeComponent,
       },
       {
-        path:'room', component:RoomComponent,
+        path: 'room', component: RoomComponent,
       },
       {
-        path:'roomdetail/:id',component:RoomRoomdetailComponent,
+        path: 'roomdetail/:id', component: RoomRoomdetailComponent,
       },
       {
-        path:'agent', component:AgentComponent,
+        path: 'agent', component: AgentComponent,
       },
       {
-        path:'agentdetail/:id', component:AgentDetailComponent,
+        path: 'agentdetail/:id', component: AgentDetailComponent,
       },
       {
-        path:'contact', component:ContactComponent,
+        path: 'contact', component: ContactComponent,
       },
       {
-        path:'information', component:InformationComponent,
+        path: 'information', component: InformationComponent,
       },
       {
-        path:'history', component:HistoryComponent,
+        path: 'history', component: HistoryComponent,
       },
       {
-        path:'request', component:RequestComponent,
+        path: 'request', component: RequestComponent,
       },
       {
-        path:'favourite', component:FavouriteComponent,
+        path: 'favourite', component: FavouriteComponent,
       },
       {
-        path:'order', component:OrderCustommerComponent,
+        path: 'order', component: OrderCustommerComponent,
+      },
+      {
+        path: 'chat', component: ChatComponent,canActivate: [RoleGuardService], data: { expectedRole: "ROLE_CUSTOMER" }
       }
     ]
   },
   {
-    path:'admin',component:DashboardComponent,canActivate: [RoleGuardService],data: {expectedRole: "ROLE_ADMIN"},
-    children:[
+    path: 'admin', component: DashboardComponent, canActivate: [RoleGuardService], data: { expectedRole: "ROLE_ADMIN" },
+    children: [
       {
-        path:'report',component:ReportadminComponent,
+        path: 'report', component: ReportadminComponent,
       },
       {
-        path:'acount', component:AcountadminComponent,
+        path: 'acount', component: AcountadminComponent,
       }]
   },
   {
-    path:'agent',component:DashboardComponent,canActivate: [RoleGuardService],data: {expectedRole: "ROLE_AGENT"},
-    children:[
+    path: 'agent', component: DashboardComponent, canActivate: [RoleGuardService], data: { expectedRole: "ROLE_AGENT" },
+    children: [
       {
-        path:'report',component:ReportagentComponent,
+        path: 'report', component: ReportagentComponent,
       },
       {
-        path:'room', component:RoomagentComponent,
+        path: 'room', component: RoomagentComponent,
       },
       {
-        path:'maintenace',component:MaintenaceComponent,
+        path: 'maintenace', component: MaintenaceComponent,
       },
       {
-        path:'contract', component:ContractComponent,
+        path: 'contract', component: ContractComponent,
       },
       {
-        path:'request',component:RequestagentComponent,
+        path: 'request', component: RequestagentComponent,
       },
       {
-        path:'order/:id',component:OrderagentComponent,
+        path: 'order/:id', component: OrderagentComponent,
+      },
+      {
+        path: 'chat', component: ChatComponent
       }
     ]
   },
-  {path:'login',component:LoginComponent}
+  { path: 'login', component: LoginComponent },
+  
 ];
 
 @NgModule({
