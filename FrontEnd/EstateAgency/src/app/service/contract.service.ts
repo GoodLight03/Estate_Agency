@@ -25,4 +25,23 @@ export class ContractService {
     return this.http.get(CONTRACT_API+ 'agent/'+ id,httpOptions);
   }
 
+  upFile(id:number,file:File):Observable<any>{
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('file',file);
+    return this.http.post(CONTRACT_API +'upFile',formData);
+
+  }
+
+  getFile(file:number):void{
+    //return this.http.get(CONTRACT_API +'getfile/'+file,httpOptions);
+
+   this.http.get(CONTRACT_API +'getfile/'+file, { responseType: 'arraybuffer' })
+    .subscribe((response: ArrayBuffer) => {
+      const file = new Blob([response], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+    });
+  }
+
 }

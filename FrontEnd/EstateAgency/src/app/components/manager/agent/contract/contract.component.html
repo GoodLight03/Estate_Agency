@@ -1,4 +1,4 @@
-<!-- <p-toast></p-toast> -->
+<p-toast></p-toast>
 <p-card>
     <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
@@ -33,6 +33,8 @@
                 <td>{{category.name}}</td>
                 <td>{{category.start}}</td>
                 <td>{{category.acount}}</td>
+                <td *ngIf="category.file==null"><input type="file" pInputText class="w-full mt-2" name="img" (change)="onFileSelected($event,category)"></td>
+                <td *ngIf="category.file!=null"><button (click)="getFile(category.id)">View Contract</button></td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>

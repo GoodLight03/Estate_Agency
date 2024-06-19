@@ -53,6 +53,8 @@ export class IndexComponent implements OnInit{
         this.isLoggedIn = false;
         this.authModal = false;
         this.showSuccess("Bạn đã đăng xuất!!");
+        this.showSuccess("Bạn đã đăng xuất!!");
+        this.router.navigate(['/']);
       },error: err=>{
         this.showError(err.message);
       }

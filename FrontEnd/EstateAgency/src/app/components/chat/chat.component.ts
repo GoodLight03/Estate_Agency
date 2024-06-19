@@ -26,7 +26,7 @@ export class ChatComponent implements OnInit {
   chatId: number = 0;
   color = "";
   secondUserName = "";
-  secondUserNameV :any;
+  secondUserNameV: any;
   public alluser: any = [];
   check = sessionStorage.getItem('username');
   timesRun = 0;
@@ -62,22 +62,33 @@ export class ChatComponent implements OnInit {
       const value = sessionStorage.getItem(key);
       console.log(`Key: ${key}, Value: ${value}`);
     });
-
-    setInterval(() => {
-
-
-      this.chatService.getChatById(this.storange.geChat()).subscribe(data => {
+    if (this.storange.geChat() == 0) {
+      this.chatService.getChatByFirstUserNameOrSecondUserName(this.storange.getUser().username).subscribe(data => {
         this.chatData = data;
-        console.log(this.chatData);
-        console.log(this.chatData.messageList);
-        this.messageListV = this.chatData.messageList;
-        this.secondUserName = this.chatData.secondUserName.username;
-        this.firstUserName = this.chatData.firstUserName.username;
-        this.lengthMess = this.messageListV.length;
-        console.log("length" + this.lengthMess);
-        this.secondUserNameV=this.chatData.secondUserName;
+        this.chatList = this.chatData;
+        this.storange.saveChat( this.chatList[0].id)
+
       });
-    }, 1000);
+    }
+    
+      setInterval(() => {
+
+
+
+        this.chatService.getChatById(this.storange.geChat()).subscribe(data => {
+          this.chatData = data;
+          console.log(this.chatData);
+          console.log(this.chatData.messageList);
+          this.messageListV = this.chatData.messageList;
+          this.secondUserName = this.chatData.secondUserName.username;
+          this.firstUserName = this.chatData.firstUserName.username;
+          this.lengthMess = this.messageListV.length;
+          console.log("length" + this.lengthMess);
+          this.secondUserNameV = this.chatData.secondUserName;
+        });
+
+      }, 1000) ;
+
 
 
     console.log(this.storange.getUser().username)
@@ -90,7 +101,7 @@ export class ChatComponent implements OnInit {
         this.chatList = this.chatData;
 
         this.chatList.sort((a: any, b: any) => a.firstUserName.id - b.firstUserName.id);
-        
+
       });
 
 
@@ -138,7 +149,7 @@ export class ChatComponent implements OnInit {
         this.messageListV = this.chatData.messageList;
         this.secondUserName = this.chatData.secondUserName;
         this.firstUserName = this.chatData.firstUserName;
-        this.secondUserNameV=this.chatData.secondUserName;
+        this.secondUserNameV = this.chatData.secondUserName;
       });
       // }, 1000)
 
@@ -166,7 +177,7 @@ export class ChatComponent implements OnInit {
         this.messageListV = this.chatData.messageList;
         this.secondUserName = this.chatData.secondUserName;
         this.firstUserName = this.chatData.firstUserName;
-        this.secondUserNameV=this.chatData.secondUserName;
+        this.secondUserNameV = this.chatData.secondUserName;
       })
 
     })

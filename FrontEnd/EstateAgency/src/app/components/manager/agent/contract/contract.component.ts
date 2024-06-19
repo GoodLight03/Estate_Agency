@@ -20,7 +20,7 @@ export class ContractComponent implements OnInit{
 
   categoryForm : any ={
     id: null,
-    name : null
+    img : null
   }
 
   constructor(private messageService : MessageService,private contractService: ContractService,private storageService: StorangeService){}
@@ -117,14 +117,34 @@ export class ContractComponent implements OnInit{
     // })
   }
 
+  onFileSelected(event: any, categoryId: any): void {
+    this.categoryForm.img = event.target.files[0];
+    this.categoryForm.id=categoryId.id;
+    console.log(this.categoryForm);
+    this.contractService.upFile(this.categoryForm.id,this.categoryForm.img).subscribe({
+      next: res =>{
+       this.showSuccess("Upload OK");
+       this.getListCategory();
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
+  }
+
+  getFile(file:number):void{
+    this.contractService.getFile(file);
+  }
+
+
   showSuccess(text: string) {
-    //this.messageService.add({severity:'success', summary: 'Success', detail: text});
+    this.messageService.add({severity:'success', summary: 'Success', detail: text});
   }
   showError(text: string) {
-   // this.messageService.add({severity:'error', summary: 'Error', detail: text});
+   this.messageService.add({severity:'error', summary: 'Error', detail: text});
   }
 
   showWarn(text : string) {
-   // this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
+    this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
   }
 }

@@ -22,6 +22,7 @@
     <p-table [value]="listCategory" [rows]="5" [paginator]="true">
         <ng-template pTemplate="header">
             <tr>
+                <td>Img</td>
                 <th>Name</th>
                 <th>Email</th>
                 <!-- <th>Adress</th> -->
@@ -32,6 +33,10 @@
         </ng-template>
         <ng-template pTemplate="body" let-category>
             <tr> 
+                <td> <div class="rounded-circle user_img text_inside_circle1">
+                    <!-- {{secondUserName.substring(0,1)}} -->
+                    <img src="{{'data:image/jpg;base64,' + category.img}}" alt="" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;height: 50px;width: 50px;">
+                  </div></td>
                 <td>{{category.username}}</td>
                 <td>{{category.email}}</td>
                 <!-- <td>{{category.adress}}</td> -->
