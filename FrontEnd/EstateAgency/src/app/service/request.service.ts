@@ -14,11 +14,11 @@ export class RequestService {
 
   constructor(private http:HttpClient) { }
 
-  getListrequest():Observable<any>{
-    return this.http.get(REQUEST_API,httpOptions);
+  getListrequest(id:number,filter:string):Observable<any>{
+    return this.http.get(REQUEST_API+"all/"+id+"?filter="+filter,httpOptions);
   }
 
-  createrequest(name:string,description: string,price: string,quantity:number,categoryId: number,imageIds: Array<string>):Observable<any>{
-    return this.http.post(REQUEST_API +'create',{name,description,price,quantity,categoryId,imageIds},httpOptions);
+  createrequest(iduser:number,idroom: number,description: string):Observable<any>{
+    return this.http.post(REQUEST_API +'save',{iduser,idroom,description},httpOptions);
   }
 }

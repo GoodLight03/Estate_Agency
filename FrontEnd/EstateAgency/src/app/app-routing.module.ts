@@ -97,14 +97,17 @@ const routes: Routes = [
       {
         path: 'contract', component: ContractComponent,
       },
-      {
-        path: 'request', component: RequestagentComponent,
-      },
+      // {
+      //   path: 'request', component: RequestagentComponent,
+      // },
       {
         path: 'order/:id', component: OrderagentComponent,
       },
       {
         path: 'chat', component: ChatComponent
+      },
+      {
+        path: 'request/:id', component: RequestagentComponent,
       }
     ]
   },

@@ -27,6 +27,7 @@ export class ChatComponent implements OnInit {
   color = "";
   secondUserName = "";
   secondUserNameV: any;
+  firstUserNameV: any;
   public alluser: any = [];
   check = sessionStorage.getItem('username');
   timesRun = 0;
@@ -85,6 +86,7 @@ export class ChatComponent implements OnInit {
           this.lengthMess = this.messageListV.length;
           console.log("length" + this.lengthMess);
           this.secondUserNameV = this.chatData.secondUserName;
+          this.firstUserNameV=this.chatData.firstUserName;
         });
 
       }, 1000) ;
@@ -150,6 +152,7 @@ export class ChatComponent implements OnInit {
         this.secondUserName = this.chatData.secondUserName;
         this.firstUserName = this.chatData.firstUserName;
         this.secondUserNameV = this.chatData.secondUserName;
+        this.firstUserNameV=this.chatData.firstUserName;
       });
       // }, 1000)
 
@@ -178,6 +181,7 @@ export class ChatComponent implements OnInit {
         this.secondUserName = this.chatData.secondUserName;
         this.firstUserName = this.chatData.firstUserName;
         this.secondUserNameV = this.chatData.secondUserName;
+        this.firstUserNameV=this.chatData.firstUserName;
       })
 
     })

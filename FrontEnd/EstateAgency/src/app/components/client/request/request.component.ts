@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { RequestService } from '../../../service/request.service';
+import { StorangeService } from '../../../service/storange.service';
+import { HistoryService } from '../../../service/history.service';
 
 @Component({
   selector: 'app-request',
   templateUrl: './request.component.html',
-  styleUrl: './request.component.css'
+  styleUrl: './request.component.css',
+  providers: [MessageService]
 })
 export class RequestComponent implements OnInit{
   listCategory : any;
+
+  listRoom : any;
 
   displayForm: boolean = false;
 
@@ -14,34 +21,39 @@ export class RequestComponent implements OnInit{
 
   onUpdate : boolean = false;
 
+  select="";
+
   categoryForm : any ={
-    id: null,
-    name : null
+    iduser : null,
+    idroom : null,
+    description:null
   }
 
-  //constructor(private messageService : MessageService,private categoryService: CategoryService){}
+  constructor(private messageService : MessageService,private requestService: RequestService, private storange: StorangeService,private history:HistoryService){}
 
   ngOnInit(): void {
     this.getListCategory();
+    this.listRoomUser();
   }
 
 
   getListCategory(){
-    // this.categoryService.getListCategory().subscribe({
-    //   next: res =>{
-    //     this.listCategory = res;
-    //     console.log(res);
-    //   },error: err =>{
-    //     console.log(err);
-    //   }
-    // })
+    this.requestService.getListrequest(this.storange.getUser().id,"User").subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
   }
 
   showForm(){
     this.onUpdate = false;
     this.categoryForm ={
-      id : null,
-      name : null
+      iduser : null,
+      idroom : null,
+      description:null
     }
     this.displayForm = true;
   }
@@ -61,16 +73,16 @@ export class RequestComponent implements OnInit{
   }
 
   createCategory(){
-    const {name} = this.categoryForm;
-    // this.categoryService.createCategory(name).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Tạo danh mục thành công!");
-    //     this.displayForm = false;
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+    const {iduser,idroom,description} = this.categoryForm;
+    this.requestService.createrequest(this.storange.getUser().id,idroom,description).subscribe({
+      next: res =>{
+        this.getListCategory();
+        this.showSuccess("Tạo danh mục thành công!");
+        this.displayForm = false;
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
   }
 
 
@@ -88,15 +100,17 @@ export class RequestComponent implements OnInit{
   }
 
 
-  enableCategory(id : number){
-    // this.categoryService.enableCategory(id).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Cập nhật thành công!!");
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+  listRoomUser(){
+    this.history.getAgentOrder(this.storange.getUser().id).subscribe({
+      next: res =>{
+        //this.getListCategory();
+        this.listRoom=res;
+        console.log(this.listRoom)
+        //this.showSuccess("Cập nhật thành công!!");
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
   }
 
 
@@ -113,14 +127,26 @@ export class RequestComponent implements OnInit{
     // })
   }
 
+
+  addRoom(){
+   
+    console.log(this.select);
+    //this.select=idRoom;
+    
+    if(this.select){
+      this.categoryForm.idroom=this.select;
+      console.log("Hello"+this.categoryForm.idroom)
+    }
+  }
+
   showSuccess(text: string) {
-    //this.messageService.add({severity:'success', summary: 'Success', detail: text});
+    this.messageService.add({severity:'success', summary: 'Success', detail: text});
   }
   showError(text: string) {
-   // this.messageService.add({severity:'error', summary: 'Error', detail: text});
+    this.messageService.add({severity:'error', summary: 'Error', detail: text});
   }
 
   showWarn(text : string) {
-   // this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
+    this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
   }
 }
