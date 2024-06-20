@@ -18,6 +18,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query("SELECT c FROM Chat c WHERE c.firstUserName.username = ?1 AND c.secondUserName.username = ?2")
     HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName);
 
-    @Query("SELECT c FROM Chat c WHERE c.firstUserName.username = ?1 AND c.secondUserName.username = ?2")
-    HashSet<Chat> getChatBySecondUserNameAndFirstUserName(String firstUserName, String secondUserName);
+    @Query("SELECT c FROM Chat c WHERE c.secondUserName.username = ?1 AND c.firstUserName.username = ?2")
+    HashSet<Chat> getChatBySecondUserNameAndFirstUserName(String secondUserName, String firstUserName);
 }

@@ -56,4 +56,8 @@ public class Room {
     @JsonBackReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Request> requests;
 }

@@ -82,4 +82,8 @@ public class User {
     @JsonBackReference
     @OneToMany(mappedBy = "secondUserName", cascade = CascadeType.ALL)
     private List<Chat> secondUserChats;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Request> requests;
 }
