@@ -12,4 +12,10 @@ import com.java.web.estateagency.entity.User;
 public interface RoomRepository extends JpaRepository<Room,Long>  {
     @Query("select p from Room p where p.user.id = ?1 ")
     List<Room> getByAgent(Long id);
+
+    @Query("select p from Room p where p.user.id = ?1 and p.enabled=true")
+    List<Room> getByAgentEnable(Long id);
+
+    @Query("select p from Room p where p.enabled=true ")
+    List<Room> getAllEnable();
 }

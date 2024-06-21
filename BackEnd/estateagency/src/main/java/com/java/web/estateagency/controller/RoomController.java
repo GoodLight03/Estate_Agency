@@ -68,20 +68,44 @@ public class RoomController {
     }
 
     @GetMapping("/")
+    @Operation(summary = "All Room")
     public ResponseEntity<List<Room>> getAll(){
         List<Room> all=roomService.getAll();
         return ResponseEntity.ok(all);
     }
 
+    @GetMapping("/allenable")
+    @Operation(summary = "All Room enable")
+    public ResponseEntity<List<Room>> getAllEnable(){
+        List<Room> all=roomService.getbyAllEnable();
+        return ResponseEntity.ok(all);
+    }
+
     @GetMapping("/detail/{id}")
+    @Operation(summary = "Detail Room")
     public ResponseEntity<Room> getRoomId(@PathVariable("id")Long id){
         Room all=roomService.detailRoom(id);
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/all/{id}")
+    @Operation(summary = "All Room id")
     public ResponseEntity<List<Room>> getAgenRooom(@PathVariable("id")Long id){
         List<Room> all=roomService.getbyAgent(id);
         return ResponseEntity.ok(all);
     }
+
+    @GetMapping("/allenableAgent/{id}")
+    @Operation(summary = "All Room agent id")
+    public ResponseEntity<List<Room>> getAgenRooomEnable(@PathVariable("id")Long id){
+        List<Room> all=roomService.getbyAgentEnable(id);
+        return ResponseEntity.ok(all);
+    }
+
+    @PostMapping("/enable/{id}")
+    @Operation(summary = "Enable Room")
+    public ResponseEntity<Room> enable(@PathVariable("id")Long id, @RequestParam Boolean check){
+        return ResponseEntity.ok(roomService.enable(id,check));
+    }
+
 }

@@ -12,6 +12,7 @@ import com.java.web.estateagency.entity.Request;
 import com.java.web.estateagency.model.request.CreateRequestRequest;
 import com.java.web.estateagency.service.RequestService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,12 +31,14 @@ public class RequestController {
     private RequestService requestService;
 
     @GetMapping("/all/{id}")
+     @Operation(summary = "get Request id")
     public ResponseEntity<?> getMRequest(@PathVariable("id") long id, @RequestParam("filter") String filter) {
         List<Request> requests=requestService.findAllByIdUser(id, filter);
         return ResponseEntity.ok(requests);
     }
 
     @PostMapping("/save")
+    @Operation(summary = "get Request save")
     public ResponseEntity<Request> postMethodName(@RequestBody CreateRequestRequest createRequestRequest) {
         //TODO: process POST request
         log.info("Hell"+createRequestRequest.toString());

@@ -44,12 +44,14 @@ public class UserController {
     }
 
     @GetMapping("/agent")
+    @Operation(summary = "All Agent")
     public ResponseEntity<List<User>> getAgent(){
         List<User> agents=userService.getListAgent();
         return ResponseEntity.ok(agents);
     }
 
     @GetMapping("/all")
+    @Operation(summary = "All User")
     public ResponseEntity<List<User>> getAll(){
         List<User> all=userService.getAll();
         return ResponseEntity.ok(all);

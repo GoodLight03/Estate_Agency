@@ -14,6 +14,8 @@ import com.java.web.estateagency.entity.History;
 import com.java.web.estateagency.entity.Order;
 import com.java.web.estateagency.service.HistoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/history")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,6 +25,7 @@ public class HistoryController {
     private HistoryService historyService;
 
     @GetMapping("/customer/{id}")
+    @Operation(summary = "Get History")
     public ResponseEntity<List<History>> getbyCustomer(@PathVariable("id") Long id) {
         List<History> od = historyService.getByCusumer(id);
         return ResponseEntity.ok(od);

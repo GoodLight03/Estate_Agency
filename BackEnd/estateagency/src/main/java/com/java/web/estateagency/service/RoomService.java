@@ -13,4 +13,10 @@ public interface RoomService {
     List<Room> getbyAgent(Long idAgent);
 
     Room detailRoom(Long id);
+
+    Room enable(Long id,Boolean chBoolean);
+
+    List<Room> getbyAgentEnable(Long idAgent);
+
+    List<Room> getbyAllEnable();
 }

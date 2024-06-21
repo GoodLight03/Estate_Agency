@@ -40,6 +40,7 @@ public class CommentsController {
     }
 
     @GetMapping("/room/{id}")
+    @Operation(summary = "Get Room By Id")
     public ResponseEntity<List<Comment>> getbyCustomer(@PathVariable("id") Long id) {
         List<Comment> od = commentService.getByRoom(id);
         return ResponseEntity.ok(od);

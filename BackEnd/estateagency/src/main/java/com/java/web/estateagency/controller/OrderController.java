@@ -42,18 +42,21 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{id}")
+    @Operation(summary = "get Order customer")
     public ResponseEntity<List<Order>> getbyCustomer(@PathVariable("id") Long id) {
         List<Order> od = orderService.getorderCustomerss(id);
         return ResponseEntity.ok(od);
     }
 
     @GetMapping("/room/{id}")
+    @Operation(summary = "get Order room")
     public ResponseEntity<List<Order>> getbyRoom(@PathVariable("id") Long id) {
         List<Order> od = orderService.getorderRoomss(id);
         return ResponseEntity.ok(od);
     }
 
     @PatchMapping("/id/{id}/browse/{browse}")
+    @Operation(summary = "get Order browser")
     public ResponseEntity<?> updatebrowse(@PathVariable("id") Long id, @PathVariable("browse") String browse) {
         orderService.updatebrowse(id, browse);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.java.web.estateagency.entity.Contract;
 import com.java.web.estateagency.entity.History;
 import com.java.web.estateagency.entity.Order;
+import com.java.web.estateagency.entity.Room;
 import com.java.web.estateagency.model.request.CreateOrdersRequest;
 import com.java.web.estateagency.repository.ContractsRepository;
 import com.java.web.estateagency.repository.HistoryRepository;
@@ -62,6 +63,7 @@ public class OrderServiceImpl implements OrderService{
             History history=new History();
             history.setUser(order.getUser());
             history.setRoom(order.getRoom());
+            history.setStatus("Đang thuê");
             historyRepository.save(history);
 
             Contract contract =new Contract();
@@ -71,6 +73,12 @@ public class OrderServiceImpl implements OrderService{
             contract.setUser(order.getRoom().getUser());
             contract.setRoom(order.getRoom());
            contractRepositorys.save(contract);
+
+           Room room= roomRepository.findById(order.getRoom().getId()).get();
+           room.setState("Đã thuê");
+           room.setEnabled(false);
+           roomRepository.save(room);
+
 
         }
         order.setStatus(browse);

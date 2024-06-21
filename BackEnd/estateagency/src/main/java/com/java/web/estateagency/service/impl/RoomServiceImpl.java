@@ -35,7 +35,7 @@ public class RoomServiceImpl implements RoomService {
         room.setPrice(createRoomRequest.getPrice());
         room.setAddress(createRoomRequest.getAddress());
         room.setDescription(createRoomRequest.getDescribe());
-        room.setState(createRoomRequest.getState());
+        room.setState("Chưa thuê");
         User user = userRepository.findById(createRoomRequest.getIdAgent()).orElseThrow(()-> new NotFoundException("Not Found Category With Id: " + createRoomRequest.getIdAgent()));
         room.setUser(user);
         try {
@@ -66,6 +66,23 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room detailRoom(Long id) {
        return roomRepository.findById(id).get();
+    }
+
+    @Override
+    public Room enable(Long id,Boolean chBoolean) {
+       Room room=roomRepository.findById(id).get();
+       room.setEnabled(chBoolean);
+       return roomRepository.save(room);
+    }
+
+    @Override
+    public List<Room> getbyAgentEnable(Long idAgent) {
+       return roomRepository.getByAgentEnable(idAgent);
+    }
+
+    @Override
+    public List<Room> getbyAllEnable() {
+        return roomRepository.getAllEnable();
     }
 
 }

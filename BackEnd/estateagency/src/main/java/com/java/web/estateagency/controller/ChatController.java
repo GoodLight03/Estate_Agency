@@ -26,6 +26,7 @@ import com.java.web.estateagency.model.request.CreateMessageRequest;
 import com.java.web.estateagency.service.ChatService;
 
 import io.jsonwebtoken.io.IOException;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/create")
+    @Operation(summary = "Create Chat")
     public ResponseEntity<Chat> createChat(@RequestParam("idfirstUserName") Long idfirstUserName, @RequestParam("idsecondUserName") Long idsecondUserName ) {
 
         CreateChatRoomRequest createChatRoomRequest=new CreateChatRoomRequest();
@@ -56,6 +58,7 @@ public class ChatController {
 
 
     @GetMapping("/all")
+    @Operation(summary = "Get All Chat")
     public ResponseEntity<List<Chat>> getAllChats() {
         try {
             return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
@@ -65,6 +68,7 @@ public class ChatController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get By Id Chat")
     public ResponseEntity<Chat> getChatById(@PathVariable Long id) {
         try {
             return new ResponseEntity<Chat>(chatService.getById(id), HttpStatus.OK);
@@ -74,6 +78,7 @@ public class ChatController {
     }
 
     @GetMapping("/firstUserName/{username}")
+    @Operation(summary = "Get Chat By First")
     public ResponseEntity<?> getChatByFirstUserName(@PathVariable String username) {
         try {
             HashSet<Chat> byChat = this.chatService.getChatByFirstUserName(username);
@@ -86,6 +91,7 @@ public class ChatController {
 
 
     @GetMapping("/secondUserName/{username}")
+    @Operation(summary = "Get Chat By Second")
     public ResponseEntity<?> getChatBySecondUserName(@PathVariable String username) {
 
         try {
@@ -97,6 +103,7 @@ public class ChatController {
     }
 
     @GetMapping("/getChatByFirstUserNameOrSecondUserName/{username}")
+    @Operation(summary = "Get By User F or S")
     public ResponseEntity<?> getChatByFirstUserNameOrSecondUserName(@PathVariable String username) {
 
         try {
@@ -109,6 +116,7 @@ public class ChatController {
 
 
     @GetMapping("/getChatByFirstUserNameAndSecondUserName")
+    @Operation(summary = "Get By User S or F")
     public ResponseEntity<?> getChatByFirstUserNameAndSecondUserName(@RequestParam("firstUserName") String firstUserName, @RequestParam("secondUserName") String secondUserName){
 
         try {
@@ -127,6 +135,7 @@ public class ChatController {
     // }
 
     @PutMapping("/message/{chatId}")
+    @Operation(summary = "Create Mesage")
     public ResponseEntity<Chat> addMessage(@RequestParam("message") String message ,@RequestParam("acount") String acount, @PathVariable Long chatId) throws ChatNotFoundException {
         log.info("Hello"+chatId.toString());
         CreateMessageRequest message2=new CreateMessageRequest();
