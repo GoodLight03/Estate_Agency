@@ -35,19 +35,19 @@ public class WebSecurityConfig {
       return new AuthTokenFilter();
     }
 
-    private static final String[] AUTH_WHITELIST = {
-      "/swagger-resources",
-      "/swagger-resources/**",
-      "/configuration/ui",
-      "/configuration/security",
-      "/swagger-ui.html",
-      "/webjars/**",
-      "/v3/api-docs/**",
-      "/api/public/**",
-      "/api/public/authenticate",
-      "/actuator/*",
-      "/swagger-ui/**"
-};
+//     private static final String[] AUTH_WHITELIST = {
+//       "/swagger-resources",
+//       "/swagger-resources/**",
+//       "/configuration/ui",
+//       "/configuration/security",
+//       "/swagger-ui.html",
+//       "/webjars/**",
+//       "/v3/api-docs/**",
+//       "/api/public/**",
+//       "/api/public/authenticate",
+//       "/actuator/*",
+//       "/swagger-ui/**"
+// };
   
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -74,7 +74,6 @@ public class WebSecurityConfig {
           .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
           .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
           .authorizeRequests().requestMatchers("/api/auth/**").permitAll()
-          .requestMatchers(AUTH_WHITELIST).permitAll()
           .requestMatchers("/**").permitAll()
           .anyRequest().authenticated();
       

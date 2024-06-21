@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.java.web.estateagency.config.vnpay.VNPayService;
 import com.java.web.estateagency.model.request.CreateUserRequest;
 import com.java.web.estateagency.model.request.LoginRequest;
 import com.java.web.estateagency.model.response.MessageResponse;
@@ -33,8 +35,11 @@ import com.java.web.estateagency.security.service.UserDetailsImpl;
 import com.java.web.estateagency.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,78 +47,114 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+        @Autowired
+        private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+        @Autowired
+        private JwtUtils jwtUtils;
 
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private UserService userService;
 
-    @PostMapping("/login")
-    @Operation(summary = "Đăng nhập")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                        loginRequest.getPassword()));
+        @Autowired
+        private VNPayService vnPayService;
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        @PostMapping("/login")
+        @Operation(summary = "Đăng nhập")
+        public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+                Authentication authentication = authenticationManager
+                                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                                                loginRequest.getPassword()));
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles));
-        // return ResponseEntity.ok(jwtCookie);
-    }
+                List<String> roles = userDetails.getAuthorities().stream()
+                                .map(item -> item.getAuthority())
+                                .collect(Collectors.toList());
 
-    // @PostMapping("/register")
-    // @Operation(summary="Đăng ký")
-    // public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest
-    // request){
-    // //log.info(request.toString());
-    // userService.register(request);
+                return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                                .body(new UserInfoResponse(userDetails.getId(),
+                                                userDetails.getUsername(),
+                                                userDetails.getEmail(),
+                                                roles));
+                // return ResponseEntity.ok(jwtCookie);
+        }
 
-    // return ResponseEntity.ok(new MessageResponse("User registered
-    // successfully!"));
-    // }
+        // @PostMapping("/register")
+        // @Operation(summary="Đăng ký")
+        // public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest
+        // request){
+        // //log.info(request.toString());
+        // userService.register(request);
 
-    @PostMapping("/register")
-    @Operation(summary = "Đăng ký")
-    public ResponseEntity<?> register(@RequestParam("username") String username,
-            @RequestParam("password") String password, @RequestParam("email") String email,
-            @RequestParam("role") String[] role, @RequestParam("img") MultipartFile img) {
+        // return ResponseEntity.ok(new MessageResponse("User registered
+        // successfully!"));
+        // }
 
-         log.info(role[0]+"Hekk");
-        Set<String> sec=new HashSet<>();
-        sec.add(role[0]);
-        CreateUserRequest request=new CreateUserRequest();
-        request.setUsername(username);
-        request.setEmail(email);
-        request.setRole(sec);
-        request.setPassword(password);
-        log.info(request.toString());
-        request.setImg(img);
-      
-        userService.register(request);
+        @PostMapping("/register")
+        @Operation(summary = "Đăng ký")
+        public ResponseEntity<?> register(@RequestParam("username") String username,
+                        @RequestParam("password") String password, @RequestParam("email") String email,
+                        @RequestParam("role") String[] role, @RequestParam("img") MultipartFile img) {
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
+                log.info(role[0] + "Hekk");
+                Set<String> sec = new HashSet<>();
+                sec.add(role[0]);
+                CreateUserRequest request = new CreateUserRequest();
+                request.setUsername(username);
+                request.setEmail(email);
+                request.setRole(sec);
+                request.setPassword(password);
+                log.info(request.toString());
+                request.setImg(img);
 
-    @PostMapping("/logout")
-    @Operation(summary = "Đăng xuất")
-    public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been logout!"));
-    }
+                userService.register(request);
+
+                return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        }
+
+        @PostMapping("/logout")
+        @Operation(summary = "Đăng xuất")
+        public ResponseEntity<?> logoutUser() {
+                ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+                return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                .body(new MessageResponse("You've been logout!"));
+        }
+
+        @GetMapping("/payment/{money}")
+        public String getMethodName(@PathVariable("money") int money, RedirectAttributes attributes,
+                        HttpServletRequest request) {
+                String infor = "Ok";
+                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String vnpayUrl = vnPayService.createOrder((int) money, infor, baseUrl);
+                return "redirect:" + vnpayUrl;
+        }
+
+        @GetMapping("/vnpay-payment")
+        public String GetMapping(HttpServletRequest request,
+                        RedirectAttributes attributes) {
+                int paymentStatus = vnPayService.orderReturn(request);
+
+                String orderInfo = request.getParameter("vnp_OrderInfo");
+                String paymentTime = request.getParameter("vnp_PayDate");
+                String transactionId = request.getParameter("vnp_TransactionNo");
+                String totalPrice = request.getParameter("vnp_Amount");
+
+                // model.addAttribute("orderId", orderInfo);
+                // model.addAttribute("totalPrice", totalPrice);
+                // model.addAttribute("paymentTime", paymentTime);
+                // model.addAttribute("transactionId", transactionId);
+                if (paymentStatus == 1) {
+                        // ShoppingCart cart = cartService.FindById(Long.parseLong(orderInfo));
+                        // Order order = orderService.save(cart);
+                        // session.removeAttribute("totalItems");
+                        return "client/ordersuccess";
+                }
+                return "client/orderfail";
+        }
+
 }
