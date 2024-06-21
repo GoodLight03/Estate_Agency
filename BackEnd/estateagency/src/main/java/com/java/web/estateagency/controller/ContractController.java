@@ -49,5 +49,10 @@ public class ContractController {
         return ResponseEntity.ok(contractServices.getFIle(id));
     }
     
+    @PostMapping("/bill/{id}")
+    public ResponseEntity<String> getBill(@PathVariable("id") long id) {
+       
+         return ResponseEntity.ok(contractServices.generateReport(id));
+    }
     
 }

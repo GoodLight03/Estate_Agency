@@ -12,4 +12,6 @@ public interface ContractsService {
     Contract upFile(Long id, MultipartFile file);
 
     byte[] getFIle(Long id);
+
+    String generateReport(long id);
 }
