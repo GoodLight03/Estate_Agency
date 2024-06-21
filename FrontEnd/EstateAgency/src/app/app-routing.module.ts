@@ -24,6 +24,7 @@ import { FavouriteComponent } from './components/client/favourite/favourite.comp
 import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
 import { RoleGuardService } from './service/role-guard.service';
 import { ChatComponent } from './components/chat/chat.component';
+import { ContactadminComponent } from './components/manager/admin/contactadmin/contactadmin.component';
 
 const routes: Routes = [
   {
@@ -80,7 +81,11 @@ const routes: Routes = [
       },
       {
         path: 'acount', component: AcountadminComponent,
-      }]
+      },
+      {
+        path: 'contact', component: ContactadminComponent,
+      }
+    ]
   },
   {
     path: 'agent', component: DashboardComponent, canActivate: [RoleGuardService], data: { expectedRole: "ROLE_AGENT" },

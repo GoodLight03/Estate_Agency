@@ -14,11 +14,31 @@ export class MaintenanceService {
 
   constructor(private http:HttpClient) { }
 
-  getListMaintenance():Observable<any>{
-    return this.http.get(MAINTAENANCE_API,httpOptions);
+  getListMaintenance(id:number):Observable<any>{
+    return this.http.get(MAINTAENANCE_API+"all/"+id,httpOptions);
   }
 
-  createMaintenance(name:string,description: string,price: string,quantity:number,categoryId: number,imageIds: Array<string>):Observable<any>{
-    return this.http.post(MAINTAENANCE_API +'create',{name,description,price,quantity,categoryId,imageIds},httpOptions);
+  createMaintenance(name:string,price: string,idroom:number):Observable<any>{
+    return this.http.post(MAINTAENANCE_API +'save',{name,price,idroom},httpOptions);
   }
+
+  upFile(id:number,file:File):Observable<any>{
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('file',file);
+    return this.http.post(MAINTAENANCE_API +'upFile',formData);
+
+  }
+
+  getFile(file:number):void{
+    //return this.http.get(CONTRACT_API +'getfile/'+file,httpOptions);
+
+   this.http.get(MAINTAENANCE_API +'getfile/'+file, { responseType: 'arraybuffer' })
+    .subscribe((response: ArrayBuffer) => {
+      const file = new Blob([response], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+    });
+  }
+
 }

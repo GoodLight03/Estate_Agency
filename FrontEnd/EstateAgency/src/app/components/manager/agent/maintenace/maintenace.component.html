@@ -1,37 +1,69 @@
-<!-- <p-toast></p-toast> -->
-<p-card>
-    <p-toolbar styleClass="mb-4 gap-2">
-        <ng-template pTemplate="left">
-            <button pButton pRipple label="Thêm danh mục" icon="pi pi-plus" class="p-button-success mr-2" (click)="showForm()"></button>
-        </ng-template>
-    </p-toolbar>
+<p-toast></p-toast>
+<div style="margin-top: 100px; margin-bottom: 700px;">
 
-    <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true" [transitionOptions]="'.3s'">
-        <form action="">
-            <div class="p-field">
-                <label for="username">Tên danh mục: </label>
-                <input type="text" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.name" name="name">
-            </div>
-            <div class="p-field mt-3">
-                <button type="submit" pButton (click)="createCategory()" *ngIf="!onUpdate" >Tạo mới</button>
-                <button type="submit" pButton (click)="updateCategory()" *ngIf="onUpdate" >Cập nhật</button>
-                <button pButton type="button" class="p-button-danger ml-3" (click)="displayForm=false">Hủy</button>
-            </div>
-        </form>
-    </p-dialog>
 
-    <p-table [value]="listCategory" [rows]="5" [paginator]="true">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Name</th>
-                <th>Enable</th>
-                <th>Action</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-category>
-            <tr> 
-                <td>{{category.name}}</td>
-                <td>
+    <p-card>
+        <p-toolbar styleClass="mb-4 gap-2">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="Thêm Bảo trì" icon="pi pi-plus" class="p-button-success mr-2"
+                    (click)="showForm()"></button>
+            </ng-template>
+        </p-toolbar>
+
+        <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true"
+            [transitionOptions]="'.3s'">
+            <form action="">
+                <div class="field">
+                    <label class="mb-3">Category</label>
+                    <div class="formgrid grid">
+
+                        <select [(ngModel)]="select" (change)="addRoom()" name="idroom">
+                            <option *ngFor="let category of listRoom"  [value]="category.id">
+                                {{category.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="p-field">
+                    <label for="username">Name </label>
+                    <input type="text" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.name"
+                        name="name">
+                </div>
+
+                <div class="p-field">
+                    <label for="username">Price </label>
+                    <input type="text" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.price"
+                        name="name">
+                </div>
+
+                <div class="p-field mt-3">
+                    <button type="submit" pButton (click)="createCategory()" *ngIf="!onUpdate">Tạo mới</button>
+                    <button type="submit" pButton (click)="updateCategory()" *ngIf="onUpdate">Cập nhật</button>
+                    <button pButton type="button" class="p-button-danger ml-3" (click)="displayForm=false">Hủy</button>
+                </div>
+            </form>
+        </p-dialog>
+
+        <p-table [value]="listCategory" [rows]="5" [paginator]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Room</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-category>
+                <tr>
+                    <td>{{category.name}}</td>
+                    <td>{{category.room.name}}</td>
+                    <td>{{category.date}}</td>
+                    <td>{{category.price}}</td>
+                    <td *ngIf="category.file==null"><input type="file" pInputText class="w-full mt-2" name="img" (change)="onFileSelected($event,category)"></td>
+                    <td *ngIf="category.file!=null"><button (click)="getFile(category.id)">View Contract</button></td>
+                    
+
+                <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>
                 </td>
@@ -48,10 +80,11 @@
                             <p-button label="No" icon="pi pi-times" (click)="deleteForm=false"></p-button>
                         </div>
                     </p-dialog>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+                </td> -->
+                </tr>
+            </ng-template>
+        </p-table>
 
 
-</p-card>
+    </p-card>
+</div>

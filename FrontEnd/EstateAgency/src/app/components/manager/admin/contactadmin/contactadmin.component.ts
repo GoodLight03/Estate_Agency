@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { AcountService } from '../../../../service/acount.service';
-import { RoomService } from '../../../../service/room.service';
+import { ContactService } from '../../../../service/contact.service';
 
 @Component({
-  selector: 'app-reportadmin',
-  templateUrl: './reportadmin.component.html',
-  styleUrl: './reportadmin.component.css'
+  selector: 'app-contactadmin',
+  templateUrl: './contactadmin.component.html',
+  styleUrl: './contactadmin.component.css',
+  providers: [MessageService]
 })
-export class ReportadminComponent implements OnInit{
+export class ContactadminComponent implements OnInit{
   listCategory : any;
 
   displayForm: boolean = false;
@@ -17,14 +17,13 @@ export class ReportadminComponent implements OnInit{
 
   onUpdate : boolean = false;
 
-  selectedRole=false;
-
   categoryForm : any ={
-    id: null,
-    name : null
+    id:null,
+    title: null,
+    content : null
   }
 
-  constructor(private messageService : MessageService,private roomService: RoomService){}
+  constructor(private messageService : MessageService,private contactService: ContactService){}
 
   ngOnInit(): void {
     this.getListCategory();
@@ -32,7 +31,7 @@ export class ReportadminComponent implements OnInit{
 
 
   getListCategory(){
-    this.roomService.getAll().subscribe({
+    this.contactService.getListContact().subscribe({
       next: res =>{
         this.listCategory = res;
         console.log(res);
@@ -40,25 +39,6 @@ export class ReportadminComponent implements OnInit{
         console.log(err);
       }
     })
-  }
-
-  onRoleChange(category: any) {
-    // Lấy giá trị select đã được chọn
-    this.selectedRole = category.enabled;
-    console.log(this.selectedRole)
-    // Thực hiện xử lý tương ứng với giá trị select đã được chọn
-
-    this.roomService.enabel(category.id,this.selectedRole).subscribe({
-      next: res =>{
-        console.log(res);
-        this.showSuccess(res)
-        // Tải lại trang hiện tại
-        this.getListCategory()
-      },error: err =>{
-        console.log(err);
-      }
-    })
-    
   }
 
   showForm(){
@@ -86,15 +66,23 @@ export class ReportadminComponent implements OnInit{
 
   createCategory(){
     const {name} = this.categoryForm;
-    // this.categoryService.createCategory(name).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Tạo danh mục thành công!");
-    //     this.displayForm = false;
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+    this.contactService.update(this.categoryForm.content,this.categoryForm.id).subscribe({
+      next: res =>{
+       this.getListCategory();
+        this.showSuccess("Tạo danh mục thành công!");
+        this.displayForm = false;
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
+  }
+
+  openForm(id:number,title:string){
+    this.categoryForm.id=id;
+    this.displayForm=true;
+    console.log(id+title);
+    this.categoryForm.title=title;
+    this.categoryForm.content=null;
   }
 
 
@@ -138,14 +126,13 @@ export class ReportadminComponent implements OnInit{
   }
 
   showSuccess(text: string) {
-    //this.messageService.add({severity:'success', summary: 'Success', detail: text});
+    this.messageService.add({severity:'success', summary: 'Success', detail: text});
   }
   showError(text: string) {
-   // this.messageService.add({severity:'error', summary: 'Error', detail: text});
+    this.messageService.add({severity:'error', summary: 'Error', detail: text});
   }
 
   showWarn(text : string) {
-   // this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
+   this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
   }
-
 }

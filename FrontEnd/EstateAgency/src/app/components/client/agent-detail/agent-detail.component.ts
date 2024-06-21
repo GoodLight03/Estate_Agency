@@ -40,7 +40,7 @@ export class AgentDetailComponent implements OnInit{
   }
 
   getListCategory(){
-    this.roomService.getRoomByAgent(this.id).subscribe({
+    this.roomService.getRoomByAgentEnable(this.id).subscribe({
       next: res =>{
         this.listCategory = res;
         console.log(res);

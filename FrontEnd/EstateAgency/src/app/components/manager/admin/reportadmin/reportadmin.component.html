@@ -2,19 +2,21 @@
 <p-card>
     <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
-            <button pButton pRipple label="Thêm danh mục" icon="pi pi-plus" class="p-button-success mr-2" (click)="showForm()"></button>
+            <button pButton pRipple label="Thêm danh mục" icon="pi pi-plus" class="p-button-success mr-2"
+                (click)="showForm()"></button>
         </ng-template>
     </p-toolbar>
 
-    <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true" [transitionOptions]="'.3s'">
+    <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true"
+        [transitionOptions]="'.3s'">
         <form action="">
             <div class="p-field">
                 <label for="username">Tên danh mục: </label>
                 <input type="text" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.name" name="name">
             </div>
             <div class="p-field mt-3">
-                <button type="submit" pButton (click)="createCategory()" *ngIf="!onUpdate" >Tạo mới</button>
-                <button type="submit" pButton (click)="updateCategory()" *ngIf="onUpdate" >Cập nhật</button>
+                <button type="submit" pButton (click)="createCategory()" *ngIf="!onUpdate">Tạo mới</button>
+                <button type="submit" pButton (click)="updateCategory()" *ngIf="onUpdate">Cập nhật</button>
                 <button pButton type="button" class="p-button-danger ml-3" (click)="displayForm=false">Hủy</button>
             </div>
         </form>
@@ -27,16 +29,26 @@
                 <th>Price</th>
                 <th>Address</th>
                 <th>Decription</th>
-                <!-- <th>Enable</th>
-                <th>Action</th> -->
+                <th>Enable</th>
+                <th>Action</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-category>
-            <tr> 
+            <tr>
                 <td>{{category.name}}</td>
                 <td>{{category.price}}</td>
                 <td>{{category.address}}</td>
                 <td>{{category.description}}</td>
+                <td>{{category.enabled}}</td>
+                <td>{{category.state}}</td>
+                <td>
+                    <select *ngIf="category.state!='Đã thuê'"
+                        style="width: 100%;text-align: left; background-color: #eee; border: none;"
+                        [(ngModel)]="category.enabled" name="role" (change)="onRoleChange(category)">
+                        <option value="True">Duyệt</option>
+                        <option value="False">Không duyệt</option>
+                    </select>
+                </td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>

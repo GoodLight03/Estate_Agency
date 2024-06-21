@@ -37,11 +37,23 @@ export class RoomService {
     return this.http.get(ROOM_API +'all/'+ id,httpOptions);
   }
 
+  getRoomByAgentEnable(id: number):Observable<any>{
+    return this.http.get(ROOM_API +'allenableAgent/'+ id,httpOptions);
+  }
+
   getAll():Observable<any>{
     return this.http.get(ROOM_API,httpOptions);
   }
 
+  getAllEnable():Observable<any>{
+    return this.http.get(ROOM_API+"allenable",httpOptions);
+  }
+
   getRoomId(id: number):Observable<any>{
     return this.http.get(ROOM_API+ 'detail/'+ id,httpOptions);
+  }
+
+  enabel(id:number,check:boolean):Observable<any>{
+    return this.http.post(ROOM_API+"enable/"+id+"?check="+check,httpOptions);
   }
 }

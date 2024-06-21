@@ -37,6 +37,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OrderCustommerComponent } from './components/client/order-custommer/order-custommer.component';
 import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { ContactadminComponent } from './components/manager/admin/contactadmin/contactadmin.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,6 +65,7 @@ import { ChatComponent } from './components/chat/chat.component';
     OrderCustommerComponent,
     OrderagentComponent,
     ChatComponent,
+    ContactadminComponent,
   ],
   imports: [
     BrowserModule,

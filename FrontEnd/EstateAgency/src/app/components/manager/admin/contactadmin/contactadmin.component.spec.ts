@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequestagentComponent } from './requestagent.component';
+import { ContactadminComponent } from './contactadmin.component';
 
-describe('RequestagentComponent', () => {
-  let component: RequestagentComponent;
-  let fixture: ComponentFixture<RequestagentComponent>;
+describe('ContactadminComponent', () => {
+  let component: ContactadminComponent;
+  let fixture: ComponentFixture<ContactadminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RequestagentComponent]
+      declarations: [ContactadminComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(RequestagentComponent);
+    fixture = TestBed.createComponent(ContactadminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

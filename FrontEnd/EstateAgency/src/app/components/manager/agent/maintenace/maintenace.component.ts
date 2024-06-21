@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { MaintenanceService } from '../../../../service/maintenance.service';
+import { StorangeService } from '../../../../service/storange.service';
+import { RoomService } from '../../../../service/room.service';
 
 @Component({
   selector: 'app-maintenace',
   templateUrl: './maintenace.component.html',
-  styleUrl: './maintenace.component.css'
+  styleUrl: './maintenace.component.css',
+  providers: [MessageService]
 })
 export class MaintenaceComponent implements OnInit{
   listCategory : any;
+
+  listRoom : any;
 
   displayForm: boolean = false;
 
@@ -14,34 +21,39 @@ export class MaintenaceComponent implements OnInit{
 
   onUpdate : boolean = false;
 
+  select="";
+
   categoryForm : any ={
-    id: null,
-    name : null
+    name : null,
+    price : null,
+    idroom:null
   }
 
-  //constructor(private messageService : MessageService,private categoryService: CategoryService){}
+  constructor(private messageService : MessageService,private maintainService: MaintenanceService, private storange: StorangeService,private roomService:RoomService){}
 
   ngOnInit(): void {
     this.getListCategory();
+    this.listRoomUser();
   }
 
 
   getListCategory(){
-    // this.categoryService.getListCategory().subscribe({
-    //   next: res =>{
-    //     this.listCategory = res;
-    //     console.log(res);
-    //   },error: err =>{
-    //     console.log(err);
-    //   }
-    // })
+    this.maintainService.getListMaintenance(this.storange.getUser().id).subscribe({
+      next: res =>{
+        this.listCategory = res;
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
   }
 
   showForm(){
     this.onUpdate = false;
     this.categoryForm ={
-      id : null,
-      name : null
+      name : null,
+      price : null,
+      idroom:null
     }
     this.displayForm = true;
   }
@@ -61,16 +73,16 @@ export class MaintenaceComponent implements OnInit{
   }
 
   createCategory(){
-    const {name} = this.categoryForm;
-    // this.categoryService.createCategory(name).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Tạo danh mục thành công!");
-    //     this.displayForm = false;
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+    const {name,price,idroom} = this.categoryForm;
+    this.maintainService.createMaintenance(name,price,idroom).subscribe({
+      next: res =>{
+        this.getListCategory();
+        this.showSuccess("Tạo danh mục thành công!");
+        this.displayForm = false;
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
   }
 
 
@@ -88,15 +100,17 @@ export class MaintenaceComponent implements OnInit{
   }
 
 
-  enableCategory(id : number){
-    // this.categoryService.enableCategory(id).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Cập nhật thành công!!");
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+  listRoomUser(){
+    this.roomService.getRoomByAgent(this.storange.getUser().id).subscribe({
+      next: res =>{
+        //this.getListCategory();
+        this.listRoom=res;
+        console.log(this.listRoom)
+        //this.showSuccess("Cập nhật thành công!!");
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
   }
 
 
@@ -113,15 +127,45 @@ export class MaintenaceComponent implements OnInit{
     // })
   }
 
+  onFileSelected(event: any, categoryId: any): void {
+    this.categoryForm.img = event.target.files[0];
+    this.categoryForm.id=categoryId.id;
+    console.log(this.categoryForm);
+    this.maintainService.upFile(this.categoryForm.id,this.categoryForm.img).subscribe({
+      next: res =>{
+       this.showSuccess("Upload OK");
+       this.getListCategory();
+        console.log(res);
+      },error: err =>{
+        console.log(err);
+      }
+    })
+  }
+
+  getFile(file:number):void{
+    this.maintainService.getFile(file);
+  }
+
+
+  addRoom(){
+   
+    console.log(this.select);
+    //this.select=idRoom;
+    
+    if(this.select){
+      this.categoryForm.idroom=this.select;
+      console.log("Hello"+this.categoryForm.idroom)
+    }
+  }
+
   showSuccess(text: string) {
-    //this.messageService.add({severity:'success', summary: 'Success', detail: text});
+    this.messageService.add({severity:'success', summary: 'Success', detail: text});
   }
   showError(text: string) {
-   // this.messageService.add({severity:'error', summary: 'Error', detail: text});
+    this.messageService.add({severity:'error', summary: 'Error', detail: text});
   }
 
   showWarn(text : string) {
-   // this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
+    this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
   }
-
 }

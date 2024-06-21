@@ -21,7 +21,7 @@ export class RoomComponent implements OnInit {
   }
 
   getListCategory(){
-    this.roomService.getAll().subscribe({
+    this.roomService.getAllEnable().subscribe({
       next: res =>{
         this.listCategory = res;
         console.log(res);
