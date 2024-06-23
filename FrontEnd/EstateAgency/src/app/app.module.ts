@@ -38,6 +38,7 @@ import { OrderCustommerComponent } from './components/client/order-custommer/ord
 import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { ContactadminComponent } from './components/manager/admin/contactadmin/contactadmin.component';
+import { BillComponent } from './components/manager/agent/bill/bill.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ContactadminComponent } from './components/manager/admin/contactadmin/c
     OrderagentComponent,
     ChatComponent,
     ContactadminComponent,
+    BillComponent,
   ],
   imports: [
     BrowserModule,
