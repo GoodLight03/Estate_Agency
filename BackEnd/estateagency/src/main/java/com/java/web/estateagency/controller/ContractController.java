@@ -2,7 +2,12 @@ package com.java.web.estateagency.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +26,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/api/contract")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -39,7 +43,7 @@ public class ContractController {
     @PostMapping("/upFile")
     @Operation(summary = "Upload File")
     public ResponseEntity<Contract> upload(@RequestParam("id") Long id, @RequestParam("file") MultipartFile file) {
-        
+
         return ResponseEntity.ok(contractServices.upFile(id, file));
     }
 
@@ -48,11 +52,7 @@ public class ContractController {
     public ResponseEntity<byte[]> getFIle(@PathVariable Long id) {
         return ResponseEntity.ok(contractServices.getFIle(id));
     }
+
     
-    @PostMapping("/bill/{id}")
-    public ResponseEntity<String> getBill(@PathVariable("id") long id) {
-       
-         return ResponseEntity.ok(contractServices.generateReport(id));
-    }
-    
+
 }
