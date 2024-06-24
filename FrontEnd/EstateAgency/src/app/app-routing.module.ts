@@ -71,6 +71,9 @@ const routes: Routes = [
       },
       {
         path: 'chat', component: ChatComponent,canActivate: [RoleGuardService], data: { expectedRole: "ROLE_CUSTOMER" }
+      },
+      {
+        path: 'bill/:id', component: BillComponent,
       }
     ]
   },

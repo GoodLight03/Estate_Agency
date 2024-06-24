@@ -2,6 +2,8 @@ import { RoomService } from './../../../../service/room.service';
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StorangeService } from '../../../../service/storange.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BillService } from '../../../../service/bill.service';
 
 @Component({
   selector: 'app-bill',
@@ -9,6 +11,8 @@ import { StorangeService } from '../../../../service/storange.service';
   styleUrl: './bill.component.css'
 })
 export class BillComponent implements OnInit {
+
+  id: number = 0;
 
   listCategory : any;
 
@@ -23,17 +27,19 @@ export class BillComponent implements OnInit {
   categoryForm : any ={
     //id: null,
     name : null,
-    prive: null,
-    add: null,
-    decr:null,
-    stt:null,
-    img:null,
-    idAgent: null
+    idcontact: null,
+   
   }
 
-  constructor(private messageService : MessageService,private RoomService: RoomService,private storageService: StorangeService){}
+  constructor(private router: Router, private route: ActivatedRoute,private messageService : MessageService,private billService: BillService,private storageService: StorangeService){
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+  }
 
   ngOnInit(): void {
+    
+    this.id = this.route.snapshot.params['id'];
+    console.log("OK" + this.id);
     this.getListCategory();
     this.categoryForm.idAgent = this.storageService.getUser().id;
     console.log(this.categoryForm.idAgent)
@@ -44,7 +50,7 @@ export class BillComponent implements OnInit {
   }
 
   getListCategory(){
-    this.RoomService.getRoomByAgent(this.storageService.getUser().id).subscribe({
+    this.billService.getBillByContract(this.id).subscribe({
       next: res =>{
         this.listCategory = res;
         console.log(res);
@@ -58,12 +64,8 @@ export class BillComponent implements OnInit {
     this.onUpdate = false;
     this.categoryForm ={
       name : null,
-      price: null,
-      address: null,
-      description:null,
-      stt:null,
-      state:null,
-      idAgent: null
+      idcontact: null,
+      
     }
     this.displayForm = true;
   }
@@ -84,9 +86,9 @@ export class BillComponent implements OnInit {
 
   createCategory(){
     //const {name} = this.categoryForm;
-    const {name,price,address,description,state,img,idAgent} = this.categoryForm;
+    const {name,idcontact} = this.categoryForm;
     console.log(this.categoryForm);
-    this.RoomService.createRoom(name,price,address,description,state,img,this.storageService.getUser().id).subscribe({
+    this.billService.createBill(name,this.id).subscribe({
       next: res =>{
         this.getListCategory();
         this.showSuccess("Tạo danh mục thành công!");
@@ -95,6 +97,26 @@ export class BillComponent implements OnInit {
         this.showError(err.message);
       }
     })
+  }
+
+  getBill(id:number){
+    this.billService.getFile(id);
+  }
+
+  down(id:number){
+    this.billService.downFIle(id);
+  }
+
+  payment(id:number,money:number,infor:string){
+    this.billService.payment(id,money,infor,this.storageService.getUser().username).subscribe(
+      vnpayUrl => {
+        // Xử lý kết quả trả về từ phương thức Spring Boot
+        window.location.href = vnpayUrl; // Chuyển hướng đến URL trả về từ phương thức Spring Boot
+      },
+      error => {
+        console.log(error); // Xử lý lỗi nếu có
+      }
+    );
   }
 
 

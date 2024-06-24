@@ -39,6 +39,8 @@ import { OrderagentComponent } from './components/manager/agent/orderagent/order
 import { ChatComponent } from './components/chat/chat.component';
 import { ContactadminComponent } from './components/manager/admin/contactadmin/contactadmin.component';
 import { BillComponent } from './components/manager/agent/bill/bill.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,9 @@ import { BillComponent } from './components/manager/agent/bill/bill.component';
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    InputTextModule,
+    DropdownModule
   ],
   providers: [
     provideClientHydration()

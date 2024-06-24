@@ -19,6 +19,7 @@
                 <td>{{category.room.price}}</td>
                 <td>{{category.room.address}}</td>
                 <td>{{category.status}}</td>
+                <td><a href="javascript:void(0)" routerLink="/bill/{{category.room.id}}">Bill</a></td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>
