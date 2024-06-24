@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,10 @@ import com.java.web.estateagency.repository.ContractsRepository;
 import com.java.web.estateagency.service.BillService;
 
 import io.jsonwebtoken.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BillServiceImpl implements BillService {
 
     @Autowired
@@ -46,37 +49,45 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill save(CreateBillRequest createBillRequest) {
-        Bill bill=new Bill();
+        Bill bill = new Bill();
         bill.setName(createBillRequest.getName());
         bill.setDate(new Date());
         bill.setContract(contractsRepository.findById(createBillRequest.getIdcontact()).get());
         bill.setStatus("Chưa thanh toán");
 
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
-        LocalDate lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
-
         Contract contract = contractsRepository.findById(createBillRequest.getIdcontact()).get();
         Room room = contract.getRoom();
 
         List<Maintenance> maintenances = room.getMaintenances();
-        List<Maintenance> maintenances2=new ArrayList<>();
-        for (Maintenance maintenance : maintenances) {
-            if (convertDate(maintenance.getDate()).isEqual(firstDayOfMonth) || convertDate(maintenance.getDate()).isEqual(lastDayOfMonth) || (convertDate(maintenance.getDate()).isAfter(firstDayOfMonth) && convertDate(maintenance.getDate()).isBefore(lastDayOfMonth))) {
-                maintenances2.add(maintenance);
-            }
-        }
-        long total=0;
-        total+=room.getPrice();
+        List<Maintenance> maintenances2 = getByDay(maintenances,LocalDate.now());
+        long total = 0;
+        total += room.getPrice();
         for (Maintenance maintenance : maintenances2) {
-            total+=maintenance.getPrice();
+            total += maintenance.getPrice();
         }
-            
+
         bill.setTotal(total);
         return billRepository.save(bill);
     }
 
-    private LocalDate convertDate(Date date){
+    private List<Maintenance> getByDay(List<Maintenance> list,LocalDate currentDate) {
+        
+        LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+
+        List<Maintenance> maintenances2 = new ArrayList<>();
+        for (Maintenance maintenance : list) {
+            if (convertDate(maintenance.getDate()).isEqual(firstDayOfMonth)
+                    || convertDate(maintenance.getDate()).isEqual(lastDayOfMonth)
+                    || (convertDate(maintenance.getDate()).isAfter(firstDayOfMonth)
+                            && convertDate(maintenance.getDate()).isBefore(lastDayOfMonth))) {
+                maintenances2.add(maintenance);
+            }
+        }
+        return maintenances2;
+    }
+
+    private LocalDate convertDate(Date date) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 
         // Chuyển đổi từ java.time.LocalDateTime sang java.time.LocalDate
@@ -87,82 +98,98 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<Bill> getByIdContract(Long id) {
-       return billRepository.getByContract(id);
+        return billRepository.getByContractID(id);
     }
 
     @Override
     public byte[] generateReport(long id) {
         try {
-           
-            Contract contract = contractsRepository.findById(id).get();
-            // log.info("Contact:"+contract.toString());
-            Room room = contract.getRoom();
-            // log.info("Room: "+room.toString());
-            String data = "Name: " + room.getName() + "\n" + "Adress:" + room.getAddress() +
-                    "\n" + "Price: " + room.getPrice() + "\n" + "Payment Method: Cart";
-            Date date = new Date();
-            String fileName = room.getName();
-           
-            Document document = new Document();
-            // String filePath = "D:\\Angular\\" + fileName + ".pdf";
-            // PdfWriter.getInstance(document, new FileOutputStream(filePath));
-            // Tạo một ByteArrayOutputStream để ghi dữ liệu PDF vào bộ đệm
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PdfWriter.getInstance(document, baos);
-            document.open();
-            setRactangleInPdf(document);
+            // Bill bill = billRepository.findById(id).get();
+            Optional<Bill> optionalBill = billRepository.findById(id);
 
-            Paragraph chunk = new Paragraph("Bill In Month", getFont("Header"));
-            chunk.setAlignment(Element.ALIGN_CENTER);
-            document.add(chunk);
+            if (optionalBill.isPresent()) {
+                Bill bill = optionalBill.get();
+                Contract contract = bill.getContract();
+                // Tiếp tục xử lý
 
-            Paragraph paragraph = new Paragraph(data + "\n \n", getFont("Data"));
-            document.add(paragraph);
+                // Contract contract = bill.getContract();
+                // Contract contract = contractsRepository.findById(id).get();
+                // log.info("Contact:"+contract.toString());
+                Room room = contract.getRoom();
+                // log.info("Room: "+room.toString());
+                String data = "Name: " + room.getName() + "\n" + "Adress:" + room.getAddress() +
+                        "\n" + "Price: " + room.getPrice() + "\n" + "Payment Method: Cart";
+                Date date = new Date();
+                String fileName = room.getName();
 
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100);
-            addTableHeader(table);
+                Document document = new Document();
+                // String filePath = "D:\\Angular\\" + fileName + ".pdf";
+                // PdfWriter.getInstance(document, new FileOutputStream(filePath));
+                // Tạo một ByteArrayOutputStream để ghi dữ liệu PDF vào bộ đệm
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                PdfWriter.getInstance(document, baos);
+                document.open();
+                setRactangleInPdf(document);
 
-            // JSONArray
-            // jsonArray=CafeUtils.getJsonArrayfromString((String)requestMap.get("productDetails"));
-            // log.info(jsonArray+"");
-            // for(int i=0; i<jsonArray.length();i++){
-            // log.info("Helloj"+jsonArray.getJSONObject(i));
-            // addRows(table,
-            // CafeUtils.getMapFormJson(jsonArray.getJSONObject(i).toString()));
-            // }
+                Paragraph chunk = new Paragraph("Bill In Month", getFont("Header"));
+                chunk.setAlignment(Element.ALIGN_CENTER);
+                document.add(chunk);
 
-            List<Maintenance> maintenances = room.getMaintenances();
-            for (Maintenance maintenance : maintenances) {
-                addRows(table, maintenance);
+                Paragraph paragraph = new Paragraph(data + "\n \n", getFont("Data"));
+                document.add(paragraph);
+
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                addTableHeader(table);
+
+                // JSONArray
+                // jsonArray=CafeUtils.getJsonArrayfromString((String)requestMap.get("productDetails"));
+                // log.info(jsonArray+"");
+                // for(int i=0; i<jsonArray.length();i++){
+                // log.info("Helloj"+jsonArray.getJSONObject(i));
+                // addRows(table,
+                // CafeUtils.getMapFormJson(jsonArray.getJSONObject(i).toString()));
+                // }
+
+                List<Maintenance> maintenances = room.getMaintenances();
+                if(maintenances.size()>0){
+                    List<Maintenance> maintenances2 = getByDay(maintenances,convertDate(bill.getDate()));
+                    for (Maintenance maintenance : maintenances2) {
+                        addRows(table, maintenance);
+                    }
+                    document.add(table);
+                }
+               
+
+                Paragraph footer = new Paragraph("Total :" + getTotal(id).toString() + "\n"
+                        + "Thank you for visiting. Please visit again!!", getFont("Data"));
+                document.add(footer);
+
+                document.close();
+
+                // // Chuẩn bị HTTP response
+                // response.setContentType("application/pdf");
+                // response.addHeader("Content-Disposition", "attachment; filename=" + fileName
+                // + ".pdf");
+                // // Gửi dữ liệu PDF từ bộ đệm dưới dạng phản hồi HTTP
+                // response.setContentLength(baos.size());
+                // ServletOutputStream outputStream = response.getOutputStream();
+                // baos.writeTo(outputStream);
+                // outputStream.flush();
+
+                // // Đảm bảo rằng dữ liệu đã được gửi đi và không còn trong bộ đệm
+                // outputStream.close();
+                byte[] pdfContent = baos.toByteArray();
+                return pdfContent;
+                // return fileName;
+            }else {
+                throw new IllegalArgumentException("Bill not found for id: " + id);
             }
-            document.add(table);
-
-            Paragraph footer = new Paragraph("Total :" + getTotal(id).toString() + "\n"
-                    + "Thank you for visiting. Please visit again!!", getFont("Data"));
-            document.add(footer);
-
-            document.close();
-
-            // // Chuẩn bị HTTP response
-            // response.setContentType("application/pdf");
-            // response.addHeader("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
-            // // Gửi dữ liệu PDF từ bộ đệm dưới dạng phản hồi HTTP
-            // response.setContentLength(baos.size());
-            // ServletOutputStream outputStream = response.getOutputStream();
-            // baos.writeTo(outputStream);
-            // outputStream.flush();
-
-            // // Đảm bảo rằng dữ liệu đã được gửi đi và không còn trong bộ đệm
-            // outputStream.close();
-            byte[] pdfContent = baos.toByteArray();
-            return pdfContent;
-            //return fileName;
         } catch (Exception e) {
-           
+            log.info(e.getMessage());
             throw new IOException("Error generating report: " + e.getMessage());
         }
-        //return "";
+        // return "";
 
     }
 
@@ -226,6 +253,19 @@ public class BillServiceImpl implements BillService {
         rect.setBorderColor(BaseColor.BLACK);
         rect.setBorderWidth(1);
         document.add(rect);
+    }
+
+    @Override
+    public Bill detail(long id) {
+        return billRepository.findById(id).get();
+    }
+
+    @Override
+    public Bill updatePayment(long id, String user) {
+        Bill bill=billRepository.findById(id).get();
+        bill.setStatus("Đã thanh toán");
+        bill.setUser(user);
+        return billRepository.save(bill);
     }
 
 }

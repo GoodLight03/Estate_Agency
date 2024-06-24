@@ -56,8 +56,7 @@ public class AuthController {
         @Autowired
         private UserService userService;
 
-        @Autowired
-        private VNPayService vnPayService;
+    
 
         @PostMapping("/login")
         @Operation(summary = "Đăng nhập")
@@ -125,36 +124,6 @@ public class AuthController {
                                 .body(new MessageResponse("You've been logout!"));
         }
 
-        @GetMapping("/payment/{money}")
-        public String getMethodName(@PathVariable("money") int money, RedirectAttributes attributes,
-                        HttpServletRequest request) {
-                String infor = "Ok";
-                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-                String vnpayUrl = vnPayService.createOrder((int) money, infor, baseUrl);
-                return "redirect:" + vnpayUrl;
-        }
-
-        @GetMapping("/vnpay-payment")
-        public String GetMapping(HttpServletRequest request,
-                        RedirectAttributes attributes) {
-                int paymentStatus = vnPayService.orderReturn(request);
-
-                String orderInfo = request.getParameter("vnp_OrderInfo");
-                String paymentTime = request.getParameter("vnp_PayDate");
-                String transactionId = request.getParameter("vnp_TransactionNo");
-                String totalPrice = request.getParameter("vnp_Amount");
-
-                // model.addAttribute("orderId", orderInfo);
-                // model.addAttribute("totalPrice", totalPrice);
-                // model.addAttribute("paymentTime", paymentTime);
-                // model.addAttribute("transactionId", transactionId);
-                if (paymentStatus == 1) {
-                        // ShoppingCart cart = cartService.FindById(Long.parseLong(orderInfo));
-                        // Order order = orderService.save(cart);
-                        // session.removeAttribute("totalItems");
-                        return "client/ordersuccess";
-                }
-                return "client/orderfail";
-        }
+        
 
 }

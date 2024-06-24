@@ -12,5 +12,5 @@ import com.java.web.estateagency.entity.History;
 @Repository
 public interface BillRepository extends JpaRepository<Bill,Long>{
     @Query("select p from Bill p where p.contract.id = ?1 ")
-    List<Bill> getByContract(Long id);
+    List<Bill> getByContractID(Long id);
 }

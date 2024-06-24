@@ -11,4 +11,8 @@ public interface BillService {
     List<Bill> getByIdContract(Long id);
 
     byte[] generateReport(long id) ;
+
+    Bill detail(long id);
+
+    Bill updatePayment(long id, String user);
 }
