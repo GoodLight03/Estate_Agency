@@ -20,7 +20,7 @@
                 <td>{{category.room.address}}</td>
                 <td>{{category.status}}</td>
                 <td>
-                    <select  *ngIf="!category.browse" style="width: 100%;text-align: left; background-color: #eee; border: none;" [(ngModel)]="category.status" name="role" (change)="onRoleChange(category)">
+                    <select  *ngIf="!category.browse" class="form-select" aria-label="Default select example" [(ngModel)]="category.status" name="role" (change)="onRoleChange(category)">
                         <option value="Duyệt">Duyệt</option>
                         <option value="Không duyệt">Không duyệt</option>
                     </select>

@@ -24,6 +24,8 @@ export class BillComponent implements OnInit {
 
   selectedRole= "";
 
+  role="";
+
   categoryForm : any ={
     //id: null,
     name : null,
@@ -37,7 +39,7 @@ export class BillComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.role=this.storageService.getUser().roles[0];
     this.id = this.route.snapshot.params['id'];
     console.log("OK" + this.id);
     this.getListCategory();
