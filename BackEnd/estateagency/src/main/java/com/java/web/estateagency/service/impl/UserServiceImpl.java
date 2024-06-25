@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.java.web.estateagency.entity.ERole;
 import com.java.web.estateagency.entity.Role;
 import com.java.web.estateagency.entity.User;
+import com.java.web.estateagency.exception.BadRequestException;
 import com.java.web.estateagency.exception.NotFoundException;
 import com.java.web.estateagency.model.request.ChangePasswordRequest;
 import com.java.web.estateagency.model.request.CreateUserRequest;
@@ -26,7 +27,10 @@ import com.java.web.estateagency.repository.UserRepository;
 import com.java.web.estateagency.service.UserService;
 import com.java.web.estateagency.utils.ImageUpload;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
   @Autowired
@@ -40,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private ImageUpload imageUpload;
+
 
   @Override
   public void register(CreateUserRequest request) {
@@ -104,33 +109,47 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User updateUser(UpdateProfileRequest request) {
+    User user = userRepository.findById(request.getId()).get();
+    try {
+
+      user.setFullname(request.getFullname());
+      user.setUsername(request.getUsername());
+      user.setEmail(request.getEmail());
+      if (request.getImg() != null) {
+        user.setImg(Base64.getEncoder().encodeToString(request.getImg().getBytes()));
+      }
+      user.setState(request.getState());
+      user.setAddress(request.getAddress());
+      user.setPhone(request.getPhone());
+
+      return userRepository.save(user);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     // TODO Auto-generated method stub
-    User user = userRepository.findByUsername(request.getUsername())
-        .orElseThrow(() -> new NotFoundException("Not Found User"));
-    user.setFullname(request.getFullname());
-
-    user.setEmail(request.getEmail());
-
-    user.setState(request.getState());
-    user.setAddress(request.getAddress());
-    user.setPhone(request.getPhone());
-    userRepository.save(user);
     return user;
+
   }
 
   @Override
   public void changePassword(ChangePasswordRequest request) {
     // TODO Auto-generated method stub
-    // User user =
-    // userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new
-    // NotFoundException("Not Found User"));
+    User user = userRepository.findByUsername(request.getUsername())
+        .orElseThrow(() -> new NotFoundException("Not Found User"));
 
-    // if(encoder.encode(request.getOldPassword()) != user.getPassword()){
-    // throw new BadRequestException("Old Passrword Not Same");
-    // }
-    // user.setPassword(encoder.encode(request.getNewPassword()));
+        log.info(user.getPassword());
+        log.info(encoder.encode(request.getOldPassword()));
 
-    // userRepository.save(user);
+    if (!encoder.matches(request.getOldPassword(), user.getPassword())) {
+      throw new BadRequestException("Old Passrword Not Same");
+    }
+    if (encoder.matches(request.getNewPassword() ,request.getConfilmPassword())) {
+      throw new BadRequestException("New Passrword àd Confilm Not Same");
+    }
+    user.setPassword(encoder.encode(request.getNewPassword()));
+
+    userRepository.save(user);
 
   }
 

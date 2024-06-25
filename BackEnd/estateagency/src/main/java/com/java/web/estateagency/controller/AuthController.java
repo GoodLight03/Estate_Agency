@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.java.web.estateagency.config.vnpay.VNPayService;
+import com.java.web.estateagency.entity.User;
 import com.java.web.estateagency.model.request.CreateUserRequest;
 import com.java.web.estateagency.model.request.LoginRequest;
 import com.java.web.estateagency.model.response.MessageResponse;
@@ -56,8 +57,6 @@ public class AuthController {
         @Autowired
         private UserService userService;
 
-    
-
         @PostMapping("/login")
         @Operation(summary = "Đăng nhập")
         public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
@@ -83,16 +82,6 @@ public class AuthController {
                 // return ResponseEntity.ok(jwtCookie);
         }
 
-        // @PostMapping("/register")
-        // @Operation(summary="Đăng ký")
-        // public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest
-        // request){
-        // //log.info(request.toString());
-        // userService.register(request);
-
-        // return ResponseEntity.ok(new MessageResponse("User registered
-        // successfully!"));
-        // }
 
         @PostMapping("/register")
         @Operation(summary = "Đăng ký")
@@ -124,6 +113,6 @@ public class AuthController {
                                 .body(new MessageResponse("You've been logout!"));
         }
 
+      
         
-
 }
