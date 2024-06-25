@@ -45,4 +45,20 @@ export class BillService {
     
   }
 
+  getReport(id: number): Observable<any> {
+    return this.http.get(BILL_API+"report/" + id, httpOptions);
+  }
+
+  getReportAgent(id: number): Observable<any> {
+    return this.http.get(BILL_API+"reportagent/" + id, httpOptions);
+  }
+
+  getReportAdmin(): Observable<any> {
+    return this.http.get(BILL_API+"reportadmin", httpOptions);
+  }
+
+  getReportContractMaintain(id: number): Observable<any> {
+    return this.http.get(BILL_API+"reportcontractmaintain/" + id, httpOptions);
+  }
+
 }

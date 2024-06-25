@@ -3,12 +3,12 @@
 
 
     <p-card>
-        <p-toolbar styleClass="mb-4 gap-2">
+        <!-- <p-toolbar styleClass="mb-4 gap-2">
             <ng-template pTemplate="left">
                 <button pButton pRipple label="Thêm danh mục" icon="pi pi-plus" class="p-button-success mr-2"
                     (click)="showForm()"></button>
             </ng-template>
-        </p-toolbar>
+        </p-toolbar> -->
 
         <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true"
             [transitionOptions]="'.3s'">
@@ -42,8 +42,9 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>Name</th>
-                    <th>Enable</th>
-                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Status</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-category>
@@ -51,8 +52,14 @@
                     <td>{{category.room.name}}</td>
                     <td>{{category.description}}</td>
                     <td>{{category.date}}</td>
-                    
-
+                    <td>{{category.status}}</td>
+                    <td>
+                        <select  *ngIf="!category.browse" style="width: 100%;text-align: left; background-color: #eee; border: none;" [(ngModel)]="category.status" name="role" (change)="onRoleChange(category)">
+                            <option value="Đã tiếp nhận">Đã tiếp nhận</option>
+                            <option value="Đang xử lý">Đang xử lý</option>
+                            <option value="Đã xử lý">Đã xử lý</option>
+                        </select>
+                    </td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>

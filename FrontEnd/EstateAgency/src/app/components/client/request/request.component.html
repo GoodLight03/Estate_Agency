@@ -38,8 +38,9 @@
         <ng-template pTemplate="header">
             <tr>
                 <th>Name</th>
-                <th>Enable</th>
-                <th>Action</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-category>
@@ -47,6 +48,7 @@
                 <td>{{category.room.name}}</td>
                 <td>{{category.description}}</td>
                 <td>{{category.date}}</td>
+                <td>{{category.status}}</td>
 
 
                 <!-- <td>

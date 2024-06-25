@@ -21,4 +21,8 @@ export class RequestService {
   createrequest(iduser:number,idroom: number,description: string):Observable<any>{
     return this.http.post(REQUEST_API +'save',{iduser,idroom,description},httpOptions);
   }
+
+  updateStatus(id: number,status:string):Observable<any>{
+    return this.http.patch(REQUEST_API+'status/id/'+id+'/status/'+status,httpOptions)
+  }
 }

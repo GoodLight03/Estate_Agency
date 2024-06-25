@@ -41,6 +41,12 @@ import { ContactadminComponent } from './components/manager/admin/contactadmin/c
 import { BillComponent } from './components/manager/agent/bill/bill.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { IgxCategoryChartModule } from 'igniteui-angular-charts';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ChartModule } from 'primeng/chart';
+import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
+import { Ripple } from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -70,6 +76,7 @@ import { DropdownModule } from 'primeng/dropdown';
     ChatComponent,
     ContactadminComponent,
     BillComponent,
+    ContractcustomerComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,7 +93,13 @@ import { DropdownModule } from 'primeng/dropdown';
     HttpClientModule,
     NgbModule,
     InputTextModule,
-    DropdownModule
+    DropdownModule,
+    NgxChartsModule,
+    IgxCategoryChartModule,
+    NgApexchartsModule,
+    ChartModule,
+    Ripple
+   
   ],
   providers: [
     provideClientHydration()

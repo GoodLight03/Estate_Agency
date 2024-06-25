@@ -42,7 +42,7 @@
                 <td>{{category.title}}</td>
                 <td>{{category.content}}</td>
                 <td>{{category.status}}</td>
-                <td><button (click)="openForm(category.id,category.title)">Reply</button></td>
+                <td><button class="btn btn-info" (click)="openForm(category.id,category.title)">Reply</button></td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>

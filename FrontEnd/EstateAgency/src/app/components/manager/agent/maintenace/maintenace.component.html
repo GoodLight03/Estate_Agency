@@ -14,7 +14,7 @@
                     <label class="mb-3">Category</label>
                     <div class="formgrid grid">
 
-                        <select [(ngModel)]="select" (change)="addRoom()" name="idroom">
+                        <select [(ngModel)]="select" (change)="addRoom()" name="idroom" class="form-select" aria-label="Default select example">
                             <option *ngFor="let category of listRoom"  [value]="category.id">
                                 {{category.name}}
                             </option>

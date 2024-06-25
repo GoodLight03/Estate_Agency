@@ -26,6 +26,7 @@ import { RoleGuardService } from './service/role-guard.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { ContactadminComponent } from './components/manager/admin/contactadmin/contactadmin.component';
 import { BillComponent } from './components/manager/agent/bill/bill.component';
+import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
 
 const routes: Routes = [
   {
@@ -74,7 +75,10 @@ const routes: Routes = [
       },
       {
         path: 'bill/:id', component: BillComponent,
-      }
+      },
+      {
+        path: 'contract/:id', component: ContractcustomerComponent,
+      },
     ]
   },
   {

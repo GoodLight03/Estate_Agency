@@ -25,6 +25,10 @@ export class ContractService {
     return this.http.get(CONTRACT_API+ 'agent/'+ id,httpOptions);
   }
 
+  getRoomr(id: number):Observable<any>{
+    return this.http.get(CONTRACT_API+ 'room/'+ id,httpOptions);
+  }
+
   upFile(id:number,file:File):Observable<any>{
     const formData = new FormData();
     formData.append('id', id.toString());

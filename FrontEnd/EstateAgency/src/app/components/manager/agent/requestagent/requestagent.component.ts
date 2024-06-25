@@ -24,6 +24,8 @@ export class RequestagentComponent implements OnInit{
 
   select="";
 
+  selectedRole="";
+
   id: number = 0;
 
   categoryForm : any ={
@@ -120,6 +122,26 @@ export class RequestagentComponent implements OnInit{
       }
     })
   }
+
+  onRoleChange(category: any) {
+    // Lấy giá trị select đã được chọn
+    this.selectedRole = category.status;
+    console.log(this.selectedRole)
+    // Thực hiện xử lý tương ứng với giá trị select đã được chọn
+
+    this.requestService.updateStatus(category.id,this.selectedRole).subscribe({
+      next: res =>{
+        console.log(res);
+        this.showSuccess(res)
+        // Tải lại trang hiện tại
+        this.getListCategory()
+      },error: err =>{
+        console.log(err);
+      }
+    })
+    
+  }
+
 
 
   deleteCategory(){

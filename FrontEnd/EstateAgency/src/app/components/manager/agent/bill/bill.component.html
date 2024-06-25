@@ -39,9 +39,9 @@
                 <td>{{category.date}}</td>
                 <td>{{category.total}}</td>
                 <td>{{category.status}}</td>
-                <td><button (click)="getBill(category.id)">Bill PDF</button></td>
-                <td><button (click)="down(category.id)">Down PDF</button></td>
-                <td *ngIf="category.status!='Đã thanh toán'"><button (click)="payment(category.id,category.total,category.name)">Payment</button></td>
+                <td><button (click)="getBill(category.id)" class="btn btn-info">Bill PDF</button></td>
+                <td><button (click)="down(category.id)" class="btn btn-warning">Down PDF</button></td>
+                <td *ngIf="category.status!='Đã thanh toán'"><button (click)="payment(category.id,category.total,category.name)" class="btn btn-success">Payment</button></td>
                 <!-- <td>
                     <button pButton type="button" class="p-button-info" (click)="enableCategory(category.id)" *ngIf="category.enable">Enabled</button>
                     <button pButton type="button" class="p-button-warning" (click)="enableCategory(category.id)" *ngIf="!category.enable">Disabled</button>

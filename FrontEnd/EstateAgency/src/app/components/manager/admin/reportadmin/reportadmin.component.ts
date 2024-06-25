@@ -1,7 +1,10 @@
+import { StorangeService } from './../../../../service/storange.service';
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AcountService } from '../../../../service/acount.service';
 import { RoomService } from '../../../../service/room.service';
+import { BillService } from '../../../../service/bill.service';
+import { CommentService } from '../../../../service/comment.service';
 
 @Component({
   selector: 'app-reportadmin',
@@ -17,6 +20,8 @@ export class ReportadminComponent implements OnInit{
 
   onUpdate : boolean = false;
 
+  detail:boolean=false;
+
   selectedRole=false;
 
   categoryForm : any ={
@@ -24,12 +29,75 @@ export class ReportadminComponent implements OnInit{
     name : null
   }
 
-  constructor(private messageService : MessageService,private roomService: RoomService){}
+  reportAgent:any;
+
+  idRoom=0;
+
+  room:any;
+
+  lisrcommnet: any;
+
+  agent: any;
+
+  constructor(private commentService:CommentService,private messageService : MessageService,private roomService: RoomService,private billService:BillService){}
 
   ngOnInit(): void {
     this.getListCategory();
+    this.getReportAdmin();
+
+    this.detail=false;
+
+    this.idRoom = 1;
+    console.log("OK" + this.idRoom);
+    this.getProduct();
+
+    this.getListComment();
   }
 
+  onDetail(id:number){
+    this.detail=true;
+    this.idRoom = id;
+    console.log("OK" + this.idRoom);
+    this.getProduct();
+
+    this.getListComment()
+  }
+
+  getListComment() {
+    this.commentService.getRoomIdComment(this.idRoom).subscribe({
+      next: res => {
+        this.lisrcommnet = res;
+        console.log(res);
+      }, error: err => {
+        console.log(err);
+      }
+    })
+  }
+
+  getProduct() {
+    this.roomService.getRoomId(this.idRoom).subscribe({
+      next: res => {
+        this.room = res;
+        this.agent = res.user;
+        
+        // this.getListRelatedProduct();
+      }, error: err => {
+        console.log(err);
+      }
+    })
+  }
+
+  getReportAdmin(){
+    this.billService.getReportAdmin().subscribe({
+      next: res => {
+        this.reportAgent = res;
+        console.log(this.reportAgent);
+
+      }, error: err => {
+        console.log(err);
+      }
+    })
+  }
 
   getListCategory(){
     this.roomService.getAll().subscribe({

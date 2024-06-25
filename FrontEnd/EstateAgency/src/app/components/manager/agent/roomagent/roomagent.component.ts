@@ -1,13 +1,14 @@
 import { RoomService } from './../../../../service/room.service';
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, PrimeIcons } from 'primeng/api';
 import { StorangeService } from '../../../../service/storange.service';
+import { CommentService } from '../../../../service/comment.service';
 
 @Component({
   selector: 'app-roomagent',
   templateUrl: './roomagent.component.html',
   styleUrl: './roomagent.component.css',
-  providers: [MessageService,ConfirmationService]
+  providers: [MessageService,ConfirmationService,PrimeIcons],
 })
 export class RoomagentComponent implements OnInit {
 
@@ -19,10 +20,20 @@ export class RoomagentComponent implements OnInit {
 
   onUpdate : boolean = false;
 
+  detail:boolean=false;
+
   selectedRole= "";
 
+  idRoom=0;
+
+  room:any;
+
+  lisrcommnet: any;
+
+  agent: any;
+
   categoryForm : any ={
-    //id: null,
+    id: null,
     name : null,
     prive: null,
     add: null,
@@ -32,12 +43,19 @@ export class RoomagentComponent implements OnInit {
     idAgent: null
   }
 
-  constructor(private messageService : MessageService,private RoomService: RoomService,private storageService: StorangeService){}
+  constructor(private commentService:CommentService,private roomService:RoomService,private messageService : MessageService,private RoomService: RoomService,private storageService: StorangeService){}
 
   ngOnInit(): void {
     this.getListCategory();
     this.categoryForm.idAgent = this.storageService.getUser().id;
     console.log(this.categoryForm.idAgent)
+    this.detail=false;
+
+    this.idRoom = 1;
+    console.log("OK" + this.idRoom);
+    this.getProduct();
+
+    this.getListComment()
   }
 
   onFileSelected(event: any): void {
@@ -70,17 +88,54 @@ export class RoomagentComponent implements OnInit {
   }
 
   
- onUpdateForm(id: number,name : string){
+ onUpdateForm(category:any){
       this.onUpdate = true;
       this.displayForm =true;
-      this.categoryForm.id = id;
-      this.categoryForm.name = name;
+      this.categoryForm.id = category.id;
+      this.categoryForm.name = category.name;
+      this.categoryForm.price = category.price;
+      this.categoryForm.address = category.address;
+      this.categoryForm.description = category.description;
+      //this.categoryForm.name = category.name;
   }
 
   onDelete(id:number,name : string){
     this.deleteForm = true;
     this.categoryForm.id = id;
     this.categoryForm.name = name;
+  }
+
+  onDetail(id:number){
+    this.detail=true;
+    this.idRoom = id;
+    console.log("OK" + this.idRoom);
+    this.getProduct();
+
+    this.getListComment()
+  }
+
+  getListComment() {
+    this.commentService.getRoomIdComment(this.idRoom).subscribe({
+      next: res => {
+        this.lisrcommnet = res;
+        console.log(res);
+      }, error: err => {
+        console.log(err);
+      }
+    })
+  }
+
+  getProduct() {
+    this.roomService.getRoomId(this.idRoom).subscribe({
+      next: res => {
+        this.room = res;
+        this.agent = res.user;
+        
+        // this.getListRelatedProduct();
+      }, error: err => {
+        console.log(err);
+      }
+    })
   }
 
   createCategory(){
@@ -100,15 +155,18 @@ export class RoomagentComponent implements OnInit {
 
 
   updateCategory(){
-    const {id,name} = this.categoryForm;
-    // this.categoryService.updateCategory(id,name).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showSuccess("Cập nhật danh mục thành công!");
-    //     this.displayForm = false;
-    //   },error: err =>{
-    //     this.showError(err.message);
-    //   }
+   // const {id,name} = this.categoryForm;
+    const {id,name,price,address,description,state,img,idAgent} = this.categoryForm;
+    console.log(this.categoryForm);
+    this.RoomService.updateRoom(id,name,price,address,description,state,img,this.storageService.getUser().id).subscribe({
+      next: res =>{
+        this.getListCategory();
+        this.showSuccess("Update thành công!");
+        this.displayForm = false;
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
     // })
   }
 
@@ -126,16 +184,16 @@ export class RoomagentComponent implements OnInit {
 
 
   deleteCategory(){
-    const {id} = this.categoryForm;
-    // this.categoryService.deleteCategory(id).subscribe({
-    //   next: res =>{
-    //     this.getListCategory();
-    //     this.showWarn("Xóa danh mục thành công!!");
-    //     this.deleteForm = false;
-    //   },error: err=>{
-    //     this.showError(err.message);
-    //   }
-    // })
+    const {id} = this.categoryForm.id;
+    this.RoomService.deleteRoom(this.categoryForm.id).subscribe({
+      next: res =>{
+        this.getListCategory();
+        this.showWarn("Xóa danh mục thành công!!");
+        this.deleteForm = false;
+      },error: err=>{
+        this.showError(err.message);
+      }
+    })
   }
 
   showSuccess(text: string) {

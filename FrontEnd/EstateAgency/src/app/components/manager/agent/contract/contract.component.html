@@ -1,10 +1,10 @@
 <p-toast></p-toast>
 <p-card>
-    <p-toolbar styleClass="mb-4 gap-2">
+    <!-- <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
             <button pButton pRipple label="Thêm danh mục" icon="pi pi-plus" class="p-button-success mr-2" (click)="showForm()"></button>
         </ng-template>
-    </p-toolbar>
+    </p-toolbar> -->
 
     <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true" [transitionOptions]="'.3s'">
         <form action="">
@@ -34,7 +34,7 @@
                 <td>{{category.start}}</td>
                 <td>{{category.acount}}</td>
                 <td *ngIf="category.file==null"><input type="file" pInputText class="w-full mt-2" name="img" (change)="onFileSelected($event,category)"></td>
-                <td *ngIf="category.file!=null"><button (click)="getFile(category.id)">View Contract</button></td>
+                <td *ngIf="category.file!=null"><button (click)="getFile(category.id)" class="btn btn-info">View Contract</button></td>
                 <td><a href="javascript:void(0)" routerLink="/agent/bill/{{category.id}}">Bill</a></td>
                 
                 <!-- <td>

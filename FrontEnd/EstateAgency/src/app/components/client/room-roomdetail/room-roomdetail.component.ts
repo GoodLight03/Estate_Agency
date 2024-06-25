@@ -42,7 +42,7 @@ export class RoomRoomdetailComponent {
     console.log("OK" + this.id);
     this.getProduct();
     this.isLoggedIn = this.storageService.isLoggedIn();
-    this.getListComment()
+    this.getListComment();
   }
 
   getProduct() {
