@@ -42,5 +42,12 @@ public class RequestServiceImpl implements RequestService{
        request.setUser(userRepository.findById(createRequestRequest.getIduser()).get());
        return repository.save(request);
     }
+
+    @Override
+    public Request updateStatus(long id, String status) {
+        Request request=repository.findById(id).get();
+        request.setStatus(status);
+        return repository.save(request);
+    }
     
 }

@@ -13,4 +13,7 @@ import com.java.web.estateagency.entity.Room;
 public interface ContractsRepository extends JpaRepository<Contract,Long>{
     @Query("select p from Contract p where p.user.id = ?1 ")
     List<Contract> getByAgent(Long id);
+
+    @Query("select p from Contract p where p.room.id = ?1 ")
+    List<Contract> getByRoom(Long id);
 }

@@ -8,6 +8,8 @@ import com.java.web.estateagency.model.request.CreateRoomRequest;
 public interface RoomService {
     Room createRoom(CreateRoomRequest createRoomRequest);
 
+    Room updateRoom(CreateRoomRequest createRoomRequest);
+
     List<Room> getAll();
 
     List<Room> getbyAgent(Long idAgent);
@@ -19,4 +21,6 @@ public interface RoomService {
     List<Room> getbyAgentEnable(Long idAgent);
 
     List<Room> getbyAllEnable();
+
+    void delete(Long id);
 }

@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -31,7 +33,11 @@ import com.java.web.estateagency.entity.Maintenance;
 import com.java.web.estateagency.entity.Room;
 import com.java.web.estateagency.model.request.CreateBillRequest;
 import com.java.web.estateagency.repository.BillRepository;
+import com.java.web.estateagency.repository.ContactRepository;
 import com.java.web.estateagency.repository.ContractsRepository;
+import com.java.web.estateagency.repository.MaintenanceRepository;
+import com.java.web.estateagency.repository.RoomRepository;
+import com.java.web.estateagency.repository.UserRepository;
 import com.java.web.estateagency.service.BillService;
 
 import io.jsonwebtoken.io.IOException;
@@ -47,6 +53,18 @@ public class BillServiceImpl implements BillService {
     @Autowired
     private BillRepository billRepository;
 
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MaintenanceRepository maintenanceRepository;
+
     @Override
     public Bill save(CreateBillRequest createBillRequest) {
         Bill bill = new Bill();
@@ -59,7 +77,7 @@ public class BillServiceImpl implements BillService {
         Room room = contract.getRoom();
 
         List<Maintenance> maintenances = room.getMaintenances();
-        List<Maintenance> maintenances2 = getByDay(maintenances,LocalDate.now());
+        List<Maintenance> maintenances2 = getByDay(maintenances, LocalDate.now());
         long total = 0;
         total += room.getPrice();
         for (Maintenance maintenance : maintenances2) {
@@ -70,8 +88,8 @@ public class BillServiceImpl implements BillService {
         return billRepository.save(bill);
     }
 
-    private List<Maintenance> getByDay(List<Maintenance> list,LocalDate currentDate) {
-        
+    private List<Maintenance> getByDay(List<Maintenance> list, LocalDate currentDate) {
+
         LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
         LocalDate lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
 
@@ -110,13 +128,10 @@ public class BillServiceImpl implements BillService {
             if (optionalBill.isPresent()) {
                 Bill bill = optionalBill.get();
                 Contract contract = bill.getContract();
-                // Tiếp tục xử lý
 
-                // Contract contract = bill.getContract();
-                // Contract contract = contractsRepository.findById(id).get();
-                // log.info("Contact:"+contract.toString());
                 Room room = contract.getRoom();
-                // log.info("Room: "+room.toString());
+              
+
                 String data = "Name: " + room.getName() + "\n" + "Adress:" + room.getAddress() +
                         "\n" + "Price: " + room.getPrice() + "\n" + "Payment Method: Cart";
                 Date date = new Date();
@@ -151,15 +166,14 @@ public class BillServiceImpl implements BillService {
                 // CafeUtils.getMapFormJson(jsonArray.getJSONObject(i).toString()));
                 // }
 
-                List<Maintenance> maintenances = room.getMaintenances();
-                if(maintenances.size()>0){
-                    List<Maintenance> maintenances2 = getByDay(maintenances,convertDate(bill.getDate()));
+                List<Maintenance> maintenances = maintenanceRepository.getListByRoon(room.getId());
+                if (maintenances.size() > 0) {
+                    List<Maintenance> maintenances2 = getByDay(maintenances, convertDate(bill.getDate()));
                     for (Maintenance maintenance : maintenances2) {
                         addRows(table, maintenance);
                     }
                     document.add(table);
                 }
-               
 
                 Paragraph footer = new Paragraph("Total :" + getTotal(id).toString() + "\n"
                         + "Thank you for visiting. Please visit again!!", getFont("Data"));
@@ -180,9 +194,10 @@ public class BillServiceImpl implements BillService {
                 // // Đảm bảo rằng dữ liệu đã được gửi đi và không còn trong bộ đệm
                 // outputStream.close();
                 byte[] pdfContent = baos.toByteArray();
+                baos.close();
                 return pdfContent;
                 // return fileName;
-            }else {
+            } else {
                 throw new IllegalArgumentException("Bill not found for id: " + id);
             }
         } catch (Exception e) {
@@ -262,10 +277,87 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill updatePayment(long id, String user) {
-        Bill bill=billRepository.findById(id).get();
+        Bill bill = billRepository.findById(id).get();
         bill.setStatus("Đã thanh toán");
         bill.setUser(user);
         return billRepository.save(bill);
+    }
+
+    @Override
+    public List<Object> getReport(Long idAgent) {
+        List<Contract> contracts = contractsRepository.getByAgent(idAgent);
+        List<Long> list = new ArrayList<>();
+        for (Contract contract : contracts) {
+            list.add(contract.getId());
+        }
+
+        return billRepository.getTotalByMonthvsYear(list);
+
+    }
+
+    @Override
+    public List<Integer> getReportRoomandMaintain(Long idAgent) {
+        int totalbill = 0;
+        int totalmaintaince = 0;
+
+        List<Long> list = new ArrayList<>();
+        List<Contract> contracts = contractsRepository.getByAgent(idAgent);
+        for (Contract contract : contracts) {
+            list.add(contract.getId());
+        }
+        List<Bill> bills = billRepository.getByPaymented(list);
+        for (Bill bill : bills) {
+            totalbill += bill.getContract().getRoom().getPrice();
+            for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
+                totalmaintaince += maintenance.getPrice();
+            }
+
+        }
+        List<Integer> result = new ArrayList<>();
+        result.add(totalbill);
+        result.add(totalmaintaince);
+        return result;
+
+    }
+
+    private Integer getTotalAll(long id) {
+        int totalmaintaince = 0;
+
+        List<Long> list = new ArrayList<>();
+        List<Contract> contracts = contractsRepository.getByAgent(id);
+        for (Contract contract : contracts) {
+            list.add(contract.getId());
+        }
+        List<Bill> bills = billRepository.getByPaymented(list);
+        for (Bill bill : bills) {
+            totalmaintaince += bill.getContract().getRoom().getPrice();
+            for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
+                totalmaintaince += maintenance.getPrice();
+            }
+
+        }
+        return totalmaintaince;
+    }
+
+    @Override
+    public Map<String, Integer> getReportAgent(Long id) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("room", roomRepository.getByAgent(id).size());
+        map.put("roomrented", roomRepository.getByAgentAngented(id).size());
+        map.put("notpayment", billRepository.getByContractIDAndNotPayment(id).size());
+        map.put("total", getTotalAll(id));
+        return map;
+
+    }
+
+    @Override
+    public Map<String, Integer> getReportAdmin() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("acount", userRepository.findAll().size());
+        map.put("room", roomRepository.findAll().size());
+        map.put("roomnot", roomRepository.getByRoomReportAdmin().size());
+        map.put("contact", contactRepository.findAll().size());
+        return map;
     }
 
 }

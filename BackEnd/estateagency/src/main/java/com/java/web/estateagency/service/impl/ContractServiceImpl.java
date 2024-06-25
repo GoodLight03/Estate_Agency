@@ -59,5 +59,10 @@ public class ContractServiceImpl implements ContractsService {
         return decodedBytes;
     }
 
+    @Override
+    public List<Contract> getByRoom(Long id) {
+       return contractsRepository.getByRoom(id);
+    }
+
     
 }

@@ -13,6 +13,12 @@ public interface RoomRepository extends JpaRepository<Room,Long>  {
     @Query("select p from Room p where p.user.id = ?1 ")
     List<Room> getByAgent(Long id);
 
+    @Query("select p from Room p where p.user.id = ?1 and p.state='Đã thuê'")
+    List<Room> getByAgentAngented(Long id);
+
+    @Query("select p from Room p where p.enabled = false and p.state='Chưa thuê'")
+    List<Room> getByRoomReportAdmin();
+
     @Query("select p from Room p where p.user.id = ?1 and p.enabled=true")
     List<Room> getByAgentEnable(Long id);
 

@@ -7,9 +7,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +67,46 @@ public class RoomController {
         request.setImg(img);
         roomService.createRoom(request);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "Tạo Phòng")
+    public ResponseEntity<?> update(@RequestParam("id") String id,@RequestParam("name") String name,
+            @RequestParam("price") String price, @RequestParam("address") String address,
+            @RequestParam("describe") String describe, @RequestParam("state") String state,
+            @RequestParam("img") MultipartFile img, @RequestParam("idAgent") String idAgent) {
+
+        CreateRoomRequest request = new CreateRoomRequest();
+        request.setId(Long.parseLong(id));
+        request.setName(name);
+        request.setAddress(address);
+        request.setDescribe(describe);
+        request.setState(state);
+        
+        try {
+            if (price != null) {
+                request.setPrice(Float.parseFloat(price));
+            }
+
+            if (idAgent != null) {
+                request.setIdAgent(Long.parseLong(idAgent));
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(new MessageResponse("Invalid price or idAgent."));
+        }
+
+        log.info("Hello" + request.toString());
+        request.setImg(img);
+        roomService.updateRoom(request);
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id")Long id){
+        roomService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/")

@@ -15,11 +15,12 @@ import com.java.web.estateagency.service.RequestService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
@@ -43,6 +44,14 @@ public class RequestController {
         //TODO: process POST request
         log.info("Hell"+createRequestRequest.toString());
         return ResponseEntity.ok(requestService.save(createRequestRequest));
+    }
+
+    @PatchMapping("/status/id/{id}/status/{status}")
+    public ResponseEntity<Request> putMethodName(@PathVariable("id") long id, @PathVariable("status") String status) {
+        //TODO: process PUT request
+        log.info(id+status);
+        
+        return ResponseEntity.ok(requestService.updateStatus(id, status));
     }
     
     

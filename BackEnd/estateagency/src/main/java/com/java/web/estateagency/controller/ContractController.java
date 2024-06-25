@@ -40,6 +40,13 @@ public class ContractController {
         return ResponseEntity.ok(od);
     }
 
+    @GetMapping("/room/{id}")
+    @Operation(summary = "Get By Agent")
+    public ResponseEntity<List<Contract>> getbyRoom(@PathVariable("id") Long id) {
+        List<Contract> od = contractServices.getByRoom(id);
+        return ResponseEntity.ok(od);
+    }
+
     @PostMapping("/upFile")
     @Operation(summary = "Upload File")
     public ResponseEntity<Contract> upload(@RequestParam("id") Long id, @RequestParam("file") MultipartFile file) {

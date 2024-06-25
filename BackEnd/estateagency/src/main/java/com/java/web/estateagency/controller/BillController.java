@@ -1,6 +1,7 @@
 package com.java.web.estateagency.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -64,17 +65,8 @@ public class BillController {
     @GetMapping("/bill/{id}")
     public ResponseEntity<byte[]> getBill(@PathVariable("id") long id) {
 
-        log.info("Hello" + id);
-        // return ResponseEntity.ok(contractServices.generateReport(id));
         byte[] pdfContent = billService.generateReport(id);
-        // Chuẩn bị HttpHeaders
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.setContentType(MediaType.APPLICATION_PDF);
-        // headers.setContentDispositionFormData("attachment", "OK" + ".pdf");
-        // headers.setContentLength(pdfContent.length);
-
-        // Trả về phản hồi HTTP chứa tệp PDF
-        // return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+        
         return new ResponseEntity<>(pdfContent, HttpStatus.OK);
 
     }
@@ -140,6 +132,26 @@ public class BillController {
     @GetMapping("/detail/{id}")
     public ResponseEntity<Bill> getMethodName(@PathVariable("id") long id) {
         return ResponseEntity.ok(billService.detail(id));
+    }
+
+    @GetMapping("/report/{id}")
+    public ResponseEntity<List<Object>> report(@PathVariable("id") long id) {
+        return ResponseEntity.ok(billService.getReport(id));
+    }
+
+    @GetMapping("/reportcontractmaintain/{id}")
+    public ResponseEntity<List<Integer>> reportcontractmaintain(@PathVariable("id") long id) {
+        return ResponseEntity.ok(billService.getReportRoomandMaintain(id));
+    }
+
+    @GetMapping("/reportagent/{id}")
+    public ResponseEntity<Map<String,Integer>> reportAgent(@PathVariable("id") long id) {
+        return ResponseEntity.ok(billService.getReportAgent(id));
+    }
+
+    @GetMapping("/reportadmin")
+    public ResponseEntity<Map<String,Integer>> reportAdmin() {
+        return ResponseEntity.ok(billService.getReportAdmin());
     }
 
 }

@@ -9,4 +9,6 @@ public interface RequestService {
     List<Request> findAllByIdUser(Long id, String filter);
 
     Request save(CreateRequestRequest createRequestRequest);
+
+    Request updateStatus(long id, String status);
 }

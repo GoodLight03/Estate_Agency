@@ -18,5 +18,5 @@ public interface ContractsService {
 
     byte[] getFIle(Long id);
 
-  
+    List<Contract> getByRoom(Long id);
 }

@@ -85,4 +85,33 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.getAllEnable();
     }
 
+    @Override
+    public Room updateRoom(CreateRoomRequest createRoomRequest) {
+        Room room = roomRepository.findById(createRoomRequest.getId()).get();
+        room.setName(createRoomRequest.getName());
+        room.setPrice(createRoomRequest.getPrice());
+        room.setAddress(createRoomRequest.getAddress());
+        room.setDescription(createRoomRequest.getDescribe());
+        room.setState("Chưa thuê");
+        User user = userRepository.findById(createRoomRequest.getIdAgent()).orElseThrow(()-> new NotFoundException("Not Found Category With Id: " + createRoomRequest.getIdAgent()));
+        room.setUser(user);
+        try {
+            if (createRoomRequest.getImg() == null) {
+                room.setImg(Base64.getEncoder().encodeToString(room.getImg().getBytes()));
+            } else {
+                imageUpload.uploadFile(createRoomRequest.getImg());
+                room.setImg(Base64.getEncoder().encodeToString(createRoomRequest.getImg().getBytes()));
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return roomRepository.save(room);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Room room = roomRepository.findById(id).get();
+         roomRepository.delete(room);
+    }
+
 }
