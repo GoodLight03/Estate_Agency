@@ -33,7 +33,7 @@
                 <td>{{category.name}}</td>
                 <td>{{category.start}}</td>
                 <td>{{category.acount}}</td>
-                <td *ngIf="category.file==null"><input type="file" pInputText class="w-full mt-2" name="img" (change)="onFileSelected($event,category)"></td>
+                <td *ngIf="category.file==null"><input class="form-control" type="file" pInputText class="w-full mt-2" name="img" (change)="onFileSelected($event,category)"></td>
                 <td *ngIf="category.file!=null"><button (click)="getFile(category.id)" class="btn btn-info">View Contract</button></td>
                 <td><a href="javascript:void(0)" routerLink="/agent/bill/{{category.id}}">Bill</a></td>
                 

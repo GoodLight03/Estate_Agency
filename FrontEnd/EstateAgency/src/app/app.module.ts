@@ -77,6 +77,7 @@ import { Ripple } from 'primeng/ripple';
     ContactadminComponent,
     BillComponent,
     ContractcustomerComponent,
+    
   ],
   imports: [
     BrowserModule,

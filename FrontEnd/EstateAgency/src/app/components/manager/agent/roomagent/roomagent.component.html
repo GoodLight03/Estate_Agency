@@ -33,7 +33,7 @@
             </div> -->
             <div class="p-field">
                 <label for="username">Ảnh: </label>
-                <input type="file" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.img" name="img"
+                <input type="file" class="form-control" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.img" name="img"
                     (change)="onFileSelected($event)">
             </div>
             <div class="p-field mt-3">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="flex justify-content-end mt-3">
                             <p-button label="Yes" icon="pi pi-check" class="mr-2" (click)="deleteCategory()"></p-button>
-                            <p-button label="No" (click)="deleteForm=false" class="p-button-danger ml-3"></p-button>
+                            <button pButton type="button" class="p-button-danger ml-3" (click)="deleteForm=false">No</button>
                         </div>
                     </p-dialog>
                 </td>

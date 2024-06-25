@@ -25,15 +25,25 @@ export class AcountService {
   getUserName(username: string):Observable<any>{
     let params = new HttpParams();
     params = params.append('username',username);
-    return this.http.get(USER_API,{params: params})
+    return this.http.get(USER_API+"username",{params: params})
   }
 
-  updateProfile(username: string,firstname: string,lastname:string,email:string,country:string,state:string,address: string,phone: string):Observable<any>{
-    return this.http.put(USER_API +'update',{username,firstname,lastname,email,country,state,address,phone},httpOptions);
+  updateProfile(id:string,username: string,fullname: string,phone:string,address:string,email:string,img:File):Observable<any>{
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('username', username);
+    formData.append('fullname',fullname);
+    formData.append('phone',phone);
+    formData.append('address', address);
+    formData.append('email',email);
+    formData.append('img', img);
+    
+    return this.http.put(USER_API + 'update',formData);
+    
   }
 
-  changePassword(username: string, oldPassword: string,newPassword: string):Observable<any>{
-    return this.http.put(USER_API + 'password',{username,oldPassword,newPassword},httpOptions);
+  changePassword(username: string, oldPassword: string,newPassword: string,confilmPassword:string):Observable<any>{
+    return this.http.put(USER_API + 'password',{username,oldPassword,newPassword,confilmPassword},httpOptions);
   }
 
   getUserId(id: number):Observable<any>{

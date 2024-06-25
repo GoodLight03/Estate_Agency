@@ -121,6 +121,9 @@ const routes: Routes = [
       },
       {
         path: 'request/:id', component: RequestagentComponent,
+      },
+      {
+        path: 'information', component: InformationComponent,
       }
     ]
   },

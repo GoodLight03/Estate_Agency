@@ -9,7 +9,7 @@
 			<input type="text" placeholder="Full Name"  name="fullname" />
 			<input type="phone" placeholder="Phone"  name="phone" />
 			<input type="text" placeholder="Adress" name="adress" />
-			<input type="file" name="img" [(ngModel)]="registerForm.img" (change)="onFileSelected($event)">
+			<input class="form-control" type="file" name="img" [(ngModel)]="registerForm.img" (change)="onFileSelected($event)">
 			<div style="margin-bottom: 10px; width: 100%; padding: 10px; text-align: left; background-color: #eee; border: none;">	
 				<select style="width: 100%;text-align: left; background-color: #eee; border: none;" [(ngModel)]="selectedRole" name="role" (change)="addRole()">
 					<option value="customer">Cusomer</option>

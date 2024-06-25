@@ -1,1 +1,61 @@
-<p>information works!</p>
+<p-toast></p-toast>
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                    width="150px" src="{{'data:image/jpg;base64,' + registerForm.img}}"><span class="font-weight-bold">
+                    <input class="form-control" type="file" name="img" [(ngModel)]="registerForm.img"
+                        (change)="onFileSelected($event)" style="margin-top: 20px;">
+                </span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">UserName</label><input type="text" class="form-control"
+                            placeholder="first name" value="" [(ngModel)]="registerForm.username" name="username"
+                            readonly="true"></div>
+                    <div class="col-md-6"><label class="labels">FullName</label><input type="text" class="form-control"
+                            value="" placeholder="surname" [(ngModel)]="registerForm.fullname" name="fullname"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
+                            class="form-control" placeholder="enter phone number" value=""
+                            [(ngModel)]="registerForm.phone" name="email"></div>
+                    <div class="col-md-12"><label class="labels">Address</label><input type="text" class="form-control"
+                            placeholder="enter address " value="" [(ngModel)]="registerForm.address" name="email"></div>
+                    <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control"
+                            placeholder="enter email" value="" [(ngModel)]="registerForm.email" name="email"></div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" pButton
+                            (click)="updateProfile()">Save
+                            Profile</button>
+                    <button style="margin-left: 20px;" class="btn btn-info" type="button" pButton
+                            (click)="showForm()">Change Password</button></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true" [transitionOptions]="'.3s'">
+        <form action="">
+            <div class="p-field">
+                <label for="username"  style="width: 120px;">Pass Old: </label>
+                <input type="password" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.oldPassword" name="oldPassword" required>
+            </div>
+            <div class="p-field">
+                <label for="username" style="width: 120px;">Pass New: </label>
+                <input type="password" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.newPassword" name="newPassword" required>
+            </div>
+            <div class="p-field">
+                <label for="username" style="width: 120px;">Comfilm Pass: </label>
+                <input type="password" pInputText class="w-full mt-2" [(ngModel)]="categoryForm.confilmPassword" name="confilmPassword" required>
+            </div>
+            <div class="p-field mt-3">
+                <button type="submit" pButton (click)="changpass()"  >Change Pass</button>
+                <button pButton type="button" class="p-button-danger ml-3" (click)="displayForm=false">Cancle</button>
+            </div>
+        </form>
+    </p-dialog>
