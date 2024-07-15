@@ -98,9 +98,15 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
+<<<<<<< HEAD
               
               "src/assets",
                "src/assets/img/house.png"
+=======
+              "src/favicon.ico",
+              "src/assets",
+              "src/assets/img/house.png"
+>>>>>>> 2f4eb4076361d484ce54f6a9ad69a6523ededf9c
             ],
             "styles": [
               "src/styles.css",
