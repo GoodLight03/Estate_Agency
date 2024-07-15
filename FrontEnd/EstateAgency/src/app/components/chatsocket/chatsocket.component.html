@@ -1,0 +1,76 @@
+<div class="chat_window">
+    <div class="top_menu">
+      <div class="buttons">
+        <div class="button close"></div>
+        <div class="button minimize"></div>
+        <div class="button maximize"></div>
+      </div>
+      <div class="title">
+        <img src="../../../assets/img/whatsapp-icon.png" width="25px" height="25px">
+        WhatsApp
+      </div>
+    </div>
+    <ul class="messages">
+      <li class="message right" *ngFor="let item of messageList"
+      [ngClass]="{'left': item.message_side === 'receiver', 'right': item.message_side === 'sender'}"
+      >
+        <div class="avatar"></div>
+        <div class="text_wrapper">
+          <div class="text">{{item.message}}</div>
+        </div>
+      </li>
+    </ul>
+    <div class="bottom_wrapper clearfix">
+      <div class="message_input_wrapper">
+        <input class="message_input" placeholder="Message..." [(ngModel)]="messageInput" 
+        (keyup.enter)="sendMessage()"/>
+      </div>
+      <div class="send_message" (click)="sendMessage()">
+        <div class="icon"></div>
+        <div class="text">Send</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-xl-2 chat order-md-2 order-lg-5">
+    <div class="card mb-sm-3 mb-md-0 contacts_card">
+      <div class="card-header">
+        <h1 class="chat-list-title">Chat List</h1>
+      </div>
+      <div class="card-body contacts_body ">
+        <ul class="contacts chatList" *ngFor="let chats of chatList">
+          <li>
+            <div class="d-flex bd-highlight" (click)="loadChatByEmail(chats.secondUserName.username, chats.firstUserName.username)">
+              <div class="img_cont">
+                <div class="rounded-circle user_img text_inside_circle" *ngIf="chats.secondUserName.username!=senderCheck">
+                  <!-- {{chats.secondUserName.username.substring(0,1)}} -->
+                  <img src="{{'data:image/jpg;base64,' + chats.secondUserName.img}}" alt="" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;">
+                </div>
+                <div class="rounded-circle user_img text_inside_circle" *ngIf="chats.secondUserName.username==senderCheck">
+                  <!-- {{chats.firstUserName.username.substring(0,1)}} -->
+                  <img src="{{'data:image/jpg;base64,' + chats.firstUserName.img}}" alt="" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;">
+                </div>
+
+              </div>
+              <div class="user_info">
+                <div *ngIf="chats.secondUserName.username!=senderCheck" style="margin-top: 1rem;">
+                  {{chats.secondUserName.username}}</div>
+                <div *ngIf="chats.secondUserName.username==senderCheck" style="margin-top: 1rem;">
+                  {{chats.firstUserName.username}}</div>
+                <!-- <br> -->
+                <div *ngIf="chats.messageList.length>0 && chats.messageList[chats.messageList.length-1].senderEmail==senderCheck" style="margin-top: 1rem;">
+                  You: {{chats.messageList[chats.messageList.length-1].replymessage}}</div>
+                <div *ngIf="chats.messageList.length>0 && chats.messageList[chats.messageList.length-1].senderEmail!=senderCheck" style="margin-top: 1rem;">
+                  <b>{{chats.messageList[chats.messageList.length-1].senderEmail}}:{{chats.messageList[chats.messageList.length-1].replymessage}}</b></div>
+                <br>
+             
+              </div>
+          
+                
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer"></div>
+    </div>
+  </div>

@@ -47,6 +47,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { ChartModule } from 'primeng/chart';
 import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
 import { Ripple } from 'primeng/ripple';
+import { ChatsocketComponent } from './components/chatsocket/chatsocket.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { Ripple } from 'primeng/ripple';
     ContactadminComponent,
     BillComponent,
     ContractcustomerComponent,
+    ChatsocketComponent,
     
   ],
   imports: [
