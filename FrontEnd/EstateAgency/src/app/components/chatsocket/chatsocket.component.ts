@@ -71,6 +71,7 @@ export class ChatsocketComponent implements OnInit {
   lisenerMessage() {
     console.log(this.userId+"Submit");
     this.chatService.getMessageSubject().subscribe((messages: any) => {
+      console.log(messages);
       this.messageList = messages.map((item: any)=> ({
         ...item,
         message_side: item.user === this.userId ? 'sender': 'receiver'

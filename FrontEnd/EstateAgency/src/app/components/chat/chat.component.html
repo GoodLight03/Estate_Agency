@@ -80,9 +80,9 @@
                   <span class="input-group-text attach_btn"></span>
                 </div>
                 <textarea name="replymessage" class="form-control type_msg" placeholder="Type your message..."
-                  [(ngModel)]="mess" (keyup.enter)="sendMessage()"></textarea>
+                  [(ngModel)]="mess" (keyup.enter)="sendMessageSocket()"></textarea>
                 <div class="input-group-append">
-                  <button mat-raised-button class="input-group-text send_btn" (click)="sendMessage()">
+                  <button mat-raised-button class="input-group-text send_btn" (click)="sendMessageSocket()">
                     <i class="fa fa-location-arrow"></i> Sent</button>
                 </div>
               </div>
