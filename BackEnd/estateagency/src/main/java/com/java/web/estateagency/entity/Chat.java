@@ -27,6 +27,6 @@ public class Chat {
     private User secondUserName;
 
    
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messageList;
 }
