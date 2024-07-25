@@ -50,11 +50,11 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
+
     this.senderCheck = this.storange.getUser().username;
     console.log("Hello" + this.senderCheck);
 
-    console.log("Hello" + this.storange.geChat());
+    console.log("Hello Chat Data" + this.storange.geChat());
     // Lấy tất cả các khóa trong sessionStorage
     const keys = Object.keys(sessionStorage);
 
@@ -67,32 +67,35 @@ export class ChatComponent implements OnInit {
       this.chatService.getChatByFirstUserNameOrSecondUserName(this.storange.getUser().username).subscribe(data => {
         this.chatData = data;
         this.chatList = this.chatData;
-        this.storange.saveChat(this.chatList[0].id)
+        console.log(this.chatList[0].id);
+        this.chatId=this.chatList[0].id;
+        this.storange.saveChat(this.chatId);
 
-        
+
       });
     }
 
     this.chatId = this.storange.geChat();
     
+
     this.chatServiceSocket.joinRoomV(this.chatId.toString());
 
     this.lisenerMessage();
 
     // setInterval(() => {
 
-      this.chatService.getChatById(this.storange.geChat()).subscribe(data => {
-        this.chatData = data;
-        console.log(this.chatData);
-        console.log(this.chatData.messageList);
-        this.messageListV = this.chatData.messageList;
-        this.secondUserName = this.chatData.secondUserName.username;
-        this.firstUserName = this.chatData.firstUserName.username;
-        this.lengthMess = this.messageListV.length;
-        console.log("length" + this.lengthMess);
-        this.secondUserNameV = this.chatData.secondUserName;
-        this.firstUserNameV = this.chatData.firstUserName;
-      });
+    this.chatService.getChatById(this.chatId).subscribe(data => {
+      this.chatData = data;
+      console.log(this.chatData);
+      console.log(this.chatData.messageList);
+      this.messageListV = this.chatData.messageList;
+      this.secondUserName = this.chatData.secondUserName.username;
+      this.firstUserName = this.chatData.firstUserName.username;
+      this.lengthMess = this.messageListV.length;
+      console.log("length" + this.lengthMess);
+      this.secondUserNameV = this.chatData.secondUserName;
+      this.firstUserNameV = this.chatData.firstUserName;
+    });
 
     // }, 1000);
 
@@ -100,24 +103,24 @@ export class ChatComponent implements OnInit {
 
     console.log(this.storange.getUser().username)
 
-    setInterval(() => {
-      // For getting all the chat list whose ever is logged in.
-      this.chatService.getChatByFirstUserNameOrSecondUserName(this.storange.getUser().username).subscribe(data => {
-        console.log(data);
-        this.chatData = data;
-        this.chatList = this.chatData;
+    // setInterval(() => {
+    // For getting all the chat list whose ever is logged in.
+    this.chatService.getChatByFirstUserNameOrSecondUserName(this.storange.getUser().username).subscribe(data => {
+      console.log(data);
+      this.chatData = data;
+      this.chatList = this.chatData;
 
-        this.chatList.sort((a: any, b: any) => a.firstUserName.id - b.firstUserName.id);
+      this.chatList.sort((a: any, b: any) => a.firstUserName.id - b.firstUserName.id);
 
-      });
+    });
 
 
-      // this.timesRun2 += 1;
-      // if (this.timesRun2 === 2) {
-      //   clearInterval(getByname);
-      // }
-    }, 1000);
-//----------------
+    // this.timesRun2 += 1;
+    // if (this.timesRun2 === 2) {
+    //   clearInterval(getByname);
+    // }
+    // }, 1000);
+    //----------------
     // let all = setInterval(() => {
 
     //   this.userService.getListUserAll().subscribe((data) => {
@@ -138,13 +141,13 @@ export class ChatComponent implements OnInit {
   lisenerMessage() {
     //console.log(this.userId+"Submit");
     this.chatServiceSocket.getMessageSubjectV().subscribe((messages: any) => {
-      console.log("Hi+"+messages);
+      console.log(messages);
       this.messageListV = messages.messageList;
-      this.secondUserName = messages.secondUserName;
-      this.firstUserName = messages.firstUserName;
-      this.secondUserNameV =messages.secondUserName;
+      this.secondUserName = messages.secondUserName.username;
+      this.firstUserName = messages.firstUserName.username;
+      this.secondUserNameV = messages.secondUserName;
       this.firstUserNameV = messages.firstUserName;
-      
+
     });
   }
 
@@ -162,13 +165,19 @@ export class ChatComponent implements OnInit {
       console.log(this.chatId);
       this.storange.saveChat(this.chatId);
 
-
+      this.chatId = this.storange.geChat();
+      console.log("Curen Chat: "+this.chatId);
+    
+      this.chatServiceSocket.joinRoomV(this.chatId.toString());
+  
+      this.lisenerMessage();
+  
       // setInterval(() => {
       this.chatService.getChatById(this.chatId).subscribe(data => {
         this.chatData = data;
         this.messageListV = this.chatData.messageList;
-        this.secondUserName = this.chatData.secondUserName;
-        this.firstUserName = this.chatData.firstUserName;
+        this.secondUserName = this.chatData.secondUserName.username;
+        this.firstUserName = this.chatData.firstUserName.username;
         this.secondUserNameV = this.chatData.secondUserName;
         this.firstUserNameV = this.chatData.firstUserName;
       });
@@ -196,8 +205,8 @@ export class ChatComponent implements OnInit {
         this.chatData = data;
         // console.log(this.chatData.messageList);console.log(JSON.stringify(this.chatData.messageList));
         this.messageListV = this.chatData.messageList;
-        this.secondUserName = this.chatData.secondUserName;
-        this.firstUserName = this.chatData.firstUserName;
+        this.secondUserName = this.chatData.secondUserName.username;
+        this.firstUserName = this.chatData.firstUserName.username;
         this.secondUserNameV = this.chatData.secondUserName;
         this.firstUserNameV = this.chatData.firstUserName;
       })
@@ -217,7 +226,7 @@ export class ChatComponent implements OnInit {
       user: this.storange.getUser().id
     } as ChatMessage
 
-    this.chatServiceSocket.sendMessage(this.storange.geChat().toString(), chatMessage);
+    this.chatServiceSocket.sendMessage(this.chatId.toString(), chatMessage);
     this.chatForm.reset();
     this.mess = "";
   }
@@ -239,6 +248,12 @@ export class ChatComponent implements OnInit {
       (data) => {
         this.chatData = data;
         this.chatId = this.chatData.id;
+        // this.chatId = this.storange.geChat();
+
+        // this.chatServiceSocket.joinRoomV(this.chatId.toString());
+
+        // this.lisenerMessage();
+
         //sessionStorage.setItem("chatId", this.chatId);
       },
       (error) => {
