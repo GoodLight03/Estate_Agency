@@ -28,6 +28,7 @@ import { ContactadminComponent } from './components/manager/admin/contactadmin/c
 import { BillComponent } from './components/manager/agent/bill/bill.component';
 import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
 import { ChatsocketComponent } from './components/chatsocket/chatsocket.component';
+import { ChatfinalComponent } from './components/chatfinal/chatfinal.component';
 
 const routes: Routes = [
   {
@@ -72,7 +73,7 @@ const routes: Routes = [
         path: 'order', component: OrderCustommerComponent,
       },
       {
-        path: 'chat', component: ChatComponent,canActivate: [RoleGuardService], data: { expectedRole: "ROLE_CUSTOMER" }
+        path: 'chat', component: ChatfinalComponent,canActivate: [RoleGuardService], data: { expectedRole: "ROLE_CUSTOMER" }
       },
       {
         path: 'bill/:id', component: BillComponent,
@@ -118,7 +119,7 @@ const routes: Routes = [
         path: 'order/:id', component: OrderagentComponent,
       },
       {
-        path: 'chat', component: ChatComponent
+        path: 'chat', component: ChatfinalComponent
       },
       {
         path: 'request/:id', component: RequestagentComponent,
@@ -129,7 +130,8 @@ const routes: Routes = [
     ]
   },
   { path: 'login', component: LoginComponent },
-  {path: 'chatsocket/:idRoomChat', component: ChatsocketComponent}
+  // {path: 'chatsocket/:idRoomChat', component: ChatsocketComponent},
+  // {path: 'chatfinal', component: ChatfinalComponent},
 ];
 
 @NgModule({

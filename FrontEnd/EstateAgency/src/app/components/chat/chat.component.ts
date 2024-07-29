@@ -78,13 +78,13 @@ export class ChatComponent implements OnInit {
     this.chatId = this.storange.geChat();
     
 
-    this.chatServiceSocket.joinRoomV(this.chatId.toString());
+    this.chatServiceSocket.joinRoomV(this.storange.geChat().toString());
 
     this.lisenerMessage();
 
     // setInterval(() => {
 
-    this.chatService.getChatById(this.chatId).subscribe(data => {
+    this.chatService.getChatById(this.storange.geChat()).subscribe(data => {
       this.chatData = data;
       console.log(this.chatData);
       console.log(this.chatData.messageList);
@@ -168,7 +168,7 @@ export class ChatComponent implements OnInit {
       this.chatId = this.storange.geChat();
       console.log("Curen Chat: "+this.chatId);
     
-      this.chatServiceSocket.joinRoomV(this.chatId.toString());
+      this.chatServiceSocket.joinRoomV(this.storange.geChat().toString());
   
       this.lisenerMessage();
   

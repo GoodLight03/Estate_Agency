@@ -21,7 +21,7 @@ export class ChatserviceService {
 
   private messageSubjectVL: BehaviorSubject<MessageChat[]> = new BehaviorSubject<MessageChat[]>([]);
 
-  private currentRoomId: string = '';
+  private currentRoomId: string = '0';
 
   constructor() {
     this.initConnenctionSocket();
@@ -47,10 +47,13 @@ export class ChatserviceService {
   }
 
   joinRoomV(roomId: string) {
-    
+
+
+
     if (roomId !== this.currentRoomId) {
       // Xử lý khi gọi hàm với id khác
       console.log(`Đã gọi hàm với id mới: ${roomId}`);
+
       this.messageSubjectV.next({
         id: 0,
         firstUserName: {},
@@ -58,10 +61,15 @@ export class ChatserviceService {
         messageList: []
       });
 
+      console.log("Cũ:" + this.currentRoomId);
+      console.log("MỚi:" + roomId);
+
+
+      //this.stompClient.unsubscribe(`/topic/${this.currentRoomId}`);
 
       this.stompClient.connect({}, () => {
 
-        this.stompClient.unsubscribe(`/topic/${this.currentRoomId}`);
+        //this.stompClient.unsubscribe(`/topic/${this.currentRoomId}`);
 
 
         this.stompClient.subscribe(`/topic/${roomId}`, (messages: any) => {

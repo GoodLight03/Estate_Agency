@@ -1,3 +1,4 @@
+import { ChatfinalService } from './../../../service/chatfinal.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../service/auth.service';
 import { StorangeService } from '../../../service/storange.service';
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers:[MessageService]
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
   isSuccessful = false;
@@ -18,57 +19,66 @@ export class LoginComponent implements OnInit {
   roles: string[] = [];
   errorMessage = '';
 
-  loginForm : any = {
-    username : null,
-    password : null
+  loginForm: any = {
+    username: null,
+    password: null
   }
 
-  registerForm : any = {
+  registerForm: any = {
     username: null,
     email: null,
     password: null,
-    role:[],
-    img:null
+    role: [],
+    img: null
   }
 
-  selectedRole= "";
+  selectedRole = "";
 
-addRole(): void {
-  // if (this.selectedRole && !this.registerForm.role.includes(this.selectedRole)) {
-  
-  //   this.registerForm.role.push(this.selectedRole);
-  // }
-  if (this.selectedRole) {
-  
-    this.registerForm.role = [this.selectedRole];
-    console.log(this.registerForm.role);
+  addRole(): void {
+    // if (this.selectedRole && !this.registerForm.role.includes(this.selectedRole)) {
+
+    //   this.registerForm.role.push(this.selectedRole);
+    // }
+    if (this.selectedRole) {
+
+      this.registerForm.role = [this.selectedRole];
+      console.log(this.registerForm.role);
+    }
   }
-}
 
-  constructor(private authService:AuthService,private storageService:StorangeService,private messageService:MessageService,private router:Router){}
+  constructor(private authService: AuthService, private storageService: StorangeService, private messageService: MessageService, private router: Router, private chatService: ChatfinalService) { }
 
   ngOnInit(): void {
   }
 
-  login():void{
-    const {username,password} = this.loginForm;
+  login(): void {
+    const { username, password } = this.loginForm;
     console.log(this.loginForm);
-    this.authService.login(username,password).subscribe({
-      next: res =>{
+    this.authService.login(username, password).subscribe({
+      next: res => {
+
         this.storageService.saveUser(res);
+        this.chatService.login(this.storageService.getUser().username).subscribe({
+          next: () => {
+
+          },
+          error: (error) => {
+            //this.warningComponent.updateValues(error, false, false, true, false);
+          }
+        });;
         this.isLoggedIn = true;
         this.isLoginFailed = false;
         this.roles = this.storageService.getUser().roles;
         this.showSuccess("Đăng nhập thành công!!");
-        if(this.roles[0]=="ROLE_AGENT"){
+        if (this.roles[0] == "ROLE_AGENT") {
           this.router.navigate(['/agent/report']);
-        }else if(this.roles[0]=="ROLE_ADMIN"){
+        } else if (this.roles[0] == "ROLE_ADMIN") {
           this.router.navigate(['/admin/report']);
-        }else{
+        } else {
           this.router.navigate(['/']);
         }
         // this.router.navigate(['/']);
-      },error: err =>{
+      }, error: err => {
         console.log(err);
         this.isLoggedIn = false;
         this.isLoginFailed = true;
@@ -76,18 +86,18 @@ addRole(): void {
     })
   }
 
-  register():void{
-    const {username,email,password,role,img} = this.registerForm;
+  register(): void {
+    const { username, email, password, role, img } = this.registerForm;
     console.log(this.registerForm);
-    this.authService.register(username,email,password,role,img).subscribe({
-      next: res =>{
+    this.authService.register(username, email, password, role, img).subscribe({
+      next: res => {
         this.isSuccessful = true;
         this.isSignUpFailed = false;
         this.showSuccess("Đăng ký thành công")
         this.loginForm.username = username;
         this.loginForm.password = password;
         this.login();
-      },error: err =>{
+      }, error: err => {
         this.showError(err.message);
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
@@ -99,22 +109,22 @@ addRole(): void {
     this.registerForm.img = event.target.files[0];
   }
 
-  loginFormChange(){
+  loginFormChange() {
     document.getElementById('container')?.classList.remove("right-panel-active");
   }
-  registerFormChange(){
+  registerFormChange() {
     document.getElementById('container')?.classList.add("right-panel-active");
   }
-  
+
 
   showSuccess(text: string) {
-    this.messageService.add({severity:'success', summary: 'Success', detail: text});
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: text });
   }
   showError(text: string) {
-    this.messageService.add({severity:'error', summary: 'Error', detail: text});
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: text });
   }
 
   showWarn(text: string) {
-    this.messageService.add({severity:'warn', summary: 'Warn', detail: text});
+    this.messageService.add({ severity: 'warn', summary: 'Warn', detail: text });
   }
 }

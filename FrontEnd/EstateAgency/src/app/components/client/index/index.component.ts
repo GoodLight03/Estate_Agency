@@ -3,6 +3,7 @@ import { AuthService } from '../../../service/auth.service';
 import { StorangeService } from '../../../service/storange.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ChatfinalService } from '../../../service/chatfinal.service';
 
 @Component({
   selector: 'app-index',
@@ -23,8 +24,10 @@ export class IndexComponent implements OnInit{
     private authService: AuthService,
     private storageService: StorangeService,
     private messageService:MessageService,
+    private chatService: ChatfinalService,
     // private categoryService: CategoryService,
     private router: Router){
+    
 
   }
 
@@ -47,6 +50,7 @@ export class IndexComponent implements OnInit{
   }
   
   logout():void{
+    this.chatService.logout();
     this.authService.logout().subscribe({
       next:res =>{
         this.storageService.clean();

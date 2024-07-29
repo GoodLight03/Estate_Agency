@@ -4,6 +4,7 @@ import { AuthService } from '../../../service/auth.service';
 import { StorangeService } from '../../../service/storange.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { ChatfinalService } from '../../../service/chatfinal.service';
 // import {faBookmark} from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ export class DashboardComponent implements OnInit{
     private authService: AuthService,
     private storageService: StorangeService,
     private messageService: MessageService,
+    private chatService: ChatfinalService,
     // private categoryService: CategoryService,
     private router: Router) {
 
@@ -45,6 +47,7 @@ export class DashboardComponent implements OnInit{
   }
 
   logout(): void {
+    this.chatService.logout();
     this.authService.logout().subscribe({
       next: res => {
         this.storageService.clean();

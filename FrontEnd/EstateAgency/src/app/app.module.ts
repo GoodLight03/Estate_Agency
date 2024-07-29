@@ -48,6 +48,7 @@ import { ChartModule } from 'primeng/chart';
 import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
 import { Ripple } from 'primeng/ripple';
 import { ChatsocketComponent } from './components/chatsocket/chatsocket.component';
+import { ChatfinalComponent } from './components/chatfinal/chatfinal.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { ChatsocketComponent } from './components/chatsocket/chatsocket.componen
     BillComponent,
     ContractcustomerComponent,
     ChatsocketComponent,
+    ChatfinalComponent,
     
   ],
   imports: [
