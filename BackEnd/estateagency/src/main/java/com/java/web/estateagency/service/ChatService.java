@@ -10,6 +10,7 @@ import com.java.web.estateagency.exception.ChatNotFoundException;
 import com.java.web.estateagency.exception.NoChatExistsInTheRepository;
 import com.java.web.estateagency.model.request.CreateChatRoomRequest;
 import com.java.web.estateagency.model.request.CreateMessageRequest;
+import com.java.web.estateagency.model.response.ContactDTO;
 
 public interface ChatService {
     public Chat addChat(Chat chat) throws ChatAlreadyExistException;
@@ -31,4 +32,8 @@ public interface ChatService {
     Chat addMessage(Message add, Long chatId)  throws ChatNotFoundException;
 
     Chat addMessageV(CreateMessageRequest createMessageRequest)  throws ChatNotFoundException;
+
+    List<ContactDTO> findUserContacts(String username) throws ChatNotFoundException;
+
+    ContactDTO anonymousContact(String telephone);
 }

@@ -1,5 +1,6 @@
 package com.java.web.estateagency.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,9 +21,11 @@ import com.java.web.estateagency.entity.Message;
 import com.java.web.estateagency.exception.ChatAlreadyExistException;
 import com.java.web.estateagency.exception.ChatNotFoundException;
 import com.java.web.estateagency.exception.NoChatExistsInTheRepository;
+import com.java.web.estateagency.model.request.ChatMessage;
 import com.java.web.estateagency.model.request.CreateChatRoomRequest;
 import com.java.web.estateagency.model.request.CreateCommentCustomerRequest;
 import com.java.web.estateagency.model.request.CreateMessageRequest;
+import com.java.web.estateagency.model.response.ContactDTO;
 import com.java.web.estateagency.service.ChatService;
 
 import io.jsonwebtoken.io.IOException;
@@ -144,5 +147,41 @@ public class ChatController {
         message2.setReplymessage(message);
         log.info(message2.toString());
         return new ResponseEntity<Chat>(chatService.addMessageV(message2), org.springframework.http.HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/loadcontact/{id}")
+    public ResponseEntity<List<ContactDTO>> list(@PathVariable String id) throws ChatNotFoundException{
+        return ResponseEntity.ok(chatService.findUserContacts(id));
+    }
+
+    @GetMapping(path = "/anonymous/{id}")
+    public ResponseEntity <ContactDTO> getAnonymousContact(@PathVariable String id){
+        return ResponseEntity.ok(chatService.anonymousContact(id));
+    }
+
+    @GetMapping("/getChatMessage/{id}")
+    public List<ChatMessage> Getchat(@PathVariable Long id) throws ChatNotFoundException {
+       
+        try {
+            
+            Chat chat=chatService.getById(id);
+            List<ChatMessage> lst=new ArrayList<>();
+            for (Message message3 : chat.getMessageList()) {
+                ChatMessage chatMessage=ChatMessage.builder()
+                .message(message3.getReplymessage())
+                .user(message3.getSenderEmail())
+                .time(message3.getTime().toString())
+                .build();
+
+                lst.add(chatMessage);
+            }
+    
+            return lst;
+        } catch (ChatNotFoundException e) {
+            // Xử lý ngoại lệ nếu cần
+            e.printStackTrace();
+            return null; // hoặc thông báo lỗi khác
+        }
+
     }
 }
