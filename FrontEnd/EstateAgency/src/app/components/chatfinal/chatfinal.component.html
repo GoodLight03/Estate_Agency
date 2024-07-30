@@ -1,17 +1,9 @@
 <body>
-    <div class="containerh">
+  <!-- <div class="containerh">
         <div class="main">
             <header>
                 <div class="shortcuts" *ngIf="(mobile && !chatVisibility) || desktop">
-                    <!-- <div [routerLink]="['/profile']" class="hover">
-                        <img src="../../../assets/images/config.png" alt="Config Icon">
-                    </div>
-                    <div [routerLink]="['/contacts']" class="hover">
-                        <img src="../../../assets/images/contact.png" alt="Contacts Icon">
-                    </div>
-                    <div [routerLink]="['/new']" class="hover">
-                        <img src="../../../assets/images/new.png" alt="Add Icon">
-                    </div> -->
+           
                 </div>
                 <div class="back hover" *ngIf="mobile && chatVisibility" (click)="changeToChat()">
                     <img src="../../../assets/images/back.png" alt="Back Icon">
@@ -65,137 +57,157 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
-<!-- 
-    <div class="container-fluid h-100 mt-5">
-        <div class="row justify-content-center h-100">
-    
-          <div class="col-md-0 col-xl-1 order-lg-1"></div>
-       
-          <div class="col-md-0 col-xl-1 order-lg-3"></div>
-    
 
-          <div class="col-md-8 col-xl-5 chat order-md-1 order-lg-4">
-            <div class="card">
-    
-    
-              <div class="card-header msg_head">
-                <div class="d-flex bd-highlight">
+  <div class="container-fluid h-100 mt-5">
+    <div class="row justify-content-center h-100">
+
+      <div class="col-md-0 col-xl-1 order-lg-1"></div>
+
+      <div class="col-md-0 col-xl-1 order-lg-3"></div>
+
+      <div class="col-md-4 col-xl-2 chat order-md-2 order-lg-4">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-header">
+            <h1 class="chat-list-title">Chat List</h1>
+          </div>
+          <div class="card-body contacts_body ">
+            <ul class="contacts">
+              <li>
+                <div class="d-flex bd-highlight chatList" *ngFor="let item of conversations"
+                  (click)="selectChatConversation(item); changeToChat()">
                   <div class="img_cont">
-                    <div class="rounded-circle user_img text_inside_circle1" *ngIf="chatConversation && chatConversation.contact.photo">
-                      {{secondUserName.substring(0,1)}}
-                      <img src="{{'data:image/jpg;base64,' + chatConversation.contact.photo}}" alt="" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;">
+                    <div class="rounded-circle user_img text_inside_circle">
+                      <img *ngIf="item.contact.photo" class="profile-pic"
+                        src="{{'data:image/jpg;base64,' + item.contact.photo}}" alt=""
+                        style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;">
+                      <img *ngIf="!item.contact.photo" class="profile-pic" src="../../../assets/images/user.png" alt="">
                     </div>
-    
+
                   </div>
-                  <div class="user_info">
-                    <h1 >{{chatConversation.contact.name}}</h1>
-                    <p>Message</p>
-                  </div>
-                  <div class="video_cam">
+                  <div class="user_info" style="width: 100%;">
+                    <div style="margin-top: 1rem;">
+                      <h2 title="{{item.contact.name}}">{{ item.contact.name.length > 20 ?
+                        item.contact.name.substring(0, 19) + '...' : item.contact.name }}</h2>
+                    </div>
+
+
+                    <div style="margin-top: 1rem; width: 100%; display: flex; align-items: center;" >
+                      <div style="width: 10%;">
+                        <p style="margin-top: 10px;"
+                          *ngIf="item.messages[item.messages.length-1].user!=user.username "
+                          class="circle blue"></p>
+                      </div>
+                      <div style="width: 90%;">
+                        <h5 *ngIf="item.lastMessage">{{ item.lastMessage.length > 8 ? item.lastMessage.substring(0, 8)
+                          + '...' : item.lastMessage }}</h5>
+                        <h5 *ngIf="!item.lastMessage">{{item.messages[item.messages.length-1].message.length > 8 ? item.messages[item.messages.length-1].message.substring(0, 8)
+                          + '...' : item.messages[item.messages.length-1].message}}</h5>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-                <span id="action_menu_btn">
-                
-                </span>
-              </div>
-              <div class="card-body msg_card_body"  #scrollMe [scrollTop]="scrollMe.scrollHeight">
-    
-                <div *ngFor="let item of chatConversation.messages">
-                  <div class="d-flex justify-content-end mb-4" *ngIf="item.user == user.username">
-                    <div class="msg_cotainer_send">
-                      {{msg.replymessage | json}}
-                      {{item.message}}
-    
-    
-                      <span class="msg_time_send">{{msg.time | date:'HH:mm'}}</span>
-                    </div>
-                    <div class="img_cont_msg">
-                      <span
-                        class="rounded-circle user_img_msg text_inside_circle2">{{item.user.substring(0,1)}}</span>
-                    </div>
-                  </div>
-    
-    
-                  <div class="d-flex justify-content-start mb-4" *ngIf="item.user == chatConversation.contact.name">
-                    <div class="img_cont_msg">
-                      <span
-                        class="rounded-circle user_img_msg text_inside_circle3">{{item.user.substring(0,1)}}</span>
-                    </div>
-                    <div class="msg_cotainer">
-                      {{item.message}}
-                      <span class="msg_time">{{msg.time | date:'HH:mm'}}</span>
-                    </div>
-                  </div>
-    
-    
-                </div>
-              </div>
-              <div class="card-footer">
-                <form >
-                  <div class="input-group">
-                    <div class="input-group-append">
-                      <span class="input-group-text attach_btn"></span>
-                    </div>
-                    <textarea name="replymessage" class="form-control type_msg" placeholder="Type your message..."
-                    [(ngModel)]="text" (keyup.enter)="sendMessage(chatConversation.contact.name)"></textarea>
-                    <div class="input-group-append">
-                      <button mat-raised-button class="input-group-text send_btn" (click)="sendMessage(chatConversation.contact.name)">
-                        <i class="fa fa-location-arrow"></i> Sent</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
-    
-    
-         
-          <div class="col-md-4 col-xl-2 chat order-md-2 order-lg-5">
-            <div class="card mb-sm-3 mb-md-0 contacts_card">
-              <div class="card-header">
-                <h1 class="chat-list-title">Chat List</h1>
-              </div>
-              <div class="card-body contacts_body ">
-                <ul class="contacts chatList" *ngFor="let item of conversations">
-                  <li>
-                    <div class="d-flex bd-highlight" (click)="selectChatConversation(item); changeToChat()">
-                      <div class="img_cont">
-                        <div class="rounded-circle user_img text_inside_circle">
-                            <img *ngIf="item.contact.photo" class="profile-pic" src="{{'data:image/jpg;base64,' + item.contact.photo}}" alt="">
-                            <img *ngIf="!item.contact.photo" class="profile-pic" src="../../../assets/images/user.png" alt="">
-                        </div>
-    
-                      </div>
-                      <div class="user_info">
-                        <div style="margin-top: 1rem;">
-                            <h2 title="{{item.contact.name}}">{{ item.contact.name.length > 20 ? item.contact.name.substring(0, 19) + '...' : item.contact.name }}</h2>
-                        </div>
-                       
-                        
-                        <div style="margin-top: 1rem;">
-                            <h4 *ngIf="item.lastMessage">{{ item.lastMessage.length > 11 ? item.lastMessage.substring(0, 11) + '...' : item.lastMessage }}</h4>
-                            <h4 *ngIf="!item.lastMessage">iniciar conversa</h4>
-                            <div *ngIf="!item.viewed" class="circle blue"></div>
-                        <br>
-                     
-                      </div>
-                  
-                        </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="card-footer"></div>
-            </div>
-          </div>
-    
-          <div class="col-md-0 col-xl-1 order-lg-6"></div>
+          <div class="card-footer"></div>
         </div>
-      </div> -->
+      </div>
+
+
+      <div class="col-md-8 col-xl-5 chat order-md-1 order-lg-5">
+        <div class="card">
+
+
+          <div class="card-header msg_head">
+            <div class="d-flex bd-highlight">
+              <div class="img_cont">
+                <div class="rounded-circle user_img text_inside_circle1"
+                  *ngIf="chatConversation && chatConversation.contact.photo">
+                  <!-- {{secondUserName.substring(0,1)}} -->
+                  <img src="{{'data:image/jpg;base64,' + chatConversation.contact.photo}}" alt=""
+                    style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;">
+                </div>
+
+
+              </div>
+              <div class="user_info" *ngIf="desktop && !chatConversation">
+                <h1 *ngIf="desktop && !chatConversation">Chat By {{user.username}}</h1>
+              </div>
+              <div class="user_info" *ngIf="(mobile && chatVisibility) || desktop && chatConversation">
+                <!-- <img *ngIf="chatConversation && chatConversation.contact.photo" src="{{'data:image/jpg;base64,' + chatConversation.contact.photo}}" alt="Contact Image" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;"> -->
+                <!-- <img class="profile-pic" *ngIf="chatConversation && !chatConversation.contact.photo" src="../../../assets/images/user.png" alt="Contact Image" style=" width: 100%;height: 100%;object-fit: cover; object-position: center; border-radius: 50%;"> -->
+                <h1>{{chatConversation.contact.name}}</h1>
+                <p>Message</p>
+              </div>
+              <div class="video_cam">
+              </div>
+            </div>
+            <span id="action_menu_btn">
+
+            </span>
+          </div>
+          <div class="card-body msg_card_body" *ngIf="chatConversation && chatConversation.messages" #scrollMe
+            [scrollTop]="scrollMe.scrollHeight">
+
+            <div *ngFor="let item of chatConversation.messages">
+              <div class="d-flex justify-content-end mb-4" *ngIf="item.user == user.username">
+                <div class="msg_cotainer_send">
+
+                  {{item.message}}
+
+
+                  <span class="msg_time_send">{{item.time | date:'HH:mm'}}</span>
+                </div>
+                <div class="img_cont_msg">
+                  <span class="rounded-circle user_img_msg text_inside_circle2">{{item.user.substring(0,1)}}</span>
+                </div>
+              </div>
+
+
+              <div class="d-flex justify-content-start mb-4" *ngIf="item.user == chatConversation.contact.name">
+                <div class="img_cont_msg">
+                  <span class="rounded-circle user_img_msg text_inside_circle3">{{item.user.substring(0,1)}}</span>
+                </div>
+                <div class="msg_cotainer">
+                  {{item.message}}
+                  <span class="msg_time">{{item.time | date:'HH:mm'}}</span>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <div class="card-footer" *ngIf="chatConversation">
+            <form>
+              <div class="input-group">
+                <div class="input-group-append">
+                  <span class="input-group-text attach_btn"></span>
+                </div>
+                <textarea name="replymessage" class="form-control type_msg" placeholder="Type your message..."
+                  [(ngModel)]="text" (keyup.enter)="sendMessage(chatConversation.contact)"></textarea>
+                <div class="input-group-append">
+                  <button mat-raised-button class="input-group-text send_btn"
+                    (click)="sendMessage(chatConversation.contact)">
+                    <i class="fa fa-location-arrow"></i> Sent</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="col-md-0 col-xl-1 order-lg-6"></div>
+    </div>
+  </div>
 
 
 </body>
