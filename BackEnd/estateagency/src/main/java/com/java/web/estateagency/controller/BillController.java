@@ -62,7 +62,7 @@ public class BillController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @GetMapping("/bill/{id}")
+    @GetMapping("/billid/{id}")
     public ResponseEntity<byte[]> getBill(@PathVariable("id") long id) {
 
         byte[] pdfContent = billService.generateReport(id);
@@ -93,7 +93,7 @@ public class BillController {
             HttpServletRequest request) {
                 log.info(id+"-"+infor+"-"+user);
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder((int) money, id+"-"+infor+"-"+user, baseUrl);
+        String vnpayUrl = vnPayService.createOrder((int) money*100, id+"-"+infor+"-"+user, baseUrl);
         // return "redirect:" + vnpayUrl;
         return  vnpayUrl;
     }

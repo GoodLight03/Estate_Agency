@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import com.java.web.estateagency.security.jwt.AuthEntryPointJwt;
 import com.java.web.estateagency.security.jwt.AuthTokenFilter;
@@ -70,6 +71,9 @@ public class WebSecurityConfig {
     }    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+       CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
       http.cors().and().csrf().disable()
           .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
           .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
