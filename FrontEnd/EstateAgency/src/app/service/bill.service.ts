@@ -27,7 +27,7 @@ export class BillService {
   getFile(file: number): void {
     //return this.http.get(CONTRACT_API +'getfile/'+file,httpOptions);
 
-    this.http.get(BILL_API + 'bill/' + file, { responseType: 'arraybuffer' })
+    this.http.get(BILL_API + 'billid/' + file, { responseType: 'arraybuffer' })
       .subscribe((response: ArrayBuffer) => {
         const file = new Blob([response], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
