@@ -119,6 +119,7 @@ public class BillController {
         // model.addAttribute("transactionId", transactionId);
         String angularSuccessUrl = "http://localhost:4200/history";
         if (paymentStatus == 1) {
+            log.info("ovanke");
             // ShoppingCart cart = cartService.FindById(Long.parseLong(orderInfo));
             // Order order = orderService.save(cart);
             // session.removeAttribute("totalItems");

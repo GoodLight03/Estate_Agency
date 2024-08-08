@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,8 +32,8 @@ import com.java.web.estateagency.model.request.CreateUserRequest;
 import com.java.web.estateagency.model.request.LoginRequest;
 import com.java.web.estateagency.model.response.MessageResponse;
 import com.java.web.estateagency.model.response.UserInfoResponse;
-import com.java.web.estateagency.security.jwt.JwtUtils;
-import com.java.web.estateagency.security.service.UserDetailsImpl;
+// import com.java.web.estateagency.security.jwt.JwtUtils;
+// import com.java.web.estateagency.security.service.UserDetailsImpl;
 import com.java.web.estateagency.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,40 +49,41 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Slf4j
 public class AuthController {
 
-        @Autowired
-        private AuthenticationManager authenticationManager;
-
-        @Autowired
-        private JwtUtils jwtUtils;
+        // @Autowired
+        // private AuthenticationManager authenticationManager;
 
         @Autowired
         private UserService userService;
 
-        @PostMapping("/login")
-        @Operation(summary = "Đăng nhập")
-        public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-                Authentication authentication = authenticationManager
-                                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                                                loginRequest.getPassword()));
+        // @Autowired
+        // private JwtUtils jwtUtils;
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+       
 
-                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        // @PostMapping("/login")
+        // @Operation(summary = "Đăng nhập")
+        // public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        //         Authentication authentication = authenticationManager
+        //                         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+        //                                         loginRequest.getPassword()));
 
-                ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        //         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                List<String> roles = userDetails.getAuthorities().stream()
-                                .map(item -> item.getAuthority())
-                                .collect(Collectors.toList());
+        //         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-                return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                                .body(new UserInfoResponse(userDetails.getId(),
-                                                userDetails.getUsername(),
-                                                userDetails.getEmail(),
-                                                roles));
-                // return ResponseEntity.ok(jwtCookie);
-        }
+        //         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
+        //         List<String> roles = userDetails.getAuthorities().stream()
+        //                         .map(item -> item.getAuthority())
+        //                         .collect(Collectors.toList());
+
+        //         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+        //                         .body(new UserInfoResponse(userDetails.getId(),
+        //                                         userDetails.getUsername(),
+        //                                         userDetails.getEmail(),
+        //                                         roles));
+        //         // return ResponseEntity.ok(jwtCookie);
+        // }
 
         @PostMapping("/register")
         @Operation(summary = "Đăng ký")
@@ -105,14 +107,24 @@ public class AuthController {
                 return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
         }
 
-        @PostMapping("/logout")
-        @Operation(summary = "Đăng xuất")
-        public ResponseEntity<?> logoutUser() {
-                ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-                return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                                .body(new MessageResponse("You've been logout!"));
+        // @PostMapping("/logout")
+        // @Operation(summary = "Đăng xuất")
+        // public ResponseEntity<?> logoutUser() {
+        //         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        //         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+        //                         .body(new MessageResponse("You've been logout!"));
+        // }
+
+        @RequestMapping("/user")
+        public User getUserDetailsAfterLogin(Authentication authentication) {
+                //log.info(authentication.getName());
+                Optional<User> customers = userService.getUserByUsername(authentication.getName());
+                if (customers.isPresent()) {
+                        return customers.get();
+                } else {
+                        return null;
+                }
+
         }
 
-      
-        
 }

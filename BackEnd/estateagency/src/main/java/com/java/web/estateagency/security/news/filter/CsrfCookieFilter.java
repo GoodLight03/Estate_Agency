@@ -1,4 +1,4 @@
-package com.java.web.estateagency.security.filter;
+package com.java.web.estateagency.security.news.filter;
 
 import java.io.IOException;
 

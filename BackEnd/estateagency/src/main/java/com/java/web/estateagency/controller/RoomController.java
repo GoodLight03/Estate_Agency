@@ -126,6 +126,7 @@ public class RoomController {
     @GetMapping("/detail/{id}")
     @Operation(summary = "Detail Room")
     public ResponseEntity<Room> getRoomId(@PathVariable("id")Long id){
+        log.info("id:"+id);
         Room all=roomService.detailRoom(id);
         return ResponseEntity.ok(all);
     }
