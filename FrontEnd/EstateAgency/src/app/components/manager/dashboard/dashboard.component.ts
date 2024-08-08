@@ -12,8 +12,8 @@ import { ChatfinalService } from '../../../service/chatfinal.service';
   styleUrl: './dashboard.component.css',
   providers: [MessageService]
 })
-export class DashboardComponent implements OnInit{
-  authModal : boolean = true;
+export class DashboardComponent implements OnInit {
+  authModal: boolean = true;
   isLoggedIn = false;
   name = "";
   role = "";
@@ -36,29 +36,31 @@ export class DashboardComponent implements OnInit{
     console.log(this.name);
     this.role = this.storageService.getUser().roles[0];
     console.log(this.role);
-    if (this.role == "ROLE_AGENT") {
-      this.router.navigate(['/agent/report']);
-    } else if (this.role == "ROLE_ADMIN") {
-      this.router.navigate(['/admin/report']);
-    }else{
-      this.router.navigate(['/']);
-    }
+    // if (this.role == "ROLE_AGENT") {
+    //   this.router.navigate(['/agent/report']);
+    // } else if (this.role == "ROLE_ADMIN") {
+    //   this.router.navigate(['/admin/report']);
+    // }else{
+    //   this.router.navigate(['/']);
+    // }
 
   }
 
   logout(): void {
     this.chatService.logout();
-    this.authService.logout().subscribe({
-      next: res => {
-        this.storageService.clean();
-        this.isLoggedIn = false;
-        this.authModal = false;
-        this.showSuccess("Bạn đã đăng xuất!!");
-        this.router.navigate(['/']);
-      }, error: err => {
-        this.showError(err.message);
-      }
-    })
+    // this.authService.logout().subscribe({
+    //   next: res => {
+    this.storageService.clean();
+    window.sessionStorage.setItem("userdetails", "");
+    window.sessionStorage.setItem("XSRF-TOKEN", "");
+    //     this.isLoggedIn = false;
+    //     this.authModal = false;
+    //     this.showSuccess("Bạn đã đăng xuất!!");
+    this.router.navigate(['/']);
+    //   }, error: err => {
+    //     this.showError(err.message);
+    //   }
+    // })
   }
 
   showSuccess(text: string) {

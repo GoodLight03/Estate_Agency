@@ -93,7 +93,7 @@
 
     <p-dialog header="Chi tiết phòng" [(visible)]="detail" [modal]="true"
         [transitionOptions]="'.3s'">
-        <main id="main">
+        <main id="main" *ngIf="room" #scrollMe [scrollTop]="0">
 
             <!-- ======= Intro Single ======= -->
             <section class="intro-single" style="padding: 0px;">

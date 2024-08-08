@@ -31,7 +31,7 @@ export class ReportadminComponent implements OnInit{
 
   reportAgent:any;
 
-  idRoom=0;
+  idRoom!:number;
 
   room:any;
 
@@ -43,15 +43,17 @@ export class ReportadminComponent implements OnInit{
 
   ngOnInit(): void {
     this.getListCategory();
+
+    console.log("OK" + this.idRoom);
+
     this.getReportAdmin();
 
     this.detail=false;
+  
+    // this.getListComment();
 
-    this.idRoom = 1;
-    console.log("OK" + this.idRoom);
-    this.getProduct();
+    // this.getProduct();
 
-    this.getListComment();
   }
 
   onDetail(id:number){
@@ -103,7 +105,12 @@ export class ReportadminComponent implements OnInit{
     this.roomService.getAll().subscribe({
       next: res =>{
         this.listCategory = res;
-        console.log(res);
+        console.log(this.listCategory);
+        console.log(this.listCategory[0].id);
+        this.idRoom=this.listCategory[0].id;
+        console.log(this.idRoom);
+        this.getProduct();
+        this.getListComment();
       },error: err =>{
         console.log(err);
       }

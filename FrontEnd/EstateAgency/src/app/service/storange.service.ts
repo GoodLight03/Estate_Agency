@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Users } from '../models/users';
 
 const USER_KEY = 'auth-user';
 
@@ -16,7 +17,7 @@ export class StorangeService {
   }
 
 
-  saveUser(user: any): void {
+  saveUser(user: Users): void {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }

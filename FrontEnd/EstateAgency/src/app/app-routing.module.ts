@@ -29,6 +29,8 @@ import { BillComponent } from './components/manager/agent/bill/bill.component';
 import { ContractcustomerComponent } from './components/client/contractcustomer/contractcustomer.component';
 import { ChatsocketComponent } from './components/chatsocket/chatsocket.component';
 import { ChatfinalComponent } from './components/chatfinal/chatfinal.component';
+import { AuthService } from './service/auth.service';
+import { AuthGuardService } from './service/auth-guard.service';
 
 const routes: Routes = [
   {

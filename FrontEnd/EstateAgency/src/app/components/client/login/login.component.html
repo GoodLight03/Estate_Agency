@@ -21,13 +21,22 @@
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
-		<form action="#">
+		<!-- <form action="#">
 			<h1>Sign in</h1>
 			<input type="text" placeholder="Username" [(ngModel)]="loginForm.username" name="username" />
 			<input type="password" placeholder="Password" [(ngModel)]="loginForm.password" name="password" />
 			<a href="javascript:void(0)">Forgot your password?</a>
 			<a href="javascript:void(0)" routerLink="/" style="margin-top: 5px;">Back Home</a>
-			<button (click)="login()">Sign In</button>
+			<button (click)="validateUser()">Sign In</button>
+		</form> -->
+
+		<form (ngSubmit)="validateUser(loginForm)" #loginForm="ngForm">
+			<h1>Sign in</h1>
+			<input type="text" placeholder="Username" [(ngModel)]="model.username" #username="ngModel" name="username" />
+			<input type="password" placeholder="Password" [(ngModel)]="model.password" #password="ngModel"  name="password" />
+			<a href="javascript:void(0)">Forgot your password?</a>
+			<a href="javascript:void(0)" routerLink="/" style="margin-top: 5px;">Back Home</a>
+			<button type="submit">Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">

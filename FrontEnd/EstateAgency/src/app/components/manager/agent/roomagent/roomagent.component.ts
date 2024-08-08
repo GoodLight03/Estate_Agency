@@ -24,7 +24,7 @@ export class RoomagentComponent implements OnInit {
 
   selectedRole= "";
 
-  idRoom=0;
+  idRoom!:number;
 
   room:any;
 
@@ -51,11 +51,10 @@ export class RoomagentComponent implements OnInit {
     console.log(this.categoryForm.idAgent)
     this.detail=false;
 
-    this.idRoom = 1;
-    console.log("OK" + this.idRoom);
-    this.getProduct();
+    
+    // this.getProduct();
 
-    this.getListComment()
+    // this.getListComment()
   }
 
   onFileSelected(event: any): void {
@@ -67,6 +66,15 @@ export class RoomagentComponent implements OnInit {
       next: res =>{
         this.listCategory = res;
         console.log(res);
+        if(this.listCategory.length>0){
+          console.log(this.listCategory[0].id);
+          this.idRoom=this.listCategory[0].id;
+          console.log(this.idRoom);
+          this.getListComment();
+          this.getProduct();
+          
+        }
+
       },error: err =>{
         console.log(err);
       }

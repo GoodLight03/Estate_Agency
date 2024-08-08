@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Users } from '../models/users';
+import { StorangeService } from './storange.service';
 
 const AUTH_API = "http://localhost:8080/api/auth/";
 const httpOptions = {
@@ -12,7 +14,7 @@ const httpOptions = {
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private storang:StorangeService) { }
 
 
 
@@ -34,6 +36,12 @@ export class AuthService {
 
   logout():Observable<any>{
     return this.http.post(AUTH_API + "logout",{},httpOptions);
+  }
+
+  validateLoginDetails(user: Users) {
+     window.sessionStorage.setItem("userdetails",JSON.stringify(user));
+    //this.storang.saveUser(user);
+    return this.http.get(AUTH_API + "user", { observe: 'response',withCredentials: true });
   }
   
 }

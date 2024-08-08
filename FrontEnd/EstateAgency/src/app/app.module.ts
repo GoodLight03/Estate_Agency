@@ -32,7 +32,7 @@ import { RequestComponent } from './components/client/request/request.component'
 import { HistoryComponent } from './components/client/history/history.component';
 import { FavouriteComponent } from './components/client/favourite/favourite.component';
 import { RequestagentComponent } from './components/manager/agent/requestagent/requestagent.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OrderCustommerComponent } from './components/client/order-custommer/order-custommer.component';
 import { OrderagentComponent } from './components/manager/agent/orderagent/orderagent.component';
@@ -49,6 +49,8 @@ import { ContractcustomerComponent } from './components/client/contractcustomer/
 import { Ripple } from 'primeng/ripple';
 import { ChatsocketComponent } from './components/chatsocket/chatsocket.component';
 import { ChatfinalComponent } from './components/chatfinal/chatfinal.component';
+import { AuthGuardService } from './service/auth-guard.service';
+import { XhrInterceptor } from './interceptors/app.request.interceptor';
 
 @NgModule({
   declarations: [
@@ -103,11 +105,20 @@ import { ChatfinalComponent } from './components/chatfinal/chatfinal.component';
     IgxCategoryChartModule,
     NgApexchartsModule,
     ChartModule,
-    Ripple
+    Ripple,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-XSRF-TOKEN',
+    }),
    
   ],
   providers: [
-    provideClientHydration()
+    //provideClientHydration(),
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass : XhrInterceptor,
+      multi : true
+    },AuthGuardService
   ],
   bootstrap: [AppComponent]
 })
