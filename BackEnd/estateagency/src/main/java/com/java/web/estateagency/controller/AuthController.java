@@ -115,7 +115,7 @@ public class AuthController {
         //                         .body(new MessageResponse("You've been logout!"));
         // }
 
-        @RequestMapping("/user")
+        @RequestMapping("/login")
         public User getUserDetailsAfterLogin(Authentication authentication) {
                 //log.info(authentication.getName());
                 Optional<User> customers = userService.getUserByUsername(authentication.getName());

@@ -41,26 +41,5 @@ public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
 			userService.saveAD();
 		}
 
-		// // Member account
-		// if (userRepository.findByEmail("member@gmail.com") == null) {
-		// 	NguoiDung member = new NguoiDung();
-		// 	member.setEmail("member@gmail.com");
-		// 	member.setPassword(passwordEncoder.encode("123456"));
-		// 	HashSet<VaiTro> roles = new HashSet<>();
-		// 	roles.add(roleRepository.findByTenVaiTro("ROLE_MEMBER"));
-		// 	member.setVaiTro(roles);
-		// 	userRepository.save(member);
-		// }
-		
-		// // Shipper account
-		// if (userRepository.findByEmail("shipper@gmail.com") == null) {
-		// 	NguoiDung member = new NguoiDung();
-		// 	member.setEmail("shipper@gmail.com");
-		// 	member.setPassword(passwordEncoder.encode("123456"));
-		// 	HashSet<VaiTro> roles = new HashSet<>();
-		// 	roles.add(roleRepository.findByTenVaiTro("ROLE_SHIPPER"));
-		// 	member.setVaiTro(roles);
-		// 	userRepository.save(member);
-		// }
 	}
 }

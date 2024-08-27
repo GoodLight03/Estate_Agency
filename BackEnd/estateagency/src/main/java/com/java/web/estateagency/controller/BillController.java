@@ -93,7 +93,7 @@ public class BillController {
             HttpServletRequest request) {
                 log.info(id+"-"+infor+"-"+user);
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder((int) money*100, id+"-"+infor+"-"+user, baseUrl);
+        String vnpayUrl = vnPayService.payment((int) money*100, id+"-"+infor+"-"+user, baseUrl);
         // return "redirect:" + vnpayUrl;
         return  vnpayUrl;
     }

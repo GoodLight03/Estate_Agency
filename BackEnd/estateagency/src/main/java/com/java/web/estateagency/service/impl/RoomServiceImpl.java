@@ -60,7 +60,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Room> getbyAgent(Long idAgent) {
       return roomRepository.getByAgent(idAgent);
-      
     }
 
     @Override

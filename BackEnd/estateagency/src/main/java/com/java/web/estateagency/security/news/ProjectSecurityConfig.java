@@ -65,7 +65,7 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/request/**","/api/order/**","/api/maintenance/**","/api/history/**","/api/contract/**").hasAnyRole("CUSTOMER", "AGENT")
                         .requestMatchers("/api/contact/**").hasAnyRole("CUSTOMER", "ADMIN")
-                        .requestMatchers("/api/auth/user").authenticated()
+                        .requestMatchers("/api/auth/login").authenticated()
                         .requestMatchers("api/chats/**","/api/user/**","/api/room/**", "/api/comment/**","/api/bill/**","/chat/**","/chat-socket/**","/topic/*").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());

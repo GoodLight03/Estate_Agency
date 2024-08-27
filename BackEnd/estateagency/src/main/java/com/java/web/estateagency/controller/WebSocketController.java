@@ -37,16 +37,6 @@ public class WebSocketController {
     @Autowired
     private UserService userService;
 
-    /**
-     * @DestinationVariable, anotación que indica que un parámetro de método debe
-     * estar
-     * vinculado a una variable de plantilla en una cadena de plantilla de destino.
-     * Compatible con métodos de manejo de mensajes como @MessageMapping.
-     * <p>
-     * Siempre se requiere una variable de plantilla @DestinationVariable.
-     * 
-     * @throws ChatNotFoundException
-     */
     @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/{roomId}")
     public ChatMessage chat(@DestinationVariable String roomId, ChatMessage message) throws ChatNotFoundException {
@@ -67,67 +57,5 @@ public class WebSocketController {
                 message.getUser());
     }
 
-    // @MessageMapping("/chat/{roomId}")
-    // @SendTo("/topic/{roomId}") // A dónde vamos a redireccionar. Canal de envío
-    // de los mensajes.
-    // public List<ChatMessage> chatSave(@DestinationVariable String roomId,
-    // ChatMessage message) throws ChatNotFoundException {
-    // System.out.println(message);
-    // System.out.println("Hello"+roomId);
-    // try {
-    // CreateMessageRequest message2 = new CreateMessageRequest();
-    // //Long userId = Long.parseLong(message.getUser());
-    // //User user = userService.getUsserId(userId);
-    // message2.setSenderEmail(message.getUser());
-    // message2.setIdchat(message.getId());
-    // message2.setReplymessage(message.getMessage());
-    // log.info(message2.toString());
-    // chatService.addMessageV(message2);
 
-    // Chat chat=chatService.getById(message.getId());
-    // List<ChatMessage> lst=new ArrayList<>();
-    // for (Message message3 : chat.getMessageList()) {
-    // ChatMessage chatMessage=ChatMessage.builder()
-    // .message(message3.getReplymessage())
-    // .user(message3.getSenderEmail())
-    // .time(message3.getTime().toString())
-    // .build();
-
-    // lst.add(chatMessage);
-    // }
-
-    // return lst;
-    // } catch (ChatNotFoundException e) {
-    // // Xử lý ngoại lệ nếu cần
-    // e.printStackTrace();
-    // return null; // hoặc thông báo lỗi khác
-    // }
-
-    // }
-
-    // @MessageMapping("/chat/{roomId}")
-    // @SendTo("/topic/{roomId}") // A dónde vamos a redireccionar. Canal de envío
-    // de los mensajes.
-    // public Chat chatSave(@DestinationVariable String roomId, ChatMessage message)
-    // throws ChatNotFoundException {
-    // System.out.println(message);
-    // System.out.println("Hello"+roomId);
-    // try {
-    // CreateMessageRequest message2 = new CreateMessageRequest();
-    // Long userId = Long.parseLong(message.getUser());
-    // User user = userService.getUsserId(userId);
-    // message2.setSenderEmail(user.getUsername());
-    // message2.setIdchat(Long.parseLong(roomId));
-    // message2.setReplymessage(message.getMessage());
-    // log.info(message2.toString());
-    // chatService.addMessageV(message2);
-
-    // return chatService.getById(Long.parseLong(roomId));
-    // } catch (ChatNotFoundException e) {
-    // // Xử lý ngoại lệ nếu cần
-    // e.printStackTrace();
-    // return null; // hoặc thông báo lỗi khác
-    // }
-
-    // }
 }
