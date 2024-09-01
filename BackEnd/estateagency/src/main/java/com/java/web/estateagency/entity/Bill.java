@@ -19,7 +19,11 @@ public class Bill {
 
     private String name;
 
-    private Date date;
+    private Date datepay;
+
+    private Date datestart;
+
+    private Date dateend;
 
     private long total;
 

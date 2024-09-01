@@ -69,7 +69,9 @@ public class BillServiceImpl implements BillService {
     public Bill save(CreateBillRequest createBillRequest) {
         Bill bill = new Bill();
         bill.setName(createBillRequest.getName());
-        bill.setDate(new Date());
+        //bill.setDate(new Date());
+        bill.setDatestart(createBillRequest.getStart());
+        bill.setDateend(createBillRequest.getEnd());
         bill.setContract(contractsRepository.findById(createBillRequest.getIdcontact()).get());
         bill.setStatus("Chưa thanh toán");
 
@@ -77,31 +79,32 @@ public class BillServiceImpl implements BillService {
         Room room = contract.getRoom();
 
         List<Maintenance> maintenances = room.getMaintenances();
-        List<Maintenance> maintenances2 = getByDay(maintenances, LocalDate.now());
+        //List<Maintenance> maintenances2 = getByDay(maintenances, LocalDate.now());
+        List<Maintenance> maintenances2 = getByDayV2(maintenances, createBillRequest.getStart(), createBillRequest.getEnd());
         long total = 0;
         total += room.getPrice();
         for (Maintenance maintenance : maintenances2) {
             total += maintenance.getPrice();
+            log.info(total+"");
         }
 
         bill.setTotal(total);
         return billRepository.save(bill);
     }
 
-    private List<Maintenance> getByDay(List<Maintenance> list, LocalDate currentDate) {
+    private List<Maintenance> getByDayV2(List<Maintenance> list, Date start, Date end) {
 
-        LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
-        LocalDate lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+        // LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
+        // LocalDate lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
 
         List<Maintenance> maintenances2 = new ArrayList<>();
         for (Maintenance maintenance : list) {
-            if (convertDate(maintenance.getDate()).isEqual(firstDayOfMonth)
-                    || convertDate(maintenance.getDate()).isEqual(lastDayOfMonth)
-                    || (convertDate(maintenance.getDate()).isAfter(firstDayOfMonth)
-                            && convertDate(maintenance.getDate()).isBefore(lastDayOfMonth))) {
+            if (convertDate(maintenance.getDate()).isAfter(convertDate(start))
+                            && convertDate(maintenance.getDate()).isBefore(convertDate(end))) {
                 maintenances2.add(maintenance);
             }
         }
+        log.info(maintenances2.size()+"hellokiii");
         return maintenances2;
     }
 
@@ -133,7 +136,7 @@ public class BillServiceImpl implements BillService {
               
 
                 String data = "Name: " + room.getName() + "\n" + "Adress:" + room.getAddress() +
-                        "\n" + "Price: " + room.getPrice() + "\n" + "Payment Method: Cart";
+                        "\n" + "Price: " + Math.round(room.getPrice()) + "\n" + "Payment Method: Cart";
                 Date date = new Date();
                 String fileName = room.getName();
 
@@ -165,17 +168,19 @@ public class BillServiceImpl implements BillService {
                 // addRows(table,
                 // CafeUtils.getMapFormJson(jsonArray.getJSONObject(i).toString()));
                 // }
-
+                long total=0;
+                total+=room.getPrice();
                 List<Maintenance> maintenances = maintenanceRepository.getListByRoon(room.getId());
                 if (maintenances.size() > 0) {
-                    List<Maintenance> maintenances2 = getByDay(maintenances, convertDate(bill.getDate()));
+                    List<Maintenance> maintenances2 = getByDayV2(maintenances, bill.getDatestart(),bill.getDateend());
                     for (Maintenance maintenance : maintenances2) {
                         addRows(table, maintenance);
+                        total+=maintenance.getPrice();
                     }
                     document.add(table);
                 }
 
-                Paragraph footer = new Paragraph("Total :" + getTotal(id).toString() + "\n"
+                Paragraph footer = new Paragraph("Total :" + total + "\n"
                         + "Thank you for visiting. Please visit again!!", getFont("Data"));
                 document.add(footer);
 
@@ -214,18 +219,6 @@ public class BillServiceImpl implements BillService {
         table.addCell((String) maintenance.getPrice().toString());
         // table.addCell(Double.toString((Double)data.get("price")));
         // table.addCell(Double.toString((Double)data.get("total")));
-    }
-
-    private Long getTotal(long id) {
-        long total = 0;
-        Contract contract = contractsRepository.findById(id).get();
-        Room room = contract.getRoom();
-        total += room.getPrice();
-        List<Maintenance> maintenances = room.getMaintenances();
-        for (Maintenance maintenance : maintenances) {
-            total += maintenance.getPrice();
-        }
-        return total;
     }
 
     private void addTableHeader(PdfPTable table) {
@@ -279,6 +272,7 @@ public class BillServiceImpl implements BillService {
     public Bill updatePayment(long id, String user) {
         Bill bill = billRepository.findById(id).get();
         bill.setStatus("Đã thanh toán");
+        bill.setDatepay(new Date());
         bill.setUser(user);
         return billRepository.save(bill);
     }
@@ -305,6 +299,7 @@ public class BillServiceImpl implements BillService {
         for (Contract contract : contracts) {
             list.add(contract.getId());
         }
+        
         List<Bill> bills = billRepository.getByPaymented(list);
         for (Bill bill : bills) {
             totalbill += bill.getContract().getRoom().getPrice();
@@ -330,10 +325,10 @@ public class BillServiceImpl implements BillService {
         }
         List<Bill> bills = billRepository.getByPaymented(list);
         for (Bill bill : bills) {
-            totalmaintaince += bill.getContract().getRoom().getPrice();
-            for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
-                totalmaintaince += maintenance.getPrice();
-            }
+            totalmaintaince += bill.getTotal();
+            // for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
+            //     totalmaintaince += maintenance.getPrice();
+            // }
 
         }
         return totalmaintaince;

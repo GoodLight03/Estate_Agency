@@ -18,10 +18,10 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query("select p from Bill p where p.contract.room.user.id = ?1 and p.status = 'Chưa thanh toán'")
     List<Bill> getByContractIDAndNotPayment(Long id);
 
-    @Query("SELECT MONTH(o.date) AS month, YEAR(o.date) AS year, SUM(o.total) AS total " +
+    @Query("SELECT MONTH(o.datepay) AS month, YEAR(o.datepay) AS year, SUM(o.total) AS total " +
             "FROM Bill o WHERE o.status = 'Đã thanh toán' AND o.contract.id IN :idList " +
-            "GROUP BY YEAR(o.date), MONTH(o.date) " +
-            "ORDER BY YEAR(o.date), MONTH(o.date)")
+            "GROUP BY YEAR(o.datepay), MONTH(o.datepay) " +
+            "ORDER BY YEAR(o.datepay), MONTH(o.datepay)")
     public List<Object> getTotalByMonthvsYear(@Param("idList") List<Long> idList);
 
     @Query("select p from Bill p where p.status = 'Đã thanh toán' and p.contract.id IN :idList ")
