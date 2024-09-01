@@ -31,7 +31,7 @@ export class OrderagentComponent {
     this.orderService.getRoomOrder(this.id).subscribe({
       next: res =>{
         this.listCategory = res;
-        console.log(res);
+        console.log( this.listCategory);
       },error: err =>{
         console.log(err);
       }

@@ -5,6 +5,7 @@
     <p-table [value]="listCategory" [rows]="5" [paginator]="true">
         <ng-template pTemplate="header">
             <tr>
+                <th>Customer</th>
                 <th>Room</th>
                 <th>Price</th>
                 <th>Address</th>
@@ -15,6 +16,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-category>
             <tr> 
+                <td>{{category.user.username}}</td>
                 <td>{{category.room.name}}</td>
                 <td>{{category.room.price}}</td>
                 <td>{{category.room.address}}</td>

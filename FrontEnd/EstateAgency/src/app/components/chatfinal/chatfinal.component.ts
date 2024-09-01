@@ -70,8 +70,11 @@ export class ChatfinalComponent implements OnInit{
 
   sendMessage(friendTelephone:Contact){
     this.text = this.text.replace(/\n/g, '');
-    this.chatService.sendMessage(friendTelephone.name, this.text,friendTelephone.id);
-    this.text = '';
+    if(this.text!=''){
+      this.chatService.sendMessage(friendTelephone.name, this.text,friendTelephone.id);
+      this.text = '';
+    }
+    
   }
 
   selectChatConversation(conversation:Conversation){

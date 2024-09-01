@@ -41,7 +41,7 @@ export class AuthService {
   validateLoginDetails(user: Users) {
      window.sessionStorage.setItem("userdetails",JSON.stringify(user));
     //this.storang.saveUser(user);
-    return this.http.get(AUTH_API + "user", { observe: 'response',withCredentials: true });
+    return this.http.get(AUTH_API + "login", { observe: 'response',withCredentials: true });
   }
   
 }
