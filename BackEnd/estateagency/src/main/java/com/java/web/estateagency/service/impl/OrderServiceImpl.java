@@ -18,8 +18,11 @@ import com.java.web.estateagency.repository.RoomRepository;
 import com.java.web.estateagency.repository.UserRepository;
 import com.java.web.estateagency.service.OrderService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
@@ -39,11 +42,20 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Order saveOrders(CreateOrdersRequest request) {
-        Order order =new Order();
-        order.setRoom(roomRepository.findById(request.getIdRoom()).get());
-        order.setUser(userRepository.findById(request.getIdAgent()).get());
-        order.setStatus("CHờ phản hồi");
-        return orderRepository.save(order);
+        log.info(request.toString());
+        List<Order> contain=orderRepository.findAll().stream()
+        .filter(x->x.getRoom().getId()==request.getIdRoom()&&x.getUser().getId()==request.getIdAgent())
+        .toList();
+        log.info(contain.size()+"");
+        if(contain.size()<=0){
+            log.info(contain.size()+"mm");
+            Order order =new Order();
+            order.setRoom(roomRepository.findById(request.getIdRoom()).get());
+            order.setUser(userRepository.findById(request.getIdAgent()).get());
+            order.setStatus("CHờ phản hồi");
+            return orderRepository.save(order);
+        }
+        return null;
     }
     @Override
     public List<Order> getorderCustomerss(Long id) {
@@ -79,6 +91,15 @@ public class OrderServiceImpl implements OrderService{
            room.setEnabled(false);
            roomRepository.save(room);
 
+           List<Order> orderDuyet =orderRepository.findAll()
+           .stream().filter(x->x.getRoom().getName().equals(order.getRoom().getName())&&x.getStatus().equals("CHờ phản hồi")&&x.getId()!=order.getId())
+           .toList();
+
+           orderDuyet.forEach(od ->{
+            od.setStatus("Không duyệt");
+            od.setBrowse(true);
+           });
+           orderRepository.saveAll(orderDuyet);
 
         }
         order.setStatus(browse);

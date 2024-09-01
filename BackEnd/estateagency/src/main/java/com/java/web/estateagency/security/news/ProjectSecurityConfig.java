@@ -55,7 +55,7 @@ public class ProjectSecurityConfig {
                 ))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler)
                         .ignoringRequestMatchers("/api/**","/chat/**","/chat-socket/**","/topic/*")
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                        .csrfTokenRepository(csrfTokenRepository()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
@@ -66,7 +66,7 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/api/request/**","/api/order/**","/api/maintenance/**","/api/history/**","/api/contract/**").hasAnyRole("CUSTOMER", "AGENT")
                         .requestMatchers("/api/contact/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers("/api/auth/login").authenticated()
-                        .requestMatchers("api/chats/**","/api/user/**","/api/room/**", "/api/comment/**","/api/bill/**","/chat/**","/chat-socket/**","/topic/*").permitAll())
+                        .requestMatchers("/api/auth/register","api/chats/**","/api/user/**","/api/room/**", "/api/comment/**","/api/bill/**","/chat/**","/chat-socket/**","/topic/*").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
@@ -75,6 +75,14 @@ public class ProjectSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repository = new CookieCsrfTokenRepository();
+        repository.setCookieHttpOnly(true); // Đặt cờ HttpOnly
+        repository.setSecure(true);   // Đảm bảo cookie chỉ được gửi qua HTTPS
+        return repository;
     }
 
 }

@@ -2,6 +2,7 @@ package com.java.web.estateagency.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,6 +130,28 @@ public class ChatServiceImpl implements ChatService {
         chats.setFirstUserName(userRepository.findById(chat.getIdfirstUserName()).get());
         chats.setSecondUserName(userRepository.findById(chat.getIdsecondUserName()).get());
         chats.setMessageList(new ArrayList<>());
+        chatRepository.save(chats);
+
+        HashSet<Chat> chatby=new HashSet<>();
+        try {
+            chatby = getChatByFirstUserNameAndSecondUserName(userRepository.findById(chat.getIdfirstUserName()).get().getUsername(), userRepository.findById(chat.getIdsecondUserName()).get().getUsername());
+        } catch (ChatNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        if(chatby.size()==1){
+            Iterator<Chat> iterator = chatby.iterator();
+            chats=iterator.next();
+        }
+        
+        Message message = new Message();
+        message.setSenderEmail(userRepository.findById(chat.getIdsecondUserName()).get().getUsername());
+        message.setReplymessage("Tôi đang quan tâm tới phòng của bạn!");
+        message.setChat(chats);
+        
+        chats.getMessageList().add(message);
+
         return chatRepository.save(chats);
 
     }

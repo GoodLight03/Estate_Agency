@@ -11,4 +11,5 @@ public class CreateOrdersRequest {
     private Long idRoom;
     private Long idAgent;
     private String status;
+    private String nameCustomer;
 }
