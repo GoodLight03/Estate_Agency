@@ -30,7 +30,8 @@ export class BillComponent implements OnInit {
     //id: null,
     name : null,
     idcontact: null,
-   
+    start:null,
+    end:null
   }
 
   constructor(private router: Router, private route: ActivatedRoute,private messageService : MessageService,private billService: BillService,private storageService: StorangeService){
@@ -88,9 +89,9 @@ export class BillComponent implements OnInit {
 
   createCategory(){
     //const {name} = this.categoryForm;
-    const {name,idcontact} = this.categoryForm;
+    const {name,idcontact,start,end} = this.categoryForm;
     console.log(this.categoryForm);
-    this.billService.createBill(name,this.id).subscribe({
+    this.billService.createBill(name,this.id,start,end).subscribe({
       next: res =>{
         this.getListCategory();
         this.showSuccess("Tạo danh mục thành công!");

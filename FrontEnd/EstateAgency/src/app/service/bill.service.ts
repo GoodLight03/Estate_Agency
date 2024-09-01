@@ -20,8 +20,8 @@ export class BillService {
     return this.http.get(BILL_API + "payment/"+id+"/"+money+"/"+infor+"/"+user,  { responseType: 'text' });
   }
 
-  createBill(name: string, idcontact: number): Observable<any> {
-    return this.http.post(BILL_API + 'create', { name, idcontact }, httpOptions);
+  createBill(name: string, idcontact: number,start:Date,end:Date): Observable<any> {
+    return this.http.post(BILL_API + 'create', { name, idcontact ,start,end}, httpOptions);
   }
 
   getFile(file: number): void {
