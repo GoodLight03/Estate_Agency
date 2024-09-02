@@ -18,6 +18,10 @@ export class MaintenanceService {
     return this.http.get(MAINTAENANCE_API+"all/"+id,httpOptions);
   }
 
+  getListMaintenancebyRoom(id:number):Observable<any>{
+    return this.http.get(MAINTAENANCE_API+"allbyroom/"+id,httpOptions);
+  }
+
   createMaintenance(name:string,price: string,idroom:number):Observable<any>{
     return this.http.post(MAINTAENANCE_API +'save',{name,price,idroom},httpOptions);
   }

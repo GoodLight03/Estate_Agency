@@ -5,6 +5,16 @@
                 <button pButton pRipple label="Thêm Bảo trì" icon="pi pi-plus" class="p-button-success mr-2"
                     (click)="showForm()"></button>
             </ng-template>
+
+            <ng-template pTemplate="right">
+                <select [(ngModel)]="selectbyroom" (change)="selectRoom()" name="idroom" class="form-select" aria-label="Default select example">
+                    <option [value]="-1">All</option>
+                    <option *ngFor="let category of listRoom"  [value]="category.id">
+                        {{category.name}}
+                    </option>
+                </select>
+            </ng-template>
+
         </p-toolbar>
 
         <p-dialog header="Danh mục" [(visible)]="displayForm" [style]="{width: '30vw'}" [modal]="true"

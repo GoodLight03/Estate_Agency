@@ -23,6 +23,8 @@ export class RequestComponent implements OnInit{
 
   select="";
 
+  selectbyroom:number=0;
+
   categoryForm : any ={
     iduser : null,
     idroom : null,
@@ -137,6 +139,22 @@ export class RequestComponent implements OnInit{
       this.categoryForm.idroom=this.select;
       console.log("Hello"+this.categoryForm.idroom)
     }
+  }
+
+  selectRoom(){
+    if(this.selectbyroom!=-1){
+      this.requestService.getListrequest(this.selectbyroom,"UserX").subscribe({
+        next: res =>{
+          this.listCategory = res;
+          console.log(res);
+        },error: err =>{
+          console.log(err);
+        }
+      })
+    }else{
+      this.getListCategory()
+    }
+    
   }
 
   showSuccess(text: string) {
