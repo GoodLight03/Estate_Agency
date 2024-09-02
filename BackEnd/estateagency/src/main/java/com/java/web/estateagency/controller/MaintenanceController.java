@@ -40,6 +40,13 @@ public class MaintenanceController {
         return ResponseEntity.ok(requests);
     }
 
+    @GetMapping("/allbyroom/{id}")
+    @Operation(summary = "All Maintaince")
+    public ResponseEntity<?> getMRequestRoom(@PathVariable("id") long id) {
+        List<Maintenance> requests=maintenanceService.getbtIdRoom(id);
+        return ResponseEntity.ok(requests);
+    }
+
     @PostMapping("/save")
     @Operation(summary = "Save Maintaince")
     public ResponseEntity<Maintenance> postMethodName(@RequestBody CreateMaintenanceRequest createMaintenanceRequest) {

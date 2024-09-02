@@ -160,14 +160,6 @@ public class BillServiceImpl implements BillService {
                 table.setWidthPercentage(100);
                 addTableHeader(table);
 
-                // JSONArray
-                // jsonArray=CafeUtils.getJsonArrayfromString((String)requestMap.get("productDetails"));
-                // log.info(jsonArray+"");
-                // for(int i=0; i<jsonArray.length();i++){
-                // log.info("Helloj"+jsonArray.getJSONObject(i));
-                // addRows(table,
-                // CafeUtils.getMapFormJson(jsonArray.getJSONObject(i).toString()));
-                // }
                 long total=0;
                 total+=room.getPrice();
                 List<Maintenance> maintenances = maintenanceRepository.getListByRoon(room.getId());
@@ -186,18 +178,6 @@ public class BillServiceImpl implements BillService {
 
                 document.close();
 
-                // // Chuẩn bị HTTP response
-                // response.setContentType("application/pdf");
-                // response.addHeader("Content-Disposition", "attachment; filename=" + fileName
-                // + ".pdf");
-                // // Gửi dữ liệu PDF từ bộ đệm dưới dạng phản hồi HTTP
-                // response.setContentLength(baos.size());
-                // ServletOutputStream outputStream = response.getOutputStream();
-                // baos.writeTo(outputStream);
-                // outputStream.flush();
-
-                // // Đảm bảo rằng dữ liệu đã được gửi đi và không còn trong bộ đệm
-                // outputStream.close();
                 byte[] pdfContent = baos.toByteArray();
                 baos.close();
                 return pdfContent;
@@ -214,6 +194,7 @@ public class BillServiceImpl implements BillService {
     }
 
     private void addRows(PdfPTable table, Maintenance maintenance) {
+        log.info(maintenance.getName());
         table.addCell((String) maintenance.getName());
         table.addCell((String) maintenance.getDate().toString());
         table.addCell((String) maintenance.getPrice().toString());
@@ -303,14 +284,14 @@ public class BillServiceImpl implements BillService {
         List<Bill> bills = billRepository.getByPaymented(list);
         for (Bill bill : bills) {
             totalbill += bill.getContract().getRoom().getPrice();
-            for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
-                totalmaintaince += maintenance.getPrice();
-            }
+//            for (Maintenance maintenance : bill.getContract().getRoom().getMaintenances()) {
+//                totalmaintaince += maintenance.getPrice();
+//            }
 
         }
         List<Integer> result = new ArrayList<>();
         result.add(totalbill);
-        result.add(totalmaintaince);
+        result.add(billRepository.getTotalMaintain(idAgent));
         return result;
 
     }

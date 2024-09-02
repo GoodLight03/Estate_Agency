@@ -26,4 +26,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     @Query("select p from Bill p where p.status = 'Đã thanh toán' and p.contract.id IN :idList ")
     List<Bill> getByPaymented(@Param("idList") List<Long> idList);
+
+    @Query("select sum(b.total)-sum(r.price) from Contract c join Room r on c.room.id=r.id "+
+            "join Bill b on b.contract.id=c.id " +
+            "where b.status='Đã thanh toán' and r.user.id = ?1")
+     int getTotalMaintain(Long idAgent);
 }
