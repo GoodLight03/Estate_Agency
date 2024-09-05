@@ -2,6 +2,7 @@ package com.java.web.estateagency.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +23,10 @@ import com.java.web.estateagency.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(
+        name = "CRUD REST APIs for Contact in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Contact"
+)
 @RestController
 @RequestMapping("/api/contact")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -31,14 +36,20 @@ public class ContactController {
     private ContactService contactService;
 
     @GetMapping("/all")
-    @Operation(summary = "Get All Contact")
+    @Operation(
+            summary = "Get All Contact REST API",
+            description = "REST API to Get All Contact inside Estateagency"
+    )
     public ResponseEntity<?> getMRequest() {
         List<Contact> requests=contactService.findAll();
         return ResponseEntity.ok(requests);
     }
 
     @PostMapping("/save")
-    @Operation(summary = "Save Contact")
+    @Operation(
+            summary = "Create Contact REST API",
+            description = "REST API to Create Contact inside Estateagency"
+    )
     public ResponseEntity<Contact> postMethodName(@RequestBody CreateContactRequest createContactRequest) {
         //TODO: process POST request
         log.info("Hell"+createContactRequest.toString());
@@ -46,7 +57,10 @@ public class ContactController {
     }
 
     @PostMapping("/update/{id}")
-    @Operation(summary = "Update Contatc")
+    @Operation(
+            summary = "Update Contact REST API",
+            description = "REST API to Update Contact and send Email to Customer inside Estateagency"
+    )
     public ResponseEntity<Contact> updat(@PathVariable("id") long id, @RequestParam String reply) {
         //TODO: process POST request
         

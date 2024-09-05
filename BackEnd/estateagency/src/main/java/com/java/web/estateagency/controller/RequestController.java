@@ -2,6 +2,7 @@ package com.java.web.estateagency.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
+@Tag(
+        name = "CRUD REST APIs for Request in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Request"
+)
 @RestController
 @RequestMapping("/api/request")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -32,20 +36,30 @@ public class RequestController {
     private RequestService requestService;
 
     @GetMapping("/all/{id}")
-     @Operation(summary = "get Request id")
+    @Operation(
+            summary = "Get Detail Request by Id REST API",
+            description = "REST API to Get Detail Request by Id inside Estateagency"
+    )
     public ResponseEntity<?> getMRequest(@PathVariable("id") long id, @RequestParam("filter") String filter) {
         List<Request> requests=requestService.findAllByIdUser(id, filter);
         return ResponseEntity.ok(requests);
     }
 
     @PostMapping("/save")
-    @Operation(summary = "get Request save")
+    @Operation(
+            summary = "Create Request REST API",
+            description = "REST API to Create Request inside Estateagency"
+    )
     public ResponseEntity<Request> postMethodName(@RequestBody CreateRequestRequest createRequestRequest) {
         //TODO: process POST request
         log.info("Hell"+createRequestRequest.toString());
         return ResponseEntity.ok(requestService.save(createRequestRequest));
     }
 
+    @Operation(
+            summary = "Update Request REST API",
+            description = "REST API to Update Request by Id and Status inside Estateagency"
+    )
     @PatchMapping("/status/id/{id}/status/{status}")
     public ResponseEntity<Request> putMethodName(@PathVariable("id") long id, @PathVariable("status") String status) {
         //TODO: process PUT request

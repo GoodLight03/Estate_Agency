@@ -2,6 +2,7 @@ package com.java.web.estateagency.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +25,10 @@ import com.java.web.estateagency.service.MaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(
+        name = "CRUD REST APIs for Maintenance in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Maintenance"
+)
 @RestController
 @RequestMapping("/api/maintenance")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,21 +39,30 @@ public class MaintenanceController {
     private MaintenanceService maintenanceService;
 
      @GetMapping("/all/{id}")
-     @Operation(summary = "All Maintaince")
+     @Operation(
+             summary = "Get Maintenance by Agent REST API",
+             description = "REST API to Get Maintenance by Agent inside Estateagency"
+     )
     public ResponseEntity<?> getMRequest(@PathVariable("id") long id) {
         List<Maintenance> requests=maintenanceService.getbtIdAgent(id);
         return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/allbyroom/{id}")
-    @Operation(summary = "All Maintaince")
+    @Operation(
+            summary = "Get Maintenance by Room REST API",
+            description = "REST API to Get Maintenance by Room inside Estateagency"
+    )
     public ResponseEntity<?> getMRequestRoom(@PathVariable("id") long id) {
         List<Maintenance> requests=maintenanceService.getbtIdRoom(id);
         return ResponseEntity.ok(requests);
     }
 
     @PostMapping("/save")
-    @Operation(summary = "Save Maintaince")
+    @Operation(
+            summary = "Save Maintenance REST API",
+            description = "REST API to Save Maintenance inside Estateagency"
+    )
     public ResponseEntity<Maintenance> postMethodName(@RequestBody CreateMaintenanceRequest createMaintenanceRequest) {
         //TODO: process POST request
         log.info("Hell"+createMaintenanceRequest.toString());
@@ -63,14 +77,14 @@ public class MaintenanceController {
     }
 
     @PostMapping("/upFile")
-    @Operation(summary = "up file Maintaince")
+    @Operation(summary = "Up file Maintaince")
     public ResponseEntity<Maintenance> upload(@RequestParam("id") Long id, @RequestParam("file") MultipartFile file) {
         
         return ResponseEntity.ok(maintenanceService.upFile(id, file));
     }
 
     @GetMapping("/getfile/{id}")
-    @Operation(summary = "get file Maintaince")
+    @Operation(summary = "Get file Maintaince")
     public ResponseEntity<byte[]> getFIle(@PathVariable Long id) {
         return ResponseEntity.ok(maintenanceService.getFIle(id));
     }

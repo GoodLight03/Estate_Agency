@@ -2,6 +2,7 @@ package com.java.web.estateagency.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +25,10 @@ import com.java.web.estateagency.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(
+        name = "CRUD REST APIs for User in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for User"
+)
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,14 +39,20 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/username")
-    @Operation(summary = "Lấy ra user bằng username")
+    @Operation(
+            summary = "Get User by Username REST API",
+            description = "REST API to Get User by Username inside Estateagency"
+    )
     public ResponseEntity<User> getuser(@RequestParam("username") String username) {
         User user = userService.getUserByUsername(username).get();
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/update")
-    @Operation(summary = "Cập nhật user")
+    @Operation(
+            summary = "Update User REST API",
+            description = "REST API to Update User inside Estateagency"
+    )
     public ResponseEntity<User> updateProfile(@RequestParam("id") String id, @RequestParam("username") String username,
             @RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
             @RequestParam("address") String address,
@@ -61,21 +72,30 @@ public class UserController {
     }
 
     @GetMapping("/agent")
-    @Operation(summary = "All Agent")
+    @Operation(
+            summary = "Get All Agent User REST API",
+            description = "REST API to Get All Agent User inside Estateagency"
+    )
     public ResponseEntity<List<User>> getAgent() {
         List<User> agents = userService.getListAgent();
         return ResponseEntity.ok(agents);
     }
 
     @GetMapping("/all")
-    @Operation(summary = "All User")
+    @Operation(
+            summary = "Get All User REST API",
+            description = "REST API to Get All User inside Estateagency"
+    )
     public ResponseEntity<List<User>> getAll() {
         List<User> all = userService.getAll();
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Lấy Usser bằng id")
+    @Operation(
+            summary = "Get User by Id REST API",
+            description = "REST API to Get User by Id inside Estateagency"
+    )
     public ResponseEntity<User> getProduct(@PathVariable long id) {
         User user = userService.getUsserId(id);
 
@@ -83,6 +103,10 @@ public class UserController {
     }
 
     @PutMapping("/password")
+    @Operation(
+            summary = "Change Password User REST API",
+            description = "REST API to Change Password User inside Estateagency"
+    )
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request){
         log.info(request.toString());
         userService.changePassword(request);

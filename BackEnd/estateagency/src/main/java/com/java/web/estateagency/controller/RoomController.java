@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,10 @@ import com.java.web.estateagency.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(
+        name = "CRUD REST APIs for Room in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Room"
+)
 @RestController
 @RequestMapping("/api/room")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -37,7 +42,10 @@ public class RoomController {
     private RoomService roomService;
 
     @PostMapping("/create")
-    @Operation(summary = "Tạo Phòng")
+    @Operation(
+            summary = "Create Room REST API",
+            description = "REST API to Create Room inside Estateagency"
+    )
     public ResponseEntity<?> create(@RequestParam("name") String name,
             @RequestParam("price") String price, @RequestParam("address") String address,
             @RequestParam("describe") String describe, @RequestParam("state") String state,
@@ -70,7 +78,10 @@ public class RoomController {
     }
 
     @PutMapping("/update")
-    @Operation(summary = "Tạo Phòng")
+    @Operation(
+            summary = "Update Room REST API",
+            description = "REST API to Update Room inside Estateagency"
+    )
     public ResponseEntity<?> update(@RequestParam("id") String id,@RequestParam("name") String name,
             @RequestParam("price") String price, @RequestParam("address") String address,
             @RequestParam("describe") String describe, @RequestParam("state") String state,
@@ -103,28 +114,42 @@ public class RoomController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    @Operation(
+            summary = "Delete Room REST API",
+            description = "REST API to Delete Room inside Estateagency"
+    )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id")Long id){
         roomService.delete(id);
         return ResponseEntity.ok().build();
     }
 
+
     @GetMapping("/")
-    @Operation(summary = "All Room")
+    @Operation(
+            summary = "Get All Room REST API",
+            description = "REST API to Get All Room inside Estateagency"
+    )
     public ResponseEntity<List<Room>> getAll(){
         List<Room> all=roomService.getAll();
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/allenable")
-    @Operation(summary = "All Room enable")
+    @Operation(
+            summary = "Get All Room Enabled REST API",
+            description = "REST API to Get All Room Enabled inside Estateagency"
+    )
     public ResponseEntity<List<Room>> getAllEnable(){
         List<Room> all=roomService.getbyAllEnable();
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/detail/{id}")
-    @Operation(summary = "Detail Room")
+    @Operation(
+            summary = "Get Detail Room REST API",
+            description = "REST API to Get Detail Room by Id inside Estateagency"
+    )
     public ResponseEntity<Room> getRoomId(@PathVariable("id")Long id){
         log.info("id:"+id);
         Room all=roomService.detailRoom(id);
@@ -132,21 +157,30 @@ public class RoomController {
     }
 
     @GetMapping("/all/{id}")
-    @Operation(summary = "All Room id")
+    @Operation(
+            summary = "Get All Room by Agent REST API",
+            description = "REST API to Get All Room by Agent Id inside Estateagency"
+    )
     public ResponseEntity<List<Room>> getAgenRooom(@PathVariable("id")Long id){
         List<Room> all=roomService.getbyAgent(id);
         return ResponseEntity.ok(all);
     }
 
     @GetMapping("/allenableAgent/{id}")
-    @Operation(summary = "All Room agent id")
+    @Operation(
+            summary = "Get All Room Enabled by Agent REST API",
+            description = "REST API to Get All Room Enabled by Agent Id inside Estateagency"
+    )
     public ResponseEntity<List<Room>> getAgenRooomEnable(@PathVariable("id")Long id){
         List<Room> all=roomService.getbyAgentEnable(id);
         return ResponseEntity.ok(all);
     }
 
     @PostMapping("/enable/{id}")
-    @Operation(summary = "Enable Room")
+    @Operation(
+            summary = "Enable Room REST API",
+            description = "REST API to Enable Room inside Estateagency"
+    )
     public ResponseEntity<Room> enable(@PathVariable("id")Long id, @RequestParam Boolean check){
         return ResponseEntity.ok(roomService.enable(id,check));
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,10 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(
+        name = "REST APIs for Chat in Estateagency",
+        description = "REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Chat"
+)
 @RestController
 @RequestMapping("/api/chats")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -44,7 +49,8 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/create")
-    @Operation(summary = "Create Chat")
+    @Operation(summary = "Create Chat",
+            description = "REST API to Create Chat inside Estateagency")
     public ResponseEntity<Chat> createChat(@RequestParam("idfirstUserName") Long idfirstUserName, @RequestParam("idsecondUserName") Long idsecondUserName ) {
 
         CreateChatRoomRequest createChatRoomRequest=new CreateChatRoomRequest();
@@ -81,7 +87,7 @@ public class ChatController {
     }
 
     @GetMapping("/firstUserName/{username}")
-    @Operation(summary = "Get Chat By First")
+    @Operation(summary = "Get Chat By FirstUserName")
     public ResponseEntity<?> getChatByFirstUserName(@PathVariable String username) {
         try {
             HashSet<Chat> byChat = this.chatService.getChatByFirstUserName(username);
@@ -94,7 +100,7 @@ public class ChatController {
 
 
     @GetMapping("/secondUserName/{username}")
-    @Operation(summary = "Get Chat By Second")
+    @Operation(summary = "Get Chat By SecondUserName")
     public ResponseEntity<?> getChatBySecondUserName(@PathVariable String username) {
 
         try {
@@ -106,7 +112,7 @@ public class ChatController {
     }
 
     @GetMapping("/getChatByFirstUserNameOrSecondUserName/{username}")
-    @Operation(summary = "Get By User F or S")
+    @Operation(summary = "Get By User FirstUserName or SecondUserName")
     public ResponseEntity<?> getChatByFirstUserNameOrSecondUserName(@PathVariable String username) {
 
         try {
@@ -119,7 +125,7 @@ public class ChatController {
 
 
     @GetMapping("/getChatByFirstUserNameAndSecondUserName")
-    @Operation(summary = "Get By User S or F")
+    @Operation(summary = "Get By User SecondUserName or FirstUserName")
     public ResponseEntity<?> getChatByFirstUserNameAndSecondUserName(@RequestParam("firstUserName") String firstUserName, @RequestParam("secondUserName") String secondUserName){
 
         try {

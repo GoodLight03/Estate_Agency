@@ -3,6 +3,12 @@ package com.java.web.estateagency.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.java.web.estateagency.model.response.ErrorResponseDto;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,6 +38,10 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Tag(
+        name = "CRUD REST APIs for Bill in Estateagency",
+        description = "CRUD REST APIs in Estateagency to CREATE, UPDATE, FETCH AND DELETE for Bill"
+)
 @RestController
 @RequestMapping("/api/bill")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -43,8 +53,25 @@ public class BillController {
     @Autowired
     private VNPayService vnPayService;
 
+    @Operation(
+            summary = "Get Bill by Contact Id REST API",
+            description = "REST API to Get Bill By Contact Id inside Estateagency"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
     @GetMapping("/{id}")
-    @Operation(summary = "Get By Id Chat")
     public ResponseEntity<List<Bill>> getChatById(@PathVariable Long id) {
         try {
             return new ResponseEntity<List<Bill>>(billService.getByIdContract(id), HttpStatus.OK);
@@ -53,8 +80,25 @@ public class BillController {
         }
     }
 
+    @Operation(
+            summary = "Create Bill REST API",
+            description = "REST API to Create Bill inside Estateagency"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
     @PostMapping("/create")
-    @Operation(summary = "Tạo Phòng")
     public ResponseEntity<?> create(@Valid @RequestBody CreateBillRequest commentRequest) {
         log.info(commentRequest.toString());
         billService.save(commentRequest);
@@ -62,6 +106,24 @@ public class BillController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    @Operation(
+            summary = "Get Bill to PDF REST API",
+            description = "REST API to Get Bill to PDF inside Estateagency"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
     @GetMapping("/billid/{id}")
     public ResponseEntity<byte[]> getBill(@PathVariable("id") long id) {
 
@@ -71,6 +133,10 @@ public class BillController {
 
     }
 
+    @Operation(
+            summary = "Download Bill PDF REST API",
+            description = "REST API to Download Bill PDF inside Estateagency"
+    )
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> dowBill(@PathVariable("id") long id) {
 
@@ -88,6 +154,10 @@ public class BillController {
 
     }
 
+    @Operation(
+            summary = "Payment Bill",
+            description = "REST API to Payment Bill inside Estateagency"
+    )
     @GetMapping("/payment/{id}/{money}/{infor}/{user}")
     public String getMethodName(@PathVariable("id") int id,@PathVariable("money") int money,@PathVariable("infor") String infor,@PathVariable("user") String user, RedirectAttributes attributes,
             HttpServletRequest request) {
@@ -98,6 +168,10 @@ public class BillController {
         return  vnpayUrl;
     }
 
+    @Operation(
+            summary = "Payment Bill Result",
+            description = "REST API to Payment Bill Result inside Estateagency"
+    )
     @GetMapping("/vnpay-payment")
     public ResponseEntity<String> GetMapping(HttpServletRequest request,
             RedirectAttributes attributes) {
@@ -112,17 +186,11 @@ public class BillController {
         String[] result = orderInfo.split("-");
         Long id= Long.parseLong(result[0]);
         String name= result[2];
-        
-        // model.addAttribute("orderId", orderInfo);
-        // model.addAttribute("totalPrice", totalPrice);
-        // model.addAttribute("paymentTime", paymentTime);
-        // model.addAttribute("transactionId", transactionId);
+
         String angularSuccessUrl = "http://localhost:4200/history";
         if (paymentStatus == 1) {
             log.info("ovanke");
-            // ShoppingCart cart = cartService.FindById(Long.parseLong(orderInfo));
-            // Order order = orderService.save(cart);
-            // session.removeAttribute("totalItems");
+
             billService.updatePayment(id, name);
             
           return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, angularSuccessUrl).build();
@@ -130,26 +198,60 @@ public class BillController {
         return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, angularSuccessUrl).body(null);
     }
 
+    @Operation(
+            summary = "Get Bill by Id REST API",
+            description = "REST API to Get Bill By Id inside Estateagency"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
     @GetMapping("/detail/{id}")
     public ResponseEntity<Bill> getMethodName(@PathVariable("id") long id) {
         return ResponseEntity.ok(billService.detail(id));
     }
 
+    @Operation(
+            summary = "Report Bill REST API",
+            description = "REST API to Report Bill inside Estateagency"
+    )
     @GetMapping("/report/{id}")
     public ResponseEntity<List<Object>> report(@PathVariable("id") long id) {
         return ResponseEntity.ok(billService.getReport(id));
     }
 
+    @Operation(
+            summary = "Report Bill by contract and maintain REST API",
+            description = "REST API to Report Bill by contract and maintain inside Estateagency"
+    )
     @GetMapping("/reportcontractmaintain/{id}")
     public ResponseEntity<List<Integer>> reportcontractmaintain(@PathVariable("id") long id) {
         return ResponseEntity.ok(billService.getReportRoomandMaintain(id));
     }
 
+    @Operation(
+            summary = "Report Bill by Agent REST API",
+            description = "REST API to Report Bill by Agent inside Estateagency"
+    )
     @GetMapping("/reportagent/{id}")
     public ResponseEntity<Map<String,Integer>> reportAgent(@PathVariable("id") long id) {
         return ResponseEntity.ok(billService.getReportAgent(id));
     }
 
+    @Operation(
+            summary = "Report Bill by Admin REST API",
+            description = "REST API to Report Bill by Admin inside Estateagency"
+    )
     @GetMapping("/reportadmin")
     public ResponseEntity<Map<String,Integer>> reportAdmin() {
         return ResponseEntity.ok(billService.getReportAdmin());

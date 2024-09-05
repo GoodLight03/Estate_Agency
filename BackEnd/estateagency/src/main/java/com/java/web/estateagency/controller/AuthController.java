@@ -9,6 +9,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.java.web.estateagency.model.response.ErrorResponseDto;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -43,50 +49,38 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+@Tag(
+        name = "Authentication in Estateagency",
+        description = "Login, Register Acount REST APIs in Estateagency"
+)
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
 public class AuthController {
 
-        // @Autowired
-        // private AuthenticationManager authenticationManager;
-
         @Autowired
         private UserService userService;
 
-        // @Autowired
-        // private JwtUtils jwtUtils;
-
-       
-
-        // @PostMapping("/login")
-        // @Operation(summary = "Đăng nhập")
-        // public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        //         Authentication authentication = authenticationManager
-        //                         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-        //                                         loginRequest.getPassword()));
-
-        //         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        //         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        //         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
-        //         List<String> roles = userDetails.getAuthorities().stream()
-        //                         .map(item -> item.getAuthority())
-        //                         .collect(Collectors.toList());
-
-        //         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        //                         .body(new UserInfoResponse(userDetails.getId(),
-        //                                         userDetails.getUsername(),
-        //                                         userDetails.getEmail(),
-        //                                         roles));
-        //         // return ResponseEntity.ok(jwtCookie);
-        // }
-
+        @Operation(
+                summary = "Register Account REST API",
+                description = "REST API to create new Account inside Estateagency"
+        )
+        @ApiResponses({
+                @ApiResponse(
+                        responseCode = "201",
+                        description = "HTTP Status CREATED"
+                ),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "HTTP Status Internal Server Error",
+                        content = @Content(
+                                schema = @Schema(implementation = ErrorResponseDto.class)
+                        )
+                )
+        }
+        )
         @PostMapping("/register")
-        @Operation(summary = "Đăng ký")
         public ResponseEntity<?> register(@RequestParam("username") String username,
                         @RequestParam("password") String password, @RequestParam("email") String email,
                         @RequestParam("role") String[] role, @RequestParam("img") MultipartFile img) {
@@ -107,14 +101,25 @@ public class AuthController {
                 return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
         }
 
-        // @PostMapping("/logout")
-        // @Operation(summary = "Đăng xuất")
-        // public ResponseEntity<?> logoutUser() {
-        //         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        //         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-        //                         .body(new MessageResponse("You've been logout!"));
-        // }
 
+        @Operation(
+                summary = "Login Account REST API",
+                description = "REST API to Get Account on Estateagency"
+        )
+        @ApiResponses({
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "HTTP Status OK"
+                ),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "HTTP Status Internal Server Error",
+                        content = @Content(
+                                schema = @Schema(implementation = ErrorResponseDto.class)
+                        )
+                )
+        }
+        )
         @RequestMapping("/login")
         public User getUserDetailsAfterLogin(Authentication authentication) {
                 //log.info(authentication.getName());
@@ -126,5 +131,13 @@ public class AuthController {
                 }
 
         }
+
+        // @PostMapping("/logout")
+        // @Operation(summary = "Đăng xuất")
+        // public ResponseEntity<?> logoutUser() {
+        //         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        //         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+        //                         .body(new MessageResponse("You've been logout!"));
+        // }
 
 }

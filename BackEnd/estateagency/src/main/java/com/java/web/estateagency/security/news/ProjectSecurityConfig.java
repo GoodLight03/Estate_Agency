@@ -54,7 +54,7 @@ public class ProjectSecurityConfig {
                 }
                 ))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/api/**","/chat/**","/chat-socket/**","/topic/*")
+                        .ignoringRequestMatchers("/api/**","/chat/**","/chat-socket/**","/topic/*","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**")
                         .csrfTokenRepository(csrfTokenRepository()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
@@ -66,7 +66,7 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/api/request/**","/api/order/**","/api/maintenance/**","/api/history/**","/api/contract/**").hasAnyRole("CUSTOMER", "AGENT")
                         .requestMatchers("/api/contact/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers("/api/auth/login").authenticated()
-                        .requestMatchers("/api/auth/register","api/chats/**","/api/user/**","/api/room/**", "/api/comment/**","/api/bill/**","/chat/**","/chat-socket/**","/topic/*").permitAll())
+                        .requestMatchers("/api/auth/register","api/chats/**","/api/user/**","/api/room/**", "/api/comment/**","/api/bill/**","/chat/**","/chat-socket/**","/topic/*","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
